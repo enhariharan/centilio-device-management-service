@@ -7,9 +7,20 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyparser());
 
+switch (app.get('env')) {
+  case 'development':
+  case 'test':
+    app.use(require('morgan')('dev'));
+    break;
+  case 'production':
+    app.use(require('express-logger')({
+      path: __dirname + '/log/requests.log'
+    }));
+    break;
+}
+
 // Detect if pageload url has test=1 in query.  If so, enable pagetest mode.
 app.use(function(req, res, next) {
-  console.log('1');
   res.locals.showTests = app.get('env') !== 'production' &&
     req.query.test === '1';
   next();
@@ -17,19 +28,16 @@ app.use(function(req, res, next) {
 
 // Handle / route. NOTE: This method SHOULD stay above 404 handler method
 app.get('/', function(req, res){
-  console.log('2');
   res.render('home');
 });
 
 // Handle /about route. NOTE: This method SHOULD stay above 404 handler method
 app.get('/about', function(req, res){
-  console.log('3');
   res.render('about', { pageTestScript: '/qa/tests-about.js' });
 });
 
 // cuatom 404 page
 app.use(function(req, res) {
-  console.log('4');
   console.error('404 - Page not found');
   res.status(404);
   res.render('404');
@@ -37,7 +45,6 @@ app.use(function(req, res) {
 
 // custom 500 page
 app.use(function(err, req, res, next) {
-  console.log('5');
   console.error(err.stack);
   res.status(500);
   res.render('500');
