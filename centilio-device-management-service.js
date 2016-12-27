@@ -5,10 +5,11 @@ var credentials = require('./credentials.js');
 var mongoose = require('mongoose');
 var app = express();
 var Device = require('./models/device.js');
+var jsonParser = bodyparser.json();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
-app.use(bodyparser());
+app.use(jsonParser);
 
 // configure loggers as per environment
 switch (app.get('env')) {
@@ -33,10 +34,10 @@ switch(app.get('env')) {
   case 'development':
     mongoose.connect(credentials.mongo.development.connectionString, opts);
     break;
-  case test:
+  case 'test':
     mongoose.connect(credentials.mongo.test.connectionString, opts);
     break;
-  case production:
+  case 'production':
     mongoose.connect(credentials.mongo.production.connectionString, opts);
     break;
   default:
@@ -73,8 +74,9 @@ app.use(function(req, res, next) {
   var domain = require('domain').create();
 
   // handle errors raised on this domain
+  /* jshint -W002 */
   domain.on('error', function(err) {
-    console.console.error('*** ALERT ***: domain error caught\n', err.stack);
+    console.error('*** ALERT ***: domain error caught\n', err.stack);
     try {
       // failsafe procedure, shut down in 5 secs
       setTimeout(function(){
@@ -98,10 +100,10 @@ app.use(function(req, res, next) {
         res.statusCode = 500;
         res.setHeader("content-type", "text/plain");
         res.end("500 - Internal server error");
-      };
+      }
     } catch(err) {
       console.error('Unable to send HTTP code 500 as response', err.stack);
-    };
+    }
   });
 
   // add req and re objects to domain
@@ -132,7 +134,7 @@ app.get('/devices', function (req, res) {
     if (err) return console.error('err = ' + err);
     if (!devices.length) {
       console.info('No devices found in DB...');
-      return res.send('No devices found in DB...');
+      return res.status('200').send('No devices found in DB...');
     }
 
     var context = {
@@ -147,7 +149,30 @@ app.get('/devices', function (req, res) {
         return dev;
       }),
     };
-    res.send(context);
+    return res.send(context);
+  });
+});
+
+// Handle /devices POST route. NOTE: This method SHOULD stay above 404 handler method
+app.post('/devices', jsonParser, function (req, res) {
+  if (!req || !req.body) {
+    console.error('invalid request object');
+    return res.status(400).send('Bad Request');
+  }
+
+  var device = new Device({
+    uuid: req.body.uuid,
+    name: req.body.name,
+  });
+  console.log(device);
+
+  device.save(function(err) {
+    if (err) {
+      console.log('Error while saving to database.');
+      return res.status(500).send('Internal server error');
+    }
+
+    return res.status(201).send("Created");
   });
 });
 
@@ -184,7 +209,7 @@ function startServer() {
     console.log('server started on http://localhost:' + app.get('port') +
       ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
   });
-};
+}
 
 // Create the app and start server.
 if (require.main === module) {
