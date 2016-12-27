@@ -126,8 +126,33 @@ app.use(function(req, res, next) {
     next();
 });
 
+// Handle /devices GET route. NOTE: This method SHOULD stay above 404 handler method
+app.get('/devices', function (req, res) {
+  Device.find(function (err, devices) {
+    if (err) return console.error('err = ' + err);
+    if (!devices.length) {
+      console.info('No devices found in DB...');
+      return res.send('No devices found in DB...');
+    }
+
+    var context = {
+      devices: devices.map(function(device) {
+        dev = {
+          name: device.name,
+          uuid: device.uuid,
+          latitude: device.latitude,
+          longitude: device.longitude,
+          status: device.status,
+        };
+        return dev;
+      }),
+    };
+    res.send(context);
+  });
+});
+
 // Handle / route. NOTE: This method SHOULD stay above 404 handler method
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.render('home');
 });
 
