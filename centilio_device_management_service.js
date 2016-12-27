@@ -1,4 +1,5 @@
 var express = require('express');
+var http = require('http');
 var bodyparser = require('body-parser');
 
 var app = express();
@@ -56,7 +57,16 @@ app.engine('handlebars', handlebars.engine);
 app.set('view engine', 'handlebars');
 
 // Create the app and start server.
-app.listen(app.get('port'), function(){
-  console.log('server started on http://localhost:' + app.get('port') +
-    ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
-});
+function startServer() {
+  http.createServer(app).listen(app.get('port'), function() {
+    console.log('server started on http://localhost:' + app.get('port') +
+      ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
+  });
+};
+
+// Create the app and start server.
+if (require.main === module) {
+  startServer();
+} else {
+  module.exports = startServer;
+}

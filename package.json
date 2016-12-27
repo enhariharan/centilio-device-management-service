@@ -1,6 +1,6 @@
 {
   "name": "device-management-service",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Centilio Device Management Service",
   "main": "centilio_device_management_service.js",
   "scripts": {
