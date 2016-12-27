@@ -1,9 +1,11 @@
 var express = require('express');
+var bodyparser = require('body-parser');
 
 var app = express();
 
 app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
+app.use(bodyparser());
 
 // Detect if pageload url has test=1 in query.  If so, enable pagetest mode.
 app.use(function(req, res, next) {
@@ -49,5 +51,5 @@ app.set('view engine', 'handlebars');
 // Create the app and start server.
 app.listen(app.get('port'), function(){
   console.log('server started on http://localhost:' + app.get('port') +
-    '; press Ctrl+C to terminate');
+    ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
 });
