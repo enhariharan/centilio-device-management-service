@@ -1,0 +1,26 @@
+{
+  "name": "device-management-service",
+  "version": "0.0.1",
+  "description": "Centilio Device Management Service",
+  "main": "centilio_device_management_service.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enhariharan/centilio-device-management-service.git"
+  },
+  "keywords": [
+    "centilio",
+    "iot",
+    "device",
+    "management",
+    "service"
+  ],
+  "author": "Hariharan Narayanan",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/enhariharan/centilio-device-management-service/issues"
+  },
+  "homepage": "https://github.com/enhariharan/centilio-device-management-service#readme"
+}
