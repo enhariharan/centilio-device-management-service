@@ -4,6 +4,18 @@ var app = express();
 
 app.set('port', process.env.PORT || 3000);
 
+// Handle / route. NOTE: This method SHOULD stay above 404 handler method
+app.get('/', function(req, res){
+  res.type('text/plain');
+  res.send('Centilio Device Management service');
+});
+
+// Handle /about route. NOTE: This method SHOULD stay above 404 handler method
+app.get('/about', function(req, res){
+  res.type('text/plain');
+  res.send('About Centilio Device Management service');
+});
+
 // cuatom 404 page
 app.use(function(req, res) {
   console.error('404 - Page not found');
