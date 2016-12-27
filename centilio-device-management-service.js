@@ -1,6 +1,7 @@
 var express = require('express');
 var http = require('http');
 var bodyparser = require('body-parser');
+var credentials = require('./credentials.js');
 
 var app = express();
 
