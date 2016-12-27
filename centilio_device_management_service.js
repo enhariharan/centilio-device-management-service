@@ -6,33 +6,34 @@ app.set('port', process.env.PORT || 3000);
 
 // Handle / route. NOTE: This method SHOULD stay above 404 handler method
 app.get('/', function(req, res){
-  res.type('text/plain');
-  res.send('Centilio Device Management service');
+  res.render('home');
 });
 
 // Handle /about route. NOTE: This method SHOULD stay above 404 handler method
 app.get('/about', function(req, res){
-  res.type('text/plain');
-  res.send('About Centilio Device Management service');
+  res.render('about');
 });
 
 // cuatom 404 page
 app.use(function(req, res) {
   console.error('404 - Page not found');
-  res.type('text/plain');
   res.status(404);
-  res.send('404 - Page not found');
+  res.render('404');
 });
 
 // custom 500 page
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.type('text/plain');
   res.status(500);
-  res.send('500 - Internal server error');
+  res.render('500');
 });
 
-// start server
+// Setup view layout engines.
+var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
+app.engine('handlebars', handlebars.engine);
+app.set('view engine', 'handlebars');
+
+// Create the app and start server.
 app.listen(app.get('port'), function(){
   console.log('server started on http://localhost:' + app.get('port') +
     '; press Ctrl+C to terminate');
