@@ -7,14 +7,14 @@ module.exports = function(grunt) {
 
     cafemocha: {
       all: {
-        src: 'qa/tests-*.js',
+        src: 'public/qa/tests-stress.js',
         options: {ui: 'tdd'},
       }
     },
 
     jshint: {
       app: [
-        'centilio_device_management_service.js',
+        'centilio-*.js',
         'public/js/**/*.js',
         'lib/**/*.js'
       ],
