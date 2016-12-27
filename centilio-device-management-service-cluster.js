@@ -3,7 +3,7 @@ var cluster = require('cluster');
 function startWorker() {
   var worker = cluster.fork();
   console.log('worker %d started', worker.id);
-};
+}
 
 if (cluster.isMaster) {
   require('os').cpus().forEach(function() {
