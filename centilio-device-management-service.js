@@ -27,6 +27,13 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(function(req, res, next) {
+  var cluster = require('cluster');
+  if (cluster.isWorker)
+    console.log('worker %d handling request', cluster.worker.id);
+    next();
+});
+
 // Handle / route. NOTE: This method SHOULD stay above 404 handler method
 app.get('/', function(req, res){
   res.render('home');
@@ -40,15 +47,13 @@ app.get('/about', function(req, res){
 // cuatom 404 page
 app.use(function(req, res) {
   console.error('404 - Page not found');
-  res.status(404);
-  res.render('404');
+  res.status(404).render('404');
 });
 
 // custom 500 page
 app.use(function(err, req, res, next) {
   console.error(err.stack);
-  res.status(500);
-  res.render('500');
+  res.status(500).render('500');
 });
 
 // Setup view layout engines.
