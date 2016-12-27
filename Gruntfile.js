@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
     jshint: {
       app: [
-        'centilio_device_management_service.js',
+        'centilio-*.js',
         'public/js/**/*.js',
         'lib/**/*.js'
       ],
