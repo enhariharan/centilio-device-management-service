@@ -8,6 +8,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyparser());
 
+// configure loggers as per environment
 switch (app.get('env')) {
   case 'development':
   case 'test':
@@ -19,6 +20,51 @@ switch (app.get('env')) {
     }));
     break;
 }
+
+// proces every request in a domain so that any failure can be gracefully handled.
+app.use(function(req, res, next) {
+  // create a domain for this request
+  var domain = require('domain').create();
+
+  // handle errors raised on this domain
+  domain.on('error', function(err) {
+    console.console.error('*** ALERT ***: domain error caught\n', err.stack);
+    try {
+      // failsafe procedure, shut down in 5 secs
+      setTimeout(function(){
+        console.error('failsafe shutdown activated.');
+        process.exit(1);
+      }, 5000);
+
+      // disconnect from cluster
+      var worker = require('cluster').worker;
+      if (worker) worker.disconnect();
+
+      // and stop taking new requests
+      server.close();
+
+      // attempt to send back HTTP error code 500 through express route
+      try {
+        next(err);
+      } catch(err) {
+        // express route failed.  Send HTTP error 500 as Node response.
+        console.error('express error mechanism failed. Trying node response...', err.stack);
+        res.statusCode = 500;
+        res.setHeader("content-type", "text/plain");
+        res.end("500 - Internal server error");
+      };
+    } catch(err) {
+      console.error('Unable to send HTTP code 500 as response', err.stack);
+    };
+  });
+
+  // add req and re objects to domain
+  domain.add(req);
+  domain.add(res);
+
+  // execute the rest of the pipeline in the domain
+  domain.run(next);
+});
 
 // Detect if pageload url has test=1 in query.  If so, enable pagetest mode.
 app.use(function(req, res, next) {
