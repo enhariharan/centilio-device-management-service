@@ -19,7 +19,6 @@ module.exports = function(grunt) {
         'controllers/*.js',
         'models/*.js',
         'views/*.js',
-        'lib/**/*.js'
       ],
       qa: [
         'Gruntfile.js',
@@ -36,8 +35,15 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['public/**/*.js', '/*.js'],
-        tasks: [ 'cafemocha', 'jshint', 'exec' ],
+        files: [
+          'centilio-*.js',
+          'routes.js',
+          'controllers/*.js',
+          'models/*.js',
+          'views/*.js',
+          'public/**/*.js'
+          ],
+        tasks: ['cafemocha', 'jshint', 'exec' ],
       },
     },
   });
