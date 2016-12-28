@@ -35,6 +35,9 @@ exports.addDevice = function (req, res) {
   var device = new Device({
     uuid: req.body.uuid,
     name: req.body.name,
+    latitude: req.body.latitude,
+    longitude: req.body.longitude,
+    status: req.body.status,
   });
   console.log(device);
 
