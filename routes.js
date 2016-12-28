@@ -2,18 +2,15 @@ var Device = require('./models/device.js');
 var bodyparser = require('body-parser');
 var jsonParser = bodyparser.json();
 
+var main = require('./controllers/main.js');
+
 module.exports = function(app) {
   "use strict";
 
   app.use(jsonParser);
 
-  app.get("/", function(req, res) {
-    res.render('home');
-  });
-
-  app.get('/about', function(req, res){
-    res.render('about', { pageTestScript: '/qa/tests-about.js' });
-  });
+  app.get("/", main.home);
+  app.get('/about', main.about);
 
   app.get('/devices', function (req, res) {
     Device.find(function (err, devices) {
