@@ -4,11 +4,26 @@
 Centilio device management service
 
 ## Getting Started
-Install the module with: `npm install centilio-device-management-server`
+- Clone the "develop" branch
+$ git clone git@github.com:enhariharan/centilio-device-management-service.git
 
+- Change into root folder of the project and install all dependencies
+$ npm install
+
+- Modify a file credentials.js locally to give production, development, and test
+ mode credentials.
+
+- To start the server in development mode, do this.
+$ npm start
+[or]
+$ NODE_ENV=development npm start
+
+- To start the server in production mode, do this.
+$ NODE_ENV=production npm start
+
+- To include the module from another module, do this.
 ```javascript
-var centilio-device-management-server = require('centilio-device-management-server');
-centilio-device-management-server.awesome(); // "awesome"
+var server = require('centilio-device-management-server');
 ```
 
 ## Documentation
