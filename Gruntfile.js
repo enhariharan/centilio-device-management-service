@@ -15,7 +15,9 @@ module.exports = function(grunt) {
     jshint: {
       app: [
         '*.js',
-        'public/js/**/*.js',
+        'controllers/*.js',
+        'models/*.js',
+        'views/*.js',
         'lib/**/*.js'
       ],
       qa: [
