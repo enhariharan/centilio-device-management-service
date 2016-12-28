@@ -14,9 +14,11 @@ module.exports = function(grunt) {
 
     jshint: {
       app: [
-        '*.js',
-        'public/js/**/*.js',
-        'lib/**/*.js'
+        'centilio-*.js',
+        'routes.js',
+        'controllers/*.js',
+        'models/*.js',
+        'views/*.js',
       ],
       qa: [
         'Gruntfile.js',
@@ -33,8 +35,15 @@ module.exports = function(grunt) {
 
     watch: {
       scripts: {
-        files: ['public/**/*.js', '/*.js'],
-        tasks: [ 'cafemocha', 'jshint', 'exec' ],
+        files: [
+          'centilio-*.js',
+          'routes.js',
+          'controllers/*.js',
+          'models/*.js',
+          'views/*.js',
+          'public/**/*.js'
+          ],
+        tasks: ['cafemocha', 'jshint', 'exec' ],
       },
     },
   });
