@@ -3,6 +3,7 @@ var bodyparser = require('body-parser');
 var jsonParser = bodyparser.json();
 
 var main = require('./controllers/main.js');
+var devices = require('./controllers/devices.js');
 
 module.exports = function(app) {
   "use strict";
@@ -12,29 +13,7 @@ module.exports = function(app) {
   app.get("/", main.home);
   app.get('/about', main.about);
 
-  app.get('/devices', function (req, res) {
-    Device.find(function (err, devices) {
-      if (err) return console.error('err = ' + err);
-      if (!devices.length) {
-        console.info('No devices found in DB...');
-        return res.status('200').send('No devices found in DB...');
-      }
-
-      var context = {
-        devices: devices.map(function(device) {
-          var dev = {
-            name: device.name,
-            uuid: device.uuid,
-            latitude: device.latitude,
-            longitude: device.longitude,
-            status: device.status,
-          };
-          return dev;
-        }),
-      };
-      return res.send(context);
-    });
-  });
+  app.get('/devices', devices.getAllDevices);
 
   app.post('/devices', jsonParser, function (req, res) {
     if (!req || !req.body) {
