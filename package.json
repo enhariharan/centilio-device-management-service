@@ -2,9 +2,16 @@
   "name": "device-management-service",
   "version": "0.2.1",
   "description": "Centilio Device Management Service",
-  "main": "centilio_device_management_service.js",
+  "main": "centilio-device-management-service-cluster.js",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node centilio-device-management-service-cluster.js",
+    "test": "NODE_ENV=test mocha --recursive test",
+    "test:coverage": "nyc npm test",
+    "test:unit": "mocha --recursive test/middleware test/models test/routes",
+    "test:integration": "mocha --recursive test/integration"
   },
   "repository": {
     "type": "git",
@@ -17,7 +24,11 @@
     "management",
     "service"
   ],
-  "author": "Hariharan Narayanan",
+  "author": {
+    "name": "Hariharan Narayanan",
+    "email": "enhariharan@gmail.com",
+    "url": "https://github.com/enhariharan"
+  },
   "license": "UNLICENSED",
   "bugs": {
     "url": "https://github.com/enhariharan/centilio-device-management-service/issues"
