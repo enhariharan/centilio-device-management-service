@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
     jshint: {
       app: [
-        'centilio-*.js',
+        '*.js',
         'public/js/**/*.js',
         'lib/**/*.js'
       ],
