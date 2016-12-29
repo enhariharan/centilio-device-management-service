@@ -5,21 +5,31 @@ Centilio device management service
 
 ## Getting Started
 - Clone the "develop" branch
+``` bash
 $ git clone git@github.com:enhariharan/centilio-device-management-service.git
+```
 
 - Change into root folder of the project and install all dependencies
+``` bash
 $ npm install
+```
 
 - Modify a file credentials.js locally to give production, development, and test
  mode credentials.
 
 - To start the server in development mode, do this.
+``` bash
 $ npm start
+```
 [or]
+``` bash
 $ NODE_ENV=development npm start
+```
 
 - To start the server in production mode, do this.
+``` bash
 $ NODE_ENV=production npm start
+```
 
 - To include the module from another module, do this.
 ```javascript
