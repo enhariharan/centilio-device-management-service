@@ -8,7 +8,7 @@ Centilio device management service
 ``` bash
 $ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 $ sudo apt-get install -y nodejs
-For ther OS, please refer to this URL: https://nodejs.org/en/download/
+For other OS, please refer to this URL: https://nodejs.org/en/download/
 ```
 
 - If mongodb is not installed then install it next.  Instructions can be found from this URL: https://www.mongodb.com/download-center#community; Instructions for Ubuntu Linux are given below:
