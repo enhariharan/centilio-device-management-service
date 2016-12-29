@@ -5,7 +5,7 @@ var mongoose = require('mongoose');
 var app = express();
 var Device = require('./models/device.js');
 
-app.set('port', process.env.PORT || 3000);
+app.set('port', credentials.server.port || 4123);
 app.use(express.static(__dirname + '/public'));
 
 // configure loggers as per environment

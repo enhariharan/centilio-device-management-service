@@ -4,6 +4,22 @@
 Centilio device management service
 
 ## Getting Started
+- If nodejs 6.9.2 LTS is not installed then install it first.  Instructions for Ubuntu are given below.
+``` bash
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+For ther OS, please refer to this URL: https://nodejs.org/en/download/
+```
+
+- If mongodb is not installed then install it next.  Instructions can be found from this URL: https://www.mongodb.com/download-center#community; Instructions for Ubuntu Linux are given below:
+``` bash
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 0C49F3730359A14518585931BC711F9BA15703C6
+$ echo "deb [ arch=amd64,arm64 ] http://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list
+$ sudo apt-get update
+$ sudo apt-get install -y mongodb-org
+$ sudo service mongod start
+```
+
 - Clone the "develop" branch
 ``` bash
 $ git clone git@github.com:enhariharan/centilio-device-management-service.git
@@ -31,10 +47,12 @@ $ NODE_ENV=development npm start
 $ NODE_ENV=production npm start
 ```
 
-- To include the module from another module, do this.
-```javascript
-var server = require('centilio-device-management-server');
+- By default, the server is started in cluster mode. That means 1 server instance is started on each CPU core. Instead, if you want only a single instance of the server to be started, then execute the below command
+```bash
+$ NODE_ENV=<enter-your-mode> node centilio-device-management-service.js
 ```
+
+- The server starts on port 4123 by default. To change port, update the value of server.port in credentials.js.
 
 ## Documentation
 _(Coming soon)_
