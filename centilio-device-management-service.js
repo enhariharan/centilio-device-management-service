@@ -3,7 +3,7 @@ var http = require('http');
 var credentials = require('./credentials.js');
 var mongoose = require('mongoose');
 var app = express();
-var Device = require('./models/device.js');
+// var Device = require('./models/device-model.js');
 
 app.set('port', credentials.server.port || 4123);
 app.use(express.static(__dirname + '/public'));
@@ -40,30 +40,6 @@ switch(app.get('env')) {
   default:
     throw new Error('Unknown execution environment: ' + app.get('env'));
   }
-
-// TODO: Remove the below block of code. THIS CODE IS HERE ONLY FOR TESTINS PURPOSES.
-// v-----------------------------v
-// v          from here          v
-// v-----------------------------v
-Device.find(function(err, devices) {
-  if (devices.length) {
-    console.log('devices collection is not empty');
-    return;
-  }
-
-  new Device({
-    uuid: '0123456789012345678901234567890123456789012345678901234567890123',
-    name: 'Device 01',
-  }).save();
-
-  new Device({
-    uuid: '0123456789012345678901234567890123456789012345678901234567890124',
-    name: 'Device 02',
-  }).save();
-});
-// ^-----------------------------^
-// ^          till here          ^
-// ^-----------------------------^
 
 // proces every request in a domain so that any failure can be gracefully handled.
 app.use(function(req, res, next) {
