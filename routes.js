@@ -4,6 +4,7 @@ var jsonParser = bodyparser.json();
 
 var main = require('./controllers/main.js');
 var devices = require('./controllers/devices-controller.js');
+var clients = require('./controllers/clients-controller.js');
 
 module.exports = function(app) {
   "use strict";
@@ -16,7 +17,7 @@ module.exports = function(app) {
   app.get('/devices', devices.getAllDevices);
   app.post('/devices', jsonParser, devices.addDevice);
 
-  app.get('/clients', devices.getAllDevices);
-  app.post('/clients', jsonParser, devices.addDevice);
+  app.get('/clients', clients.getAllDevices);
+  app.post('/clients', jsonParser, clients.addDevice);
 
 };
