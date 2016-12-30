@@ -29,7 +29,23 @@ module.exports = function(grunt) {
 
     exec: {
       linkchecker: {
-        cmd: 'linkchecker http://localhost:3000'
+        cmd: 'linkchecker http://localhost:4123'
+      }
+    },
+
+    apidoc: {
+      myapp: {
+        src: "./",
+        dest: "doc/apidoc/",
+        options : {
+          excludeFilters: [
+            "node_modules/",
+            "models/",
+            "public/",
+            "services/",
+            "views/",
+          ]
+        }
       }
     },
 
@@ -43,7 +59,7 @@ module.exports = function(grunt) {
           'views/*.js',
           'public/**/*.js'
           ],
-        tasks: ['cafemocha', 'jshint', 'exec' ],
+        tasks: ['cafemocha', 'jshint', 'exec', 'apidoc'],
       },
     },
   });
@@ -53,11 +69,12 @@ module.exports = function(grunt) {
     'grunt-cafe-mocha',
     'grunt-contrib-jshint',
     'grunt-exec',
-    'grunt-contrib-watch'
+    'grunt-contrib-watch',
+    'grunt-apidoc',
   ].forEach(function(task) {
     grunt.loadNpmTasks(task);
   });
 
   // register tasks
-  grunt.registerTask('default', ['cafemocha', 'jshint', 'exec', 'watch']);
+  grunt.registerTask('default', ['cafemocha', 'jshint', 'exec', 'apidoc', 'watch']);
 };
