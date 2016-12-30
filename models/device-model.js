@@ -14,7 +14,7 @@ var deviceModel = {
 
   // current status of the device - "new", "registered", "activated", "online", "offline", "retired"
   status: String,
-}
+};
 
 var deviceSchema = mongoose.Schema(deviceModel);
 

@@ -55,13 +55,10 @@ $ NODE_ENV=<enter-your-mode> node centilio-device-management-service.js
 - The server starts on port 4123 by default. To change port, update the value of server.port in credentials.js.
 
 ## Documentation
-_(Coming soon)_
+_Please refer to the doc folder in the project root directory for the documentation_
 
 ## Examples
 _(Coming soon)_
-
-## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
 
 ## Release History
 _(Nothing yet)_
