@@ -1,6 +1,15 @@
 var utils = require('../models/utilities.js');
 var ClientManagementService = require('../services/client-management-service.js');
 
+/**
+ * @api {get} /clients Get all available clients
+ * @apiName getAllClients
+ * @apiGroup Client
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Client[]} devices Array of clients.
+ */
 exports.getAllClients = function (req, res) {
   "use strict";
 
@@ -13,6 +22,18 @@ exports.getAllClients = function (req, res) {
   });
 };
 
+/**
+ * @api {post} /clients Add a new client
+ * @apiName addClient
+ * @apiGroup Client
+ *
+ * @apiParam (client) {Client} Give a client as JSON
+ *
+ * @apiSuccess (201) {Client} Created clients is returned as JSON.
+ *
+ * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
+ * @apiError (500) {String} InternalServerError Error code 500 is returned in case of osme error in the server.
+ */
 exports.addClient = function (req, res) {
   if (!req || !req.body) {
     console.error('invalid request object');

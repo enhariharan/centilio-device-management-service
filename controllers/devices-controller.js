@@ -1,7 +1,16 @@
 var utils = require('../models/utilities.js');
 var DeviceManagementService = require('../services/device-management-service.js');
 
-exports.getAllDevices = function (req, res) {
+/**
+ * @api {get} /devices Get all available devices
+ * @apiName getAllDevices
+ * @apiGroup Device
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Device[]} devices Array of devices. 
+ */
+ exports.getAllDevices = function (req, res) {
   "use strict";
 
   DeviceManagementService.getAllDevices(function (err, context) {
@@ -13,6 +22,18 @@ exports.getAllDevices = function (req, res) {
   });
 };
 
+/**
+ * @api {post} /devices Add a new device
+ * @apiName addDevice
+ * @apiGroup Device
+ *
+ * @apiParam (device) {Device} Give a device as JSON
+ *
+ * @apiSuccess (201) {Device} Created devices is returned as JSON.
+ *
+ * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
+ * @apiError (500) {String} InternalServerError Error code 500 is returned in case of osme error in the server.
+ */
 exports.addDevice = function (req, res) {
   if (!req || !req.body) {
     console.error('invalid request object');
