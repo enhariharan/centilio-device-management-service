@@ -1,6 +1,7 @@
 module.exports = {
   // id and timestamp
-  id: Id,
+  uuid: String,
+  timestamp: Date,
 
   // address line 1
   line1: String,

@@ -1,4 +1,3 @@
-// var Device = require('../models/device-model.js');
 var utils = require('../models/utilities.js');
 var DeviceManagementService = require('../services/device-management-service.js');
 

@@ -9,7 +9,7 @@ exports.getAllDevices = function(callback) {
 
     if (!devices.length) {
       console.info('No devices found in DB...');
-      return callback(0, null); //res.status('200').send('No devices found in DB...');
+      return callback(0, null);
     }
 
     var context = {
@@ -33,7 +33,7 @@ exports.addDevice = function(device, callback) {
   var deviceToSave = new Device(device);
   deviceToSave.save(function(err) {
     if (err) {
-      console.log('Error while saving to database.');
+      console.log('Error while saving device to database.');
     }
     return callback(err);
   });
