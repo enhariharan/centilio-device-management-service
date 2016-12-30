@@ -1,1 +1,5 @@
 node_modules
+npm-debug.log
+log
+credentials.js
+doc/*lock*
