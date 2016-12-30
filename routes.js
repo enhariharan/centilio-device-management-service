@@ -14,6 +14,9 @@ module.exports = function(app) {
   app.get('/about', main.about);
 
   app.get('/devices', devices.getAllDevices);
-
   app.post('/devices', jsonParser, devices.addDevice);
+
+  app.get('/clients', devices.getAllDevices);
+  app.post('/clients', jsonParser, devices.addDevice);
+
 };
