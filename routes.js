@@ -1,9 +1,9 @@
-var Device = require('./models/device.js');
+// var Device = require('./models/device.js');
 var bodyparser = require('body-parser');
 var jsonParser = bodyparser.json();
 
 var main = require('./controllers/main.js');
-var devices = require('./controllers/devices.js');
+var devices = require('./controllers/devices-controller.js');
 
 module.exports = function(app) {
   "use strict";
