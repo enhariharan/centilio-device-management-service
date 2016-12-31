@@ -38,6 +38,5 @@ var addressModel = {
 
 var AddressSchema = mongoose.Schema(addressModel);
 var Address = mongoose.model('Address', addressSchema);
-module.exports = {AddressSchema};  // intentionally not exporting AddressModel
-                                   // since AddressSchema is used embedded in
-                                   // cient-model
+module.exports = AddressSchema;  // intentionally not exporting AddressModel since AddressSchema is used
+    // embedded in cient-model

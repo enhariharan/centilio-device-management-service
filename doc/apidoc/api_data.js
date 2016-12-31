@@ -20,7 +20,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\": \"centilio\",\n  \"type\": \"corporate\"",
+          "content": "{\n  \"name\": \"AB Inc\",\n  \"type\": \"corporate\",\n  \"addresses\" : [\n    {\n      \"line1\" : \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -40,7 +40,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"1eebec92-87a8-4300-bf88-8a5860875a71\",\n  \"timestamp\": 1483157605035,\n  \"name\": \"centilio\",\n  \"type\": \"corporate\"\n}",
+          "content": "HTTP/1.1 201 Created\n{\n\"uuid\": \"88b28115-b859-452c-9fb4-5323c9ed69e6\",\n\"timestamp\": 1483166090614,\n\"name\": \"AB Inc\",\n\"type\": \"corporate\",\n\"addresses\":\n  [\n    {\n      \"line1\": \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\",\n      \"uuid\": \"9eab071b-529a-4175-8033-7043a8fcc510\",\n      \"timestamp\": 1483166090615,\n      \"status\": \"active\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -109,7 +109,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
+          "content": " HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
           "type": "json"
         }
       ]
