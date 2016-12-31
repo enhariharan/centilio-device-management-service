@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var Address = require('./address.js');
+var addressSchema = require('./address.js').AddressSchema;
 
 var clientModel = {
   // id and timestamp
@@ -13,7 +13,7 @@ var clientModel = {
   type: String,
 
   // Addresses of the client
-  addresses: [Address],
+  addresses: [addressSchema],
 };
 
 var clientSchema = mongoose.Schema(clientModel);
