@@ -141,6 +141,11 @@ exports.addClient = function (req, res) {
     type: req.body.type,
   };
 
+  client.addresses = [];
+  req.body.addresses.forEach(function(address) {
+    client.addresses.push(address);
+  });
+
   ClientManagementService.addClient(client, function (err) {
     if (err) return res.status('500').send('error encountered while adding client to DB');
     return res.status('201').send(client);
