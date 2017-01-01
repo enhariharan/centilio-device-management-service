@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var addressModel = {
+var AddressModel = {
   // id and timestamp
   uuid: String,
   timestamp: Date,
@@ -36,7 +36,7 @@ var addressModel = {
   status: String,
 };
 
-var AddressSchema = mongoose.Schema(addressModel);
-var Address = mongoose.model('Address', addressSchema);
+var AddressSchema = mongoose.Schema(AddressModel);
+var Address = mongoose.model('Address', AddressSchema);
 module.exports = AddressSchema;  // intentionally not exporting AddressModel since AddressSchema is used
     // embedded in cient-model

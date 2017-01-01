@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var addressSchema = require('./address.js').AddressSchema;
+var address = require('./address.js');
 
 var clientModel = {
   // id and timestamp
@@ -13,10 +13,9 @@ var clientModel = {
   type: String,
 
   // Addresses of the client
-  addresses: [addressSchema],
+  addresses: [address],
 };
 
 var clientSchema = mongoose.Schema(clientModel);
-
 var Client = mongoose.model('Client', clientSchema);
 module.exports = Client;
