@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var address = require('./address.js');
+var address = require('./address-model.js');
 
 var clientModel = {
   // id and timestamp
