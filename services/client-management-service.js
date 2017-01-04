@@ -31,6 +31,7 @@ exports.getAllClients = function(callback) {
 }
 
 exports.addClient = function(client, callback) {
+  console.log('client: ' + JSON.stringify(client));
   var ClientSaveException = {};
   var clientToSave = new Client({
     uuid: client.uuid,
@@ -53,7 +54,7 @@ exports.addClient = function(client, callback) {
   // TODO: Email address validation must be done
 
   if (client.contactNumbers === undefined || client.contactNumbers === null || client.contactNumbers.length === 0) {
-    console.error("'emails' cannot be empty.  Please provide at least one email.");
+    console.error("'contactNumbers' cannot be empty.  Please provide at least one email.");
     return callback(1);
   }
   // TODO: contact number validation must be done
@@ -91,13 +92,16 @@ exports.addClient = function(client, callback) {
     });
   });
 
+  console.log('Going to call clientToSave.save()');
   clientToSave.save(function(err) {
     if (err) {
       console.log('Error while saving client to database.');
-      return callback(err);
       // TODO: if saving client fails, then every save in contactNumbers must be reverted also.
       // TODO: if saving client fails, then every save in addresses must be reverted also.
       // TODO: if saving client fails, then every save in emails must be reverted also.
+    } else {
+      console.log('saved.....');
     }
+    return callback(err);
   });
 }

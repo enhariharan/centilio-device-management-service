@@ -95,7 +95,19 @@ exports.getAllClients = function (req, res) {
  *       "longitude": "100.01",
  *       "type": "work"
  *     }
- *   ]
+ *   ],
+ *   "emails" : [
+ *     {
+ *       "email" : "ashok.kumar@centilio.com",
+ *       "type": "work"
+ *     }
+ *   ],
+ *   "contactNumbers" : [
+ *     {
+ *       "number" : "+919972012345",
+ *       "type": "work"
+ *     }
+ *   ],
  * }
  *
  * @apiSuccess (201) {Client} Created client is returned as JSON.
@@ -146,8 +158,23 @@ exports.addClient = function (req, res) {
     client.addresses.push(address);
   });
 
+  client.emails = [];
+  req.body.emails.forEach(function(email) {
+    client.emails.push(email);
+  });
+
+  client.contactNumbers = [];
+  req.body.contactNumbers.forEach(function(contactNumber) {
+    client.contactNumbers.push(contactNumber);
+  });
+
   ClientManagementService.addClient(client, function (err) {
-    if (err) return res.status('500').send('error encountered while adding client to DB');
+    if (err) {
+      console.error('error occured: ' + err.stack);
+      return res.status('500').send('error encountered while adding client to DB');
+    } else {
+      console.log('DB save over...: ');
+    }
     return res.status('201').send(client);
   });
 };
