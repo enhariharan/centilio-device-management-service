@@ -20,7 +20,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\": \"AB Inc\",\n  \"type\": \"corporate\",\n  \"addresses\" : [\n    {\n      \"line1\" : \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\"\n    }\n  ]\n}",
+          "content": "{\n  \"name\": \"AB Inc\",\n  \"type\": \"corporate\",\n  \"addresses\" : [\n    {\n      \"line1\" : \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\"\n    }\n  ],\n  \"emails\" : [\n    {\n      \"email\" : \"ashok.kumar@centilio.com\",\n      \"type\": \"work\"\n    }\n  ],\n  \"contactNumbers\" : [\n    {\n      \"number\" : \"+919972012345\",\n      \"type\": \"work\"\n    }\n  ],\n}",
           "type": "json"
         }
       ]
