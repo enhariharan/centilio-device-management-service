@@ -30,6 +30,35 @@ exports.getAllClients = function(callback) {
   });
 }
 
+exports.getClient = function(uuid, callback) {
+
+  Client.find({uuid: uuid}, function (err, clients) {
+    if (err) {
+      console.error('error while reading clients from DB = ' + err);
+      return callback(err, null);
+    }
+    console.info('client: ' + JSON.stringify(clients));
+
+    if (!clients.length) {
+      console.error('No clients found in DB...');
+      return callback(0, null);
+    }
+
+    var context = {
+      clients: clients.map(function(client) {
+        var cli = {
+          uuid: client.uuid,
+          timestamp: client.timestamp,
+          name: client.name,
+          type: client.type,
+        };
+        return cli;
+      }),
+    };
+    return callback(0, context);
+  });
+}
+
 exports.addClient = function(client, callback) {
   console.log('client: ' + JSON.stringify(client));
   var ClientSaveException = {};
