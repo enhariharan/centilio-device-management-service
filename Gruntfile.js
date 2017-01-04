@@ -7,7 +7,10 @@ module.exports = function(grunt) {
 
     cafemocha: {
       all: {
-        src: 'public/qa/tests-stress.js',
+        src: [
+          'public/qa/tests-stress.js',
+          'public/qa/tests-unit-client-management-service.js',
+        ],
         options: {ui: 'tdd'},
       }
     },

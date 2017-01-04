@@ -3,17 +3,14 @@ var address = require('./address-model.js');
 
 var clientModel = {
   // id and timestamp
-  uuid: String,
-  timestamp: Date,
+  uuid: {type: String, required: true},
+  timestamp: {type: Date, required: true},
 
   // corporate name or the retail the person who is signing up
-  name: String,
+  name: {type: String, required: true},
 
   // Client type. "corporate", "retail", etc.,
-  type: String,
-
-  // Addresses of the client
-  addresses: [address],
+  type: {type: String, required: true},
 };
 
 var clientSchema = mongoose.Schema(clientModel);
