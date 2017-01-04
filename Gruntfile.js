@@ -58,6 +58,7 @@ module.exports = function(grunt) {
           'centilio-*.js',
           'routes.js',
           'controllers/*.js',
+          'services/*.js',
           'models/*.js',
           'views/*.js',
           'public/**/*.js'
