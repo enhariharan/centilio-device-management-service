@@ -138,7 +138,7 @@ exports.getAllClients = function (req, res) {
  *     }
  *
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
- * @apiError (500) {String} InternalServerError Error code 500 is returned in case of osme error in the server.
+ * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
 exports.addClient = function (req, res) {
   if (!req || !req.body) {
