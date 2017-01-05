@@ -72,23 +72,28 @@ exports.addClient = function(client, callback) {
     emails: []
   });
 
+  // validate adresses.  Cannot be empty, at least one address should be provided.
   if (client.addresses === undefined || client.addresses === null || client.addresses.length === 0) {
     console.error("'addresses' cannot be empty.  Please provide at least one address.");
     return callback(1);
   }
 
+  // validate emails.  Cannot be empty, at least one email should be provided.
   if (client.emails === undefined || client.emails === null || client.emails.length === 0) {
     console.error("'emails' cannot be empty.  Please provide at least one email.");
     return callback(1);
   }
   // TODO: Email address validation must be done. Use Validator.isEmail().
 
+  // validate contact numbers.  Cannot be empty, at least one contact number should be provided.
   if (client.contactNumbers === undefined || client.contactNumbers === null || client.contactNumbers.length === 0) {
     console.error("'contactNumbers' cannot be empty.  Please provide at least one email.");
     return callback(1);
   }
   // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
 
+  // Save addresses in collection "addresses".
+  // TODO: if saving client fails, then every save in addresses must be rolled back also.
   client.addresses.forEach(function(address) {
     var addressToSave = new Address(address);
     addressToSave.client = client.uuid;
@@ -100,6 +105,8 @@ exports.addClient = function(client, callback) {
     });
   });
 
+  // Save emails in collection "emails".
+  // TODO: if saving client fails, then every save in emails must be rolled back also.
   client.emails.forEach(function(email) {
     var emailToSave = new Email(email);
     emailToSave.client = client.uuid;
@@ -111,6 +118,8 @@ exports.addClient = function(client, callback) {
     });
   });
 
+  // Save contact numbers in collection "contactNumbers".
+  // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
   client.contactNumbers.forEach(function(contactNumber) {
     var contactNumberToSave = new ContactNumber(contactNumber);
     contactNumberToSave.client = client.uuid;
@@ -122,15 +131,15 @@ exports.addClient = function(client, callback) {
     });
   });
 
-  console.log('Going to call clientToSave.save()');
+  // Finally save client into collection "emails".
   clientToSave.save(function(err) {
     if (err) {
       console.log('Error while saving client to database.');
-      // TODO: if saving client fails, then every save in contactNumbers must be reverted also.
-      // TODO: if saving client fails, then every save in addresses must be reverted also.
-      // TODO: if saving client fails, then every save in emails must be reverted also.
+      // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
+      // TODO: if saving client fails, then every save in addresses must be rolled back also.
+      // TODO: if saving client fails, then every save in emails must be rolled back also.
     } else {
-      console.log('saved.....');
+      console.info('client ' + client.name + ' saved.....');
     }
     return callback(err);
   });
