@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema;
 
-var deviceModel = {
+var deviceSchema = Schema({
   // unique id and created timestamp
   uuid: String,
   timestamp: Date,
@@ -14,9 +15,7 @@ var deviceModel = {
 
   // current status of the device - "new", "registered", "activated", "online", "offline", "retired"
   status: String,
-};
-
-var deviceSchema = mongoose.Schema(deviceModel);
+});
 
 var Device = mongoose.model('Device', deviceSchema);
 module.exports = Device;
