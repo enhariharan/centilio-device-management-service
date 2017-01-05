@@ -2,6 +2,7 @@ var Client = require('../models/client-model.js').Client;
 var Address = require('../models/client-model.js').Address;
 var Email = require('../models/client-model.js').Email;
 var ContactNumber = require('../models/client-model.js').ContactNumber;
+var Validator = require('validator');
 
 exports.getAllClients = function(callback) {
   Client.find(function (err, clients) {
@@ -80,13 +81,13 @@ exports.addClient = function(client, callback) {
     console.error("'emails' cannot be empty.  Please provide at least one email.");
     return callback(1);
   }
-  // TODO: Email address validation must be done
+  // TODO: Email address validation must be done. Use Validator.isEmail().
 
   if (client.contactNumbers === undefined || client.contactNumbers === null || client.contactNumbers.length === 0) {
     console.error("'contactNumbers' cannot be empty.  Please provide at least one email.");
     return callback(1);
   }
-  // TODO: contact number validation must be done
+  // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
 
   client.addresses.forEach(function(address) {
     var addressToSave = new Address(address);
