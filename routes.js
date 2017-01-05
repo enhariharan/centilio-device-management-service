@@ -7,6 +7,7 @@ var deviceParams = require('./controllers/device-params-controller.js');
 var clients = require('./controllers/clients-controller.js');
 var roles = require('./controllers/roles-controller.js');
 var deviceTypes = require('./controllers/device-types-controller.js');
+var deviceReadings = require('./controllers/device-readings-controller.js');
 
 module.exports = function(app) {
   "use strict";
@@ -27,6 +28,10 @@ module.exports = function(app) {
   app.get('/deviceTypes', deviceTypes.getAllDeviceTypes);
   app.get('/deviceTypes/:uuid', deviceTypes.getDeviceType);
   app.post('/deviceTypes', jsonParser, deviceTypes.addDeviceType);
+
+  app.get('/deviceReadings', deviceReadings.getAllDeviceReadings);
+  app.get('/deviceReadings/:uuid', deviceReadings.getDeviceReading);
+  app.post('/deviceReadings', jsonParser, deviceReadings.addDeviceReading);
 
   app.get('/clients', clients.getAllClients);
   app.get('/clients/:uuid', clients.getClient);

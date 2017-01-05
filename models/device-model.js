@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
-    DeviceType = require('./device-type-model.js'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    DeviceType = require('./device-type-model.js');
 
 var deviceSchema = Schema({
   // unique id and created timestamp
