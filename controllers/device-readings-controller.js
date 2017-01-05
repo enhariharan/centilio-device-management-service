@@ -45,13 +45,13 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
 };
 
 /**
- * @api {get} /deviceReadings/:uuid Get client by given uuid
+ * @api {get} /deviceReadings/:uuid Get device reading by given uuid
  * @apiName getDeviceReading
  * @apiGroup DeviceReading
  *
  * @apiParam None
  *
- * @apiSuccess (200) {DeviceReading} DeviceReading JSON having given uuid.
+ * @apiSuccess (200) {DeviceReading} deviceReading JSON having given uuid.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -88,11 +88,11 @@ exports.getDeviceReading = function (req, res) {
 };
 
 /**
- * @api {post} /deviceReadings Add a new device
+ * @api {post} /deviceReadings Add a new device reading
  * @apiName addDeviceReading
  * @apiGroup DeviceReading
  *
- * @apiParam (deviceReading) {json} Give a device reading as JSON.  UUID and timestamp are automatically generated.
+ * @apiParam (deviceReading) {json} deviceReading Give a device reading as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
  *       {
  *         "uuid": "caf95dc0-3a6c-44e1-9fee-545f22b43b5c",
@@ -110,7 +110,7 @@ exports.getDeviceReading = function (req, res) {
  *         ]
  *       }
  *
- * @apiSuccess (201) {DeviceReading} Created deviceReading is returned as JSON.
+ * @apiSuccess (201) {DeviceReading} deviceReading Created device reading is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
  *     {

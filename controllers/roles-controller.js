@@ -2,13 +2,13 @@ var utils = require('../models/utilities.js');
 var RoleManagementService = require('../services/role-management-service.js');
 
 /**
- * @api {get} /roles Get all available clients
+ * @api {get} /roles Get all available roles
  * @apiName getAllRoles
  * @apiGroup Role
  *
  * @apiParam None
  *
- * @apiSuccess (200) {Role[]} devices Array of roles.
+ * @apiSuccess (200) {Role[]} Roles Array of roles.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *    {
@@ -33,17 +33,17 @@ exports.getAllRoles = function (req, res) {
 };
 
 /**
- * @api {post} /roles Add a new client
+ * @api {post} /roles Add a new role
  * @apiName addRole
  * @apiGroup Role
  *
- * @apiParam (role) {Role} Give a client as JSON
+ * @apiParam (role) {Role} Role Give a role as JSON
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
  * {
  *   "name": "adminstrator"
  * }
  *
- * @apiSuccess (201) {Role} Created role is returned as JSON.
+ * @apiSuccess (201) {Role} Role Created role is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
  *     {

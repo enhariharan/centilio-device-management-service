@@ -2,13 +2,13 @@ var utils = require('../models/utilities.js');
 var DeviceParamManagementService = require('../services/device-param-management-service.js');
 
 /**
- * @api {get} /deviceParams Get all available devices
+ * @api {get} /deviceParams Get all available device params
  * @apiName getAllDeviceParams
  * @apiGroup DeviceParam
  *
  * @apiParam None
  *
- * @apiSuccess (200) {DeviceParam[]} devices Array of device params.
+ * @apiSuccess (200) {DeviceParam[]} deviceParams Array of device params.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -21,7 +21,7 @@ var DeviceParamManagementService = require('../services/device-param-management-
  *         },
  *         {
  *           "uuid": "7c806c7c-c10d-4302-ac52-664ca0cc3d7e",
- *           "timestamp": "2017-01-05T09:11:21.991Z",
+ *           "timestam": "2017-01-05T09:11:21.991Z",
  *           "name": "longitude",
  *           "deviceType": "bd1dbf4f-c708-44d9-8dc1-8498d8f4923d"
  *         },
@@ -53,7 +53,7 @@ var DeviceParamManagementService = require('../services/device-param-management-
  *
  * @apiParam None
  *
- * @apiSuccess (200) {DeviceParam} Dvice param JSON having given uuid.
+ * @apiSuccess (200) {DeviceParam} deviceParam JSON having given uuid.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -84,7 +84,7 @@ exports.getDeviceParam = function (req, res) {
  * @apiName addDeviceParam
  * @apiGroup DeviceParam
  *
- * @apiParam (deviceParam) {json} Give a device param as JSON.  UUID and timestamp are automatically generated.
+ * @apiParam (deviceParam) {json} deviceParam Give a device param as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
  *           {
  *             "name": Temperature",
@@ -94,7 +94,7 @@ exports.getDeviceParam = function (req, res) {
  *             }
  *           },
  *
- * @apiSuccess (201) {DeviceParam} Created device params is returned as JSON.
+ * @apiSuccess (201) {DeviceParam} deviceParam Created device params is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
  *     {

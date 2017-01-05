@@ -2,13 +2,13 @@ var utils = require('../models/utilities.js');
 var DeviceTypeManagementService = require('../services/device-type-management-service.js');
 
 /**
- * @api {get} /deviceTypes Get all available devices
+ * @api {get} /deviceTypes Get all available device types
  * @apiName getAllDeviceTypes
  * @apiGroup DeviceType
  *
  * @apiParam None
  *
- * @apiSuccess (200) {DeviceType[]} devices Array of device types.
+ * @apiSuccess (200) {DeviceType[]} deviceTypes Array of device types.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -41,13 +41,13 @@ var DeviceTypeManagementService = require('../services/device-type-management-se
 };
 
 /**
- * @api {get} /devicetypes/:uuid Get client by given uuid
+ * @api {get} /devicetypes/:uuid Get device type by given uuid
  * @apiName getDeviceType
  * @apiGroup DeviceType
  *
  * @apiParam None
  *
- * @apiSuccess (200) {DeviceType} Clients JSON having given uuid.
+ * @apiSuccess (200) {DeviceType} deviceType JSON of device type having given uuid.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -74,18 +74,18 @@ exports.getDeviceType = function (req, res) {
 };
 
 /**
- * @api {post} /devicetypes Add a new device
+ * @api {post} /devicetypes Add a new device type
  * @apiName addDeviceType
  * @apiGroup DeviceType
  *
- * @apiParam (deviceType) {json} Give a device type as JSON.  UUID and timestamp are automatically generated.
+ * @apiParam (deviceType) {json} deviceType Give a device type as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
  *     {
  *       "name": "mobile",
  *       "status": "active"
  *     }
  *
- * @apiSuccess (201) {DeviceType} Created device types is returned as JSON.
+ * @apiSuccess (201) {DeviceType} deviceType Created device types is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
  *     {

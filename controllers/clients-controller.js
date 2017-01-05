@@ -8,7 +8,7 @@ var ClientManagementService = require('../services/client-management-service.js'
  *
  * @apiParam None
  *
- * @apiSuccess (200) {Client[]} devices Array of clients.
+ * @apiSuccess (200) {Client[]} clients Array of clients.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *    {
@@ -79,7 +79,7 @@ exports.getAllClients = function (req, res) {
  *
  * @apiParam None
  *
- * @apiSuccess (200) {Client} Clients JSON having given uuid.
+ * @apiSuccess (200) {Client[]} Clients JSON array of 1 client having given uuid.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *    {
@@ -150,7 +150,7 @@ exports.getClient = function (req, res) {
  * @apiName addClient
  * @apiGroup Client
  *
- * @apiParam (client) {Client} Give a client as JSON
+ * @apiParam (client) {Client} client Give a client as JSON
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
  * {
  *   "name": "AB Inc",
@@ -182,7 +182,7 @@ exports.getClient = function (req, res) {
  *   ],
  * }
  *
- * @apiSuccess (201) {Client} Created client is returned as JSON.
+ * @apiSuccess (201) {Client} client Created client is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
  *     {
