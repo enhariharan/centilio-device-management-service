@@ -12,8 +12,8 @@ define({ "api": [
             "group": "client",
             "type": "Client",
             "optional": false,
-            "field": "Give",
-            "description": "<p>a client as JSON</p>"
+            "field": "client",
+            "description": "<p>Give a client as JSON</p>"
           }
         ]
       },
@@ -32,8 +32,8 @@ define({ "api": [
             "group": "201",
             "type": "Client",
             "optional": false,
-            "field": "Created",
-            "description": "<p>client is returned as JSON.</p>"
+            "field": "client",
+            "description": "<p>Created client is returned as JSON.</p>"
           }
         ]
       },
@@ -101,7 +101,7 @@ define({ "api": [
             "group": "200",
             "type": "Client[]",
             "optional": false,
-            "field": "devices",
+            "field": "clients",
             "description": "<p>Array of clients.</p>"
           }
         ]
@@ -146,10 +146,10 @@ define({ "api": [
         "200": [
           {
             "group": "200",
-            "type": "Client",
+            "type": "Client[]",
             "optional": false,
             "field": "Clients",
-            "description": "<p>JSON having given uuid.</p>"
+            "description": "<p>JSON array of 1 client having given uuid.</p>"
           }
         ]
       },
@@ -183,8 +183,8 @@ define({ "api": [
             "group": "deviceParam",
             "type": "json",
             "optional": false,
-            "field": "Give",
-            "description": "<p>a device param as JSON.  UUID and timestamp are automatically generated.</p>"
+            "field": "deviceParam",
+            "description": "<p>Give a device param as JSON.  UUID and timestamp are automatically generated.</p>"
           }
         ]
       },
@@ -203,8 +203,8 @@ define({ "api": [
             "group": "201",
             "type": "DeviceParam",
             "optional": false,
-            "field": "Created",
-            "description": "<p>device params is returned as JSON.</p>"
+            "field": "deviceParam",
+            "description": "<p>Created device params is returned as JSON.</p>"
           }
         ]
       },
@@ -250,7 +250,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/deviceParams",
-    "title": "Get all available devices",
+    "title": "Get all available device params",
     "name": "getAllDeviceParams",
     "group": "DeviceParam",
     "parameter": {
@@ -272,7 +272,7 @@ define({ "api": [
             "group": "200",
             "type": "DeviceParam[]",
             "optional": false,
-            "field": "devices",
+            "field": "deviceParams",
             "description": "<p>Array of device params.</p>"
           }
         ]
@@ -280,7 +280,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestamp\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestam\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -319,8 +319,8 @@ define({ "api": [
             "group": "200",
             "type": "DeviceParam",
             "optional": false,
-            "field": "Dvice",
-            "description": "<p>param JSON having given uuid.</p>"
+            "field": "deviceParam",
+            "description": "<p>JSON having given uuid.</p>"
           }
         ]
       },
@@ -344,7 +344,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/deviceReadings",
-    "title": "Add a new device",
+    "title": "Add a new device reading",
     "name": "addDeviceReading",
     "group": "DeviceReading",
     "parameter": {
@@ -354,8 +354,8 @@ define({ "api": [
             "group": "deviceReading",
             "type": "json",
             "optional": false,
-            "field": "Give",
-            "description": "<p>a device reading as JSON.  UUID and timestamp are automatically generated.</p>"
+            "field": "deviceReading",
+            "description": "<p>Give a device reading as JSON.  UUID and timestamp are automatically generated.</p>"
           }
         ]
       },
@@ -374,8 +374,8 @@ define({ "api": [
             "group": "201",
             "type": "DeviceReading",
             "optional": false,
-            "field": "Created",
-            "description": "<p>deviceReading is returned as JSON.</p>"
+            "field": "deviceReading",
+            "description": "<p>Created device reading is returned as JSON.</p>"
           }
         ]
       },
@@ -468,7 +468,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/deviceReadings/:uuid",
-    "title": "Get client by given uuid",
+    "title": "Get device reading by given uuid",
     "name": "getDeviceReading",
     "group": "DeviceReading",
     "parameter": {
@@ -490,7 +490,7 @@ define({ "api": [
             "group": "200",
             "type": "DeviceReading",
             "optional": false,
-            "field": "DeviceReading",
+            "field": "deviceReading",
             "description": "<p>JSON having given uuid.</p>"
           }
         ]
@@ -515,7 +515,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/devicetypes",
-    "title": "Add a new device",
+    "title": "Add a new device type",
     "name": "addDeviceType",
     "group": "DeviceType",
     "parameter": {
@@ -525,8 +525,8 @@ define({ "api": [
             "group": "deviceType",
             "type": "json",
             "optional": false,
-            "field": "Give",
-            "description": "<p>a device type as JSON.  UUID and timestamp are automatically generated.</p>"
+            "field": "deviceType",
+            "description": "<p>Give a device type as JSON.  UUID and timestamp are automatically generated.</p>"
           }
         ]
       },
@@ -545,8 +545,8 @@ define({ "api": [
             "group": "201",
             "type": "DeviceType",
             "optional": false,
-            "field": "Created",
-            "description": "<p>device types is returned as JSON.</p>"
+            "field": "deviceType",
+            "description": "<p>Created device types is returned as JSON.</p>"
           }
         ]
       },
@@ -592,7 +592,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/deviceTypes",
-    "title": "Get all available devices",
+    "title": "Get all available device types",
     "name": "getAllDeviceTypes",
     "group": "DeviceType",
     "parameter": {
@@ -614,7 +614,7 @@ define({ "api": [
             "group": "200",
             "type": "DeviceType[]",
             "optional": false,
-            "field": "devices",
+            "field": "deviceTypes",
             "description": "<p>Array of device types.</p>"
           }
         ]
@@ -639,7 +639,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/devicetypes/:uuid",
-    "title": "Get client by given uuid",
+    "title": "Get device type by given uuid",
     "name": "getDeviceType",
     "group": "DeviceType",
     "parameter": {
@@ -661,8 +661,8 @@ define({ "api": [
             "group": "200",
             "type": "DeviceType",
             "optional": false,
-            "field": "Clients",
-            "description": "<p>JSON having given uuid.</p>"
+            "field": "deviceType",
+            "description": "<p>JSON of device type having given uuid.</p>"
           }
         ]
       },
@@ -810,7 +810,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/devices/:uuid",
-    "title": "Get client by given uuid",
+    "title": "Get device by given uuid",
     "name": "getDevice",
     "group": "Device",
     "parameter": {
@@ -832,7 +832,7 @@ define({ "api": [
             "group": "200",
             "type": "Device",
             "optional": false,
-            "field": "Clients",
+            "field": "Device",
             "description": "<p>JSON having given uuid.</p>"
           }
         ]
@@ -857,7 +857,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/roles",
-    "title": "Add a new client",
+    "title": "Add a new role",
     "name": "addRole",
     "group": "Role",
     "parameter": {
@@ -867,8 +867,8 @@ define({ "api": [
             "group": "role",
             "type": "Role",
             "optional": false,
-            "field": "Give",
-            "description": "<p>a client as JSON</p>"
+            "field": "Role",
+            "description": "<p>Give a role as JSON</p>"
           }
         ]
       },
@@ -887,8 +887,8 @@ define({ "api": [
             "group": "201",
             "type": "Role",
             "optional": false,
-            "field": "Created",
-            "description": "<p>role is returned as JSON.</p>"
+            "field": "Role",
+            "description": "<p>Created role is returned as JSON.</p>"
           }
         ]
       },
@@ -934,7 +934,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/roles",
-    "title": "Get all available clients",
+    "title": "Get all available roles",
     "name": "getAllRoles",
     "group": "Role",
     "parameter": {
@@ -956,7 +956,7 @@ define({ "api": [
             "group": "200",
             "type": "Role[]",
             "optional": false,
-            "field": "devices",
+            "field": "Roles",
             "description": "<p>Array of roles.</p>"
           }
         ]

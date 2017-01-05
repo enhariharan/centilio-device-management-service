@@ -46,13 +46,13 @@ var DeviceManagementService = require('../services/device-management-service.js'
 };
 
 /**
- * @api {get} /devices/:uuid Get client by given uuid
+ * @api {get} /devices/:uuid Get device by given uuid
  * @apiName getDevice
  * @apiGroup Device
  *
  * @apiParam None
  *
- * @apiSuccess (200) {Device} Clients JSON having given uuid.
+ * @apiSuccess (200) {Device} Device JSON having given uuid.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
