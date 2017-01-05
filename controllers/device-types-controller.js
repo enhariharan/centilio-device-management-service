@@ -4,7 +4,7 @@ var DeviceTypeManagementService = require('../services/device-type-management-se
 /**
  * @api {get} /deviceTypes Get all available device types
  * @apiName getAllDeviceTypes
- * @apiGroup DeviceType
+ * @apiGroup Device Type
  *
  * @apiParam None
  *
@@ -43,7 +43,7 @@ var DeviceTypeManagementService = require('../services/device-type-management-se
 /**
  * @api {get} /devicetypes/:uuid Get device type by given uuid
  * @apiName getDeviceType
- * @apiGroup DeviceType
+ * @apiGroup Device Type
  *
  * @apiParam None
  *
@@ -76,7 +76,7 @@ exports.getDeviceType = function (req, res) {
 /**
  * @api {post} /devicetypes Add a new device type
  * @apiName addDeviceType
- * @apiGroup DeviceType
+ * @apiGroup Device Type
  *
  * @apiParam (deviceType) {json} deviceType Give a device type as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
