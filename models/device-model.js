@@ -1,9 +1,11 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose'),
+    DeviceType = require('./device-type-model.js'),
+    Schema = mongoose.Schema;
 
-var deviceModel = {
+var deviceSchema = Schema({
   // unique id and created timestamp
-  uuid: String,
-  timestamp: Date,
+  uuid: {type: String, required: true},
+  timestamp: {type: Date, required: true},
 
   // name of the device
   name: String,
@@ -13,10 +15,11 @@ var deviceModel = {
   longitude: String,
 
   // current status of the device - "new", "registered", "activated", "online", "offline", "retired"
-  status: String,
-};
+  status: {type: String, required: true},
 
-var deviceSchema = mongoose.Schema(deviceModel);
+  // device type. stores uuid of device type which must be aleady present in "devicetypes" collection.
+  deviceType: {type: String, ref: 'DeviceType'},
+});
 
 var Device = mongoose.model('Device', deviceSchema);
 module.exports = Device;

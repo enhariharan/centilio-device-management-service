@@ -30,7 +30,7 @@ var clientSchema = Schema({
 // TODO: Need validator - at least one phone number should be provided.
 
 var addressSchema = Schema({
-  client : {type: String, required: 'Client'},
+  client : {type: String, ref: 'Client'},
 
   // address line 1
   line1: {type: String, required: true},

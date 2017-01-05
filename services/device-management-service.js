@@ -1,4 +1,5 @@
-var Device = require('../models/device-model.js');
+var Device = require('../models/device-model.js'),
+    DeviceTypeManagementService = require('./device-type-management-service.js');
 
 exports.getAllDevices = function(callback) {
   Device.find(function (err, devices) {
@@ -21,6 +22,7 @@ exports.getAllDevices = function(callback) {
           latitude: device.latitude,
           longitude: device.longitude,
           status: device.status,
+          deviceType: device.deviceType,
         };
         return dev;
       }),
@@ -51,6 +53,7 @@ exports.getDevice = function(uuid, callback) {
           latitude: device.latitude,
           longitude: device.longitude,
           status: device.status,
+          deviceType: device.deviceType,
         };
         return dev;
       }),
@@ -60,7 +63,26 @@ exports.getDevice = function(uuid, callback) {
 }
 
 exports.addDevice = function(device, callback) {
+  console.info('device: ' + JSON.stringify(device));
   var deviceToSave = new Device(device);
+  deviceToSave.deviceType = device.deviceType.uuid;
+  console.info('deviceToSave: ' + JSON.stringify(deviceToSave));
+
+
+  // validate that the deviceType already exists in the devicetypes collection.
+  if (deviceToSave.deviceType == undefined || deviceToSave.deviceType == null) {
+        console.log('device does not have a valid device type.');
+        return callback(400);
+  }
+  console.info('deviceToSave.deviceType.uuid: ' + deviceToSave.deviceType.uuid);
+  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType.uuid, function(err) {
+    if (err) {
+      console.log('device does not have a valid device type.');
+      return callback(400);
+    }
+  });
+
+  // Now save new device into collection "device"
   deviceToSave.save(function(err) {
     if (err) {
       console.log('Error while saving device to database.');

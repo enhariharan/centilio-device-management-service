@@ -111,6 +111,7 @@ exports.getDevice = function (req, res) {
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
 exports.addDevice = function (req, res) {
+  console.info('req.body: ' + JSON.stringify(req.body));
   if (!req || !req.body) {
     console.error('invalid request object');
     return res.status(400).send('Bad Request');
@@ -122,11 +123,15 @@ exports.addDevice = function (req, res) {
     name: req.body.name,
     latitude: req.body.latitude,
     longitude: req.body.longitude,
-    status: req.body.status
+    status: req.body.status,
+    deviceType: req.body.deviceType
   };
+  console.info('device: ' + JSON.stringify(device));
 
   DeviceManagementService.addDevice(device, function (err) {
-    if (err) return res.status('500').send('error encountered while adding device to DB');
+    if (err === 400) return res.status('400').send('error encountered while adding device to DB.  Please check your JSON.');
+    if (err)  return res.status('500').send('error encountered while adding device to DB.');
+
     return res.status('201').send(device);
   });
 };
