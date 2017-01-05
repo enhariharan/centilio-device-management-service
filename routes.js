@@ -3,6 +3,7 @@ var jsonParser = bodyparser.json();
 
 var main = require('./controllers/main.js');
 var devices = require('./controllers/devices-controller.js');
+var deviceParams = require('./controllers/device-params-controller.js');
 var clients = require('./controllers/clients-controller.js');
 var roles = require('./controllers/roles-controller.js');
 var deviceTypes = require('./controllers/device-types-controller.js');
@@ -18,6 +19,10 @@ module.exports = function(app) {
   app.get('/devices', devices.getAllDevices);
   app.get('/devices/:uuid', devices.getDevice);
   app.post('/devices', jsonParser, devices.addDevice);
+
+  app.get('/deviceParams', deviceParams.getAllDeviceParams);
+  app.get('/deviceParams/:uuid', deviceParams.getDeviceParam);
+  app.post('/deviceParams', jsonParser, deviceParams.addDeviceParam);
 
   app.get('/deviceTypes', deviceTypes.getAllDeviceTypes);
   app.get('/deviceTypes/:uuid', deviceTypes.getDeviceType);
