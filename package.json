@@ -45,7 +45,8 @@
     "express-handlebars": "^3.0.0",
     "express-logger": "0.0.3",
     "mongoose": "^4.7.5",
-    "uuid": "^3.0.1"
+    "uuid": "^3.0.1",
+    "validator": "^6.2.0"
   },
   "devDependencies": {
     "apidoc": "^0.16.1",
