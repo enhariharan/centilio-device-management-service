@@ -74,7 +74,7 @@ exports.getAllClients = function (req, res) {
 
 /**
  * @api {get} /clients/:uuid Get client by given uuid
- * @apiName getClientById
+ * @apiName getClient
  * @apiGroup Client
  *
  * @apiParam None
@@ -132,7 +132,7 @@ exports.getAllClients = function (req, res) {
  *      ]
  *    }
  */
-exports.getClientById = function (req, res) {
+exports.getClient = function (req, res) {
   "use strict";
   console.log('req.params: ' + JSON.stringify(req.params));
   var uuid = req.params.uuid;
