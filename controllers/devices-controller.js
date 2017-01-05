@@ -46,6 +46,42 @@ var DeviceManagementService = require('../services/device-management-service.js'
 };
 
 /**
+ * @api {get} /devices/:uuid Get client by given uuid
+ * @apiName getDevice
+ * @apiGroup Device
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Device} Clients JSON having given uuid.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "devices":
+ *         [
+ *           {
+ *             "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
+ *             "timestamp":"2016-12-30T11:52:28.637Z",
+ *             "name":"Device 01",
+ *             "latitude":"100.001",
+ *             "longitude":"100.001",
+ *             "status":"new"
+ *           }
+ *         ]
+ *     }
+ */
+exports.getDevice = function (req, res) {
+  "use strict";
+  var uuid = req.params.uuid;
+  DeviceManagementService.getDevice(uuid, function (err, context) {
+    if (err) return res.status('500').send('error encountered while reading device from DB');
+
+    if (!context) return res.status('400').send('No such device found in DB...');
+
+    return res.status('200').send(context);
+  });
+};
+
+/**
  * @api {post} /devices Add a new device
  * @apiName addDevice
  * @apiGroup Device
