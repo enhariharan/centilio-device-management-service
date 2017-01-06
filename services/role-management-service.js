@@ -32,8 +32,19 @@ exports.addRole = function(role, callback) {
   console.log('roleToSave: ' + JSON.stringify(roleToSave));
   roleToSave.save(function(err) {
     if (err) {
-      console.log('Error while saving role to database.');
+      console.error('Error while saving role to database.');
     }
     return callback(err);
   });
 }
+
+// TODO: Uncomment this method and fix to make this synchronous.
+// exports.CheckIfRolePresentByName = function(roleName) {
+//   console.info('rolename: ' + JSON.stringify(roleName));
+//   Role.count({name: roleName}, function(err, count) {
+//     if (err) {
+//       console.error('Error while querying for role %s from database.', roleName);
+//     }
+//     return count != 0;
+//   });
+// }

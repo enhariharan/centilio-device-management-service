@@ -20,7 +20,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\": \"AB Inc\",\n  \"type\": \"corporate\",\n  \"addresses\" : [\n    {\n      \"line1\" : \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\"\n    }\n  ],\n  \"emails\" : [\n    {\n      \"email\" : \"ashok.kumar@centilio.com\",\n      \"type\": \"work\"\n    }\n  ],\n  \"contactNumbers\" : [\n    {\n      \"number\" : \"+919972012345\",\n      \"type\": \"work\"\n    }\n  ],\n}",
+          "content": "{\n  \"corporateName\": \"AB Inc\",\n  \"firstName\" : \"John\",\n  \"lastName\" : \"Doe\",\n  \"type\": \"corporate\",\n  \"addresses\": [{\n    \"line1\": \"123, ABC Road\",\n    \"line2\": \"DEF Blvd\",\n    \"city\": \"GHIJK City\",\n    \"state\": \"LM State\",\n    \"countryCode\": \"IN\",\n    \"zipCode\": \"NOPQRS\",\n    \"latitude\": \"100.01\",\n    \"longitude\": \"100.01\",\n    \"type\": \"work\"\n  }],\n  \"emails\": [{\n    \"email\": \"ashok.kumar@centilio.com\",\n    \"type\": \"work\"\n  }],\n  \"contactNumbers\": [{\n    \"number\": \"+919972012345\",\n    \"type\": \"work\"\n  }],\n  \"role\" : \"user\"\n}",
           "type": "json"
         }
       ]
@@ -40,7 +40,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n\"uuid\": \"88b28115-b859-452c-9fb4-5323c9ed69e6\",\n\"timestamp\": 1483166090614,\n\"name\": \"AB Inc\",\n\"type\": \"corporate\",\n\"addresses\":\n  [\n    {\n      \"line1\": \"123, ABC Road\",\n      \"line2\": \"DEF Blvd\",\n      \"city\": \"GHIJK City\",\n      \"state\": \"LM State\",\n      \"countryCode\": \"IN\",\n      \"zipCode\": \"NOPQRS\",\n      \"latitude\": \"100.01\",\n      \"longitude\": \"100.01\",\n      \"type\": \"work\",\n      \"uuid\": \"9eab071b-529a-4175-8033-7043a8fcc510\",\n      \"timestamp\": 1483166090615,\n      \"status\": \"active\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 201 Created",
           "type": "json"
         }
       ]

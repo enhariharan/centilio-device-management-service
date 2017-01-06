@@ -9,7 +9,7 @@ var roleSchema = Schema({
   // name of the role
   name: {type: String, required: true},
 
-  // current status of the role
+  // current status of the role - 'active', 'retired', ...
   status: {type: String, required: true},
 });
 
