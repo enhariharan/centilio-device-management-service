@@ -1,10 +1,13 @@
-// var Device = require('./models/device.js');
 var bodyparser = require('body-parser');
 var jsonParser = bodyparser.json();
 
 var main = require('./controllers/main.js');
 var devices = require('./controllers/devices-controller.js');
+var deviceParams = require('./controllers/device-params-controller.js');
 var clients = require('./controllers/clients-controller.js');
+var roles = require('./controllers/roles-controller.js');
+var deviceTypes = require('./controllers/device-types-controller.js');
+var deviceReadings = require('./controllers/device-readings-controller.js');
 
 module.exports = function(app) {
   "use strict";
@@ -15,8 +18,25 @@ module.exports = function(app) {
   app.get('/about', main.about);
 
   app.get('/devices', devices.getAllDevices);
+  app.get('/devices/:uuid', devices.getDevice);
   app.post('/devices', jsonParser, devices.addDevice);
 
+  app.get('/deviceParams', deviceParams.getAllDeviceParams);
+  app.get('/deviceParams/:uuid', deviceParams.getDeviceParam);
+  app.post('/deviceParams', jsonParser, deviceParams.addDeviceParam);
+
+  app.get('/deviceTypes', deviceTypes.getAllDeviceTypes);
+  app.get('/deviceTypes/:uuid', deviceTypes.getDeviceType);
+  app.post('/deviceTypes', jsonParser, deviceTypes.addDeviceType);
+
+  app.get('/deviceReadings', deviceReadings.getAllDeviceReadings);
+  app.get('/deviceReadings/:uuid', deviceReadings.getDeviceReading);
+  app.post('/deviceReadings', jsonParser, deviceReadings.addDeviceReading);
+
   app.get('/clients', clients.getAllClients);
+  app.get('/clients/:uuid', clients.getClient);
   app.post('/clients', jsonParser, clients.addClient);
+
+  app.get('/roles', roles.getAllRoles);
+  app.post('/roles', jsonParser, roles.addRole);
 };
