@@ -134,14 +134,16 @@ exports.getAllClients = function (req, res) {
  */
 exports.getClient = function (req, res) {
   "use strict";
-  console.log('req.params: ' + JSON.stringify(req.params));
   var uuid = req.params.uuid;
-  ClientManagementService.getClient(uuid, function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading client from DB');
-
-    if (!context) return res.status('200').send('No clients found in DB...');
-
-    return res.status('200').send(context);
+  var promise = ClientManagementService.getClient(uuid);
+  promise
+  .then(client => {
+    if (!client) return res.status('200').send('No clients found in DB...');
+    console.info('client received: ' + JSON.stringify(client));
+    return res.status('200').send(client);
+  })
+  .catch(err => {
+    if (err) return res.status('500').send('error encountered while reading client from DB' + err.stack);
   });
 };
 
@@ -152,101 +154,85 @@ exports.getClient = function (req, res) {
  *
  * @apiParam (client) {Client} client Give a client as JSON
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
- * {
- *   "name": "AB Inc",
- *   "type": "corporate",
- *   "addresses" : [
- *     {
- *       "line1" : "123, ABC Road",
- *       "line2": "DEF Blvd",
- *       "city": "GHIJK City",
- *       "state": "LM State",
- *       "countryCode": "IN",
- *       "zipCode": "NOPQRS",
- *       "latitude": "100.01",
- *       "longitude": "100.01",
- *       "type": "work"
- *     }
- *   ],
- *   "emails" : [
- *     {
- *       "email" : "ashok.kumar@centilio.com",
- *       "type": "work"
- *     }
- *   ],
- *   "contactNumbers" : [
- *     {
- *       "number" : "+919972012345",
- *       "type": "work"
- *     }
- *   ],
- * }
+ *        {
+ *          "corporateName": "AB Inc",
+ *          "firstName" : "John",
+ *          "lastName" : "Doe",
+ *          "type": "corporate",
+ *          "addresses": [{
+ *            "line1": "123, ABC Road",
+ *            "line2": "DEF Blvd",
+ *            "city": "GHIJK City",
+ *            "state": "LM State",
+ *            "countryCode": "IN",
+ *            "zipCode": "NOPQRS",
+ *            "latitude": "100.01",
+ *            "longitude": "100.01",
+ *            "type": "work"
+ *          }],
+ *          "emails": [{
+ *            "email": "ashok.kumar@centilio.com",
+ *            "type": "work"
+ *          }],
+ *          "contactNumbers": [{
+ *            "number": "+919972012345",
+ *            "type": "work"
+ *          }],
+ *          "role" : "user"
+ *        }
  *
  * @apiSuccess (201) {Client} client Created client is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
- *     {
- *     "uuid": "88b28115-b859-452c-9fb4-5323c9ed69e6",
- *     "timestamp": 1483166090614,
- *     "name": "AB Inc",
- *     "type": "corporate",
- *     "addresses":
- *       [
- *         {
- *           "line1": "123, ABC Road",
- *           "line2": "DEF Blvd",
- *           "city": "GHIJK City",
- *           "state": "LM State",
- *           "countryCode": "IN",
- *           "zipCode": "NOPQRS",
- *           "latitude": "100.01",
- *           "longitude": "100.01",
- *           "type": "work",
- *           "uuid": "9eab071b-529a-4175-8033-7043a8fcc510",
- *           "timestamp": 1483166090615,
- *           "status": "active"
- *         }
- *       ]
- *     }
  *
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
 exports.addClient = function (req, res) {
+  console.info('request body: ' + JSON.stringify(req.body));
+  // Validate that the request body is present
   if (!req || !req.body) {
     console.error('invalid request object');
     return res.status(400).send('Bad Request');
   }
 
-  var client = {
+  // copy everything from request body into a DTO object
+  var clientDTO = {
     uuid: utils.getUuid(),
     timestamp: utils.getTimestamp(),
-    name: req.body.name,
+    corporateName: req.body.corporateName,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
     type: req.body.type,
+    role: req.body.role,
+    addresses: [],
+    emails: [],
+    contactNumbers: [],
   };
 
-  client.addresses = [];
   req.body.addresses.forEach(function(address) {
-    client.addresses.push(address);
+    var a = address;
+    clientDTO.addresses.push(address);
   });
 
-  client.emails = [];
   req.body.emails.forEach(function(email) {
-    client.emails.push(email);
+    clientDTO.emails.push(email);
   });
 
-  client.contactNumbers = [];
   req.body.contactNumbers.forEach(function(contactNumber) {
-    client.contactNumbers.push(contactNumber);
+    clientDTO.contactNumbers.push(contactNumber);
   });
 
-  ClientManagementService.addClient(client, function (err) {
-    if (err) {
-      console.error('error occured: ' + err.stack);
-      return res.status('500').send('error encountered while adding client to DB');
+  // Pass the DTO to client management service to save
+  ClientManagementService.addClient(clientDTO, function (err) {
+    if (err === 500) {
+      return res.status('500').send('error encountered while adding client to DB. Intrenal server error.');
+    } else if (err === 400) {
+      console.error('error occured: ');
+      return res.status('400').send('error encountered while adding client to DB. Please check your JSON.');
     } else {
       console.log('DB save over...: ');
+      return res.status('201').send('client was saved into DB ');
     }
-    return res.status('201').send(client);
   });
 };

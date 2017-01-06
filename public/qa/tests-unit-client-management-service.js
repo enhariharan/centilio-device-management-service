@@ -16,13 +16,16 @@ suite('ClientManagementService Unit tests', function() {
     var client = {
       uuid: Utils.getUuid(),
       timestamp: Utils.getTimestamp(),
-      name: 'AB Inc',
+      corporateName: 'WorldRule Inc',
+      firstName: 'Jane',
+      lastName: 'Doe',
       type: 'corporate',
+      role: 'user',
       addresses: []
     };
 
     ClientManagementService.addClient(client, function(err) {
-      assert(err === 1);
+      assert(err === 400);
     });
     done();
   });
@@ -31,8 +34,11 @@ suite('ClientManagementService Unit tests', function() {
     var client = {
       uuid: Utils.getUuid(),
       timestamp: Utils.getTimestamp(),
-      name: 'AB Inc',
+      corporateName: 'WorldRule Inc',
+      firstName: 'Jane',
+      lastName: 'Doe',
       type: 'corporate',
+      role: 'user',
       addresses: [],
       emails: [],
       contactNumbers: []
