@@ -43,10 +43,14 @@ exports.getClient = function(uuid) {
   return _getClient(uuid);
 }
 
+exports.getClientByUser = function(user) {
+  return _getClientByUser(user);
+}
+
 exports.addClient = function(clientDTO, callback) {
   var ClientSaveException = {};
 
-  // validate role.  Cannot be empty andthe role must be present in collection "roles"
+  // validate role.  Cannot be empty and the role must be present in collection "roles"
   if (clientDTO.role === undefined || clientDTO.role === null) {
     console.error("'addresses' cannot be empty.  Please provide at least one address.");
     return callback(400);
@@ -169,7 +173,7 @@ var _getClient = function(uuid) {
         contactNumbers: [],
       };
 
-      // initialize async queries to be done from the database and execture them
+      // initialize async queries to be done from the database and exectue them
       var findClientQueryPromise = Client.findOne({uuid: uuid}).exec();
       var findAllAddressesForClientQueryPromise = Address.find({client: uuid}).exec();
       var findAllEmailsForClientQueryPromise = Email.find({client: uuid}).exec();

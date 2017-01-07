@@ -40,6 +40,7 @@
     "sampleUrl": "http://api.centilio.com/v1/"
   },
   "dependencies": {
+    "basic-auth": "^1.1.0",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "express-handlebars": "^3.0.0",

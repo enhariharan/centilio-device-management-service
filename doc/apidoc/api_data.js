@@ -979,6 +979,208 @@ define({ "api": [
     ]
   },
   {
+    "type": "post",
+    "url": "/login",
+    "title": "Add a new user",
+    "name": "addUser",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "user": [
+          {
+            "group": "user",
+            "type": "Credentials",
+            "optional": false,
+            "field": "credentials",
+            "description": "<p>Credentials sent as authentication headera</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.",
+          "content": "{json} Request-header Basic Authentication details must ne set. This should be changed to stateless JWT based token based authentication.",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "User",
+            "optional": false,
+            "field": "user",
+            "description": "<p>Created user is returned as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 201 Created",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/login-controller.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//login"
+      }
+    ]
+  },
+  {
+    "type": "get",
+    "url": "/login",
+    "title": "login into the device manager",
+    "name": "login",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "user": [
+          {
+            "group": "user",
+            "type": "Credentials",
+            "optional": false,
+            "field": "credentials",
+            "description": "<p>Credentials sent as authentication headera</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Client[]",
+            "optional": false,
+            "field": "clients",
+            "description": "<p>Array of client matching the credentials.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"clients\": [\n  {\n    \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n    \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n    \"name\": \"Ashok Kumar\",\n    \"type\": \"retail\"\n    \"addresses\" :\n      [\n        {\n          \"line1\" : \"123, ABC Road\",\n          \"line2\" : \"DEF Blvd\",\n          \"city\" : \"GHIJK City\",\n          \"state\" : \"LM State\",\n          \"countryCode\" : \"IN\",\n          \"zipCode\" : \"NOPQRS\",\n          \"latitude\" : \"100.01\",\n          \"longitude\" : \"100.01\",\n          \"type\" : \"work\",\n          \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n          \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n          \"status\" : \"active\",\n          \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n        },\n        {\n          \"line1\" : \"Address line 1\",\n          \"line2\" : \"Address line 2\",\n          \"city\" : \"City name\",\n          \"state\" : \"State Code\",\n          \"countryCode\" : \"country Code\",\n          \"zipCode\" : \"ZiPCoDe\",\n          \"latitude\" : \"100.01\",\n          \"longitude\" : \"100.01\",\n          \"type\" : \"home\",\n          \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n          \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n          \"status\" : \"active\",\n          \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n        },\n      ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/login-controller.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//login"
+      }
+    ]
+  },
+  {
+    "type": "put",
+    "url": "/login",
+    "title": "Add a new user",
+    "name": "updateUser",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "user": [
+          {
+            "group": "user",
+            "type": "Credentials",
+            "optional": false,
+            "field": "credentials",
+            "description": "<p>Credentials sent as authentication headera</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.",
+          "content": "             {json} Request-header Basic Authentication details must ne set. This should be changed to stateless JWT based token based authentication.\n{\n  \"username\": \"hanglesias\",\n  \"password\": \"password\", // This is done only for the demo. JWT token based authentication should be used instead.\n  \"status\": \"activated\",\n  \"gender\": \"female\",\n  \"profilePicPath\": \"/profile/pic/path\",\n  \"client\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n  \"role\": \"user\",\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "User",
+            "optional": false,
+            "field": "user",
+            "description": "<p>Updated user is returned as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 Created",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/login-controller.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//login"
+      }
+    ]
+  },
+  {
     "success": {
       "fields": {
         "Success 200": [
