@@ -28,6 +28,9 @@ module.exports = function(grunt) {
         'public/qa/**/*.js',
         'qa/**/*.js'
       ],
+      options: {
+        esversion: 6
+      }
     },
 
     exec: {
@@ -47,7 +50,8 @@ module.exports = function(grunt) {
             "public/",
             "services/",
             "views/",
-          ]
+          ],
+          debug: true,
         }
       }
     },

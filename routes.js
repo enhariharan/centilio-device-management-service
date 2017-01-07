@@ -1,13 +1,14 @@
-var bodyparser = require('body-parser');
-var jsonParser = bodyparser.json();
+var bodyparser = require('body-parser'),
+    jsonParser = bodyparser.json();
 
-var main = require('./controllers/main.js');
-var devices = require('./controllers/devices-controller.js');
-var deviceParams = require('./controllers/device-params-controller.js');
-var clients = require('./controllers/clients-controller.js');
-var roles = require('./controllers/roles-controller.js');
-var deviceTypes = require('./controllers/device-types-controller.js');
-var deviceReadings = require('./controllers/device-readings-controller.js');
+var main = require('./controllers/main.js'),
+    devices = require('./controllers/devices-controller.js'),
+    deviceParams = require('./controllers/device-params-controller.js'),
+    clients = require('./controllers/clients-controller.js'),
+    roles = require('./controllers/roles-controller.js'),
+    deviceTypes = require('./controllers/device-types-controller.js'),
+    deviceReadings = require('./controllers/device-readings-controller.js'),
+    login = require('./controllers/login-controller.js');
 
 module.exports = function(app) {
   "use strict";
@@ -39,4 +40,8 @@ module.exports = function(app) {
 
   app.get('/roles', roles.getAllRoles);
   app.post('/roles', jsonParser, roles.addRole);
+
+  app.get('/login', login.login);
+  app.post('/login', login.addUser);
+  app.put('/login', login.updateUser);
 };

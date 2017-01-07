@@ -1,22 +1,27 @@
 var mongoose = require('mongoose'),
-    Schema = mongoose.Schema;
+    Schema = mongoose.Schema,
+    Role   = require('./role-model.js');
 
 var clientSchema = Schema({
   // id and timestamp
   uuid: {type: String, required: [true, 'client uuid is required']},
   timestamp: {type: Date, required: [true, 'creation timestamp is required']},
 
-  // corporate name or the retail the person who is signing up
-  name: {type: String, required: [true, 'corporate name is required']},
+  // corporate name of the person who is signing up
+  // TODO: If the person is retail, then this can remain the same as firstname+lastname
+  corporateName: {type: String, required: [true, 'corporate name is required']},
+
+  // first name of the user
+  firstName: {type: String, required: [true, 'first name is required']},
+
+  // last name of the user
+  lastName: {type: String, required: [true, 'last name is required']},
+
+  // middle name of the user - optional
+  middleName: String,
 
   // Client type. "corporate", "retail", etc.,
   type: {type: String, required: [true, 'client type is required']},
-
-  // Addresses
-  addresses: [{ type: String, ref: 'Address'}],
-
-  // emails
-  emails: [{ type: String, ref: 'Email'}]
 });
 
 // TODO: This validator should be brought back when we know how to do this better.
@@ -30,6 +35,7 @@ var clientSchema = Schema({
 // TODO: Need validator - at least one phone number should be provided.
 
 var addressSchema = Schema({
+  // ref to the client.  uuid of the client is stored here.
   client : {type: String, ref: 'Client'},
 
   // address line 1
@@ -64,6 +70,7 @@ var addressSchema = Schema({
 });
 
 var emailSchema = Schema({
+  // ref to the client.  uuid of the client is stored here.
   client : {type: String, ref: 'Client'},
 
   // email id
@@ -74,6 +81,7 @@ var emailSchema = Schema({
 });
 
 var contactNumberSchema = Schema({
+  // ref to the client.  uuid of the client is stored here.
   client : {type: String, ref: 'Client'},
 
   // email id
