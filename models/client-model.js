@@ -22,18 +22,6 @@ var clientSchema = Schema({
 
   // Client type. "corporate", "retail", etc.,
   type: {type: String, required: [true, 'client type is required']},
-
-  // Addresses
-  // addresses: [{type: String, ref: 'Address'}],
-
-  // emails
-  // emails: [{ type: String, ref: 'Email'}],
-
-  // contact numbers
-  // contactNumbers: [{type: String, ref: 'ContactNumber'}],
-
-  // role
-  role: {type: String, ref: 'Role'},
 });
 
 // TODO: This validator should be brought back when we know how to do this better.

@@ -50,7 +50,8 @@ module.exports = function(grunt) {
             "public/",
             "services/",
             "views/",
-          ]
+          ],
+          debug: true,
         }
       }
     },
