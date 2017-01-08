@@ -13,5 +13,4 @@ var deviceTypeSchema = Schema({
   status: {type: String, required: true},
 });
 
-var DeviceType = mongoose.model('DeviceType', deviceTypeSchema);
-module.exports = DeviceType;
+exports.DeviceType = mongoose.model('DeviceType', deviceTypeSchema);

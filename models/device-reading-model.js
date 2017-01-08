@@ -22,5 +22,4 @@ var deviceReadingSchema = Schema({
   }],
 });
 
-var Device = mongoose.model('DeviceReading', deviceReadingSchema);
-module.exports = Device;
+exports.DeviceReading = mongoose.model('DeviceReading', deviceReadingSchema);

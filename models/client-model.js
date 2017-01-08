@@ -84,10 +84,10 @@ var contactNumberSchema = Schema({
   // ref to the client.  uuid of the client is stored here.
   client : {type: String, ref: 'Client'},
 
-  // email id
+  // contact number
   number : {type: String, required: true},
 
-  // email type
+  // type - 'work', 'home', 'personal', 'airtel', 'vodafone', 'fax', ...
   type: String,
 });
 

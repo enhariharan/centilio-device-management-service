@@ -21,5 +21,4 @@ var deviceSchema = Schema({
   deviceType: {type: String, ref: 'DeviceType'},
 });
 
-var Device = mongoose.model('Device', deviceSchema);
-module.exports = Device;
+exports.Device = mongoose.model('Device', deviceSchema);
