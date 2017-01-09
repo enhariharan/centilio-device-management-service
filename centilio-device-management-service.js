@@ -1,12 +1,23 @@
-var express = require('express');
-var http = require('http');
-var credentials = require('./credentials.js');
-var mongoose = require('mongoose');
-var app = express();
+var express = require('express'),
+    http = require('http'),
+    credentials = require('./credentials.js'),
+    mongoose = require('mongoose')
+    cors = require('cors'),
+    app = express();
+
 // var Device = require('./models/device-model.js');
 
 app.set('port', credentials.server.port || 4123);
 app.use(express.static(__dirname + '/public'));
+
+//TODO: Right now, CORS is enabled across the board.  Do check and limit this as needed.
+// Refer to these links to see how:
+// https://github.com/expressjs/cors
+// https://stackoverflow.com/questions/7067966/how-to-allow-cors
+// http://enable-cors.org/server_expressjs.html
+// https://www.npmjs.com/package/cors
+app.use(cors()); // enable CORS across the board
+app.options('*', cors()) // enable CORS pre-flight reqeusts across the board
 
 // configure loggers as per environment
 switch (app.get('env')) {
