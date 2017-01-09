@@ -4,9 +4,10 @@ var mongoose = require('mongoose'),
     DeviceParam = require('./device-param-model.js');
 
 var deviceReadingSchema = Schema({
-  // unique id and created timestamp.
-  uuid: {type: String, required: true},
-  timestamp: {type: Date, required: true},
+  // unique id, created timestamp and saved timestamp.
+  uuid: {type: String, required: true}, // This is set at the server side and should not be set by the device
+  timestamp: {type: Date, required: true}, // This is set by the device sending the reading
+  serverTimestamp:  {type: Date, required: true}, // This is set by the server at the time of persisting into the db
 
   // device - reference to the device whose readings are beings stored.
   device: {type: String, ref: 'Device'},

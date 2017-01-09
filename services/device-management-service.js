@@ -18,6 +18,7 @@ exports.getAllDevices = function(callback) {
         var dev = {
           uuid: device.uuid,
           timestamp: device.timestamp,
+          serverTimestamp: device.serverTimestamp,
           name: device.name,
           latitude: device.latitude,
           longitude: device.longitude,
@@ -49,6 +50,7 @@ exports.getDevice = function(uuid, callback) {
         var dev = {
           uuid: device.uuid,
           timestamp: device.timestamp,
+          serverTimestamp: device.serverTimestamp,
           name: device.name,
           latitude: device.latitude,
           longitude: device.longitude,
