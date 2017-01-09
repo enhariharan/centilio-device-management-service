@@ -1,5 +1,5 @@
 # centilio-device-management-server
-[![Build Status](https://secure.travis-ci.org/hariharan/temp.png?branch=master)](http://travis-ci.org/hariharan/temp)
+[![Build Status]
 
 Centilio device management service
 
@@ -22,7 +22,7 @@ $ sudo service mongod start
 
 - Clone the "develop" branch
 ``` bash
-$ git clone git@github.com:enhariharan/centilio-device-management-service.git
+$ git clone git@github.com:enhariharan/centilio-device-management-service.git # change this
 ```
 
 - Change into root folder of the project and install all dependencies
@@ -64,5 +64,5 @@ _(Coming soon)_
 _(Nothing yet)_
 
 ## License
-Copyright (c) 2016 Hariharan Narayanan  
+Copyright (c) 2016 Centilio
 Licensed under the UNLICENSED license.
