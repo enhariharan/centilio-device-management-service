@@ -16,6 +16,7 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
  *         {
  *           "uuid": "caf95dc0-3a6c-44e1-9fee-545f22b43b5c",
  *           "timestamp": "2017-01-05T12:47:08.240Z",
+ *           "serverTimestamp": "2017-01-05T14:17:14.968Z",
  *           "readings": [
  *             {
  *               "type": "latitude",
@@ -59,6 +60,7 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
  *         {
  *         "uuid": "6a91cf1d-e241-48c7-955d-4cd470ec5afb",
  *         "timestamp": "2017-01-05T14:17:14.968Z",
+ *         "serverTimestamp": "2017-01-05T14:17:14.968Z",
  *         "device": "0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80",
  *         "readings": [
  *         {
@@ -76,18 +78,28 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
  *     {
  *       "uuid": "047919ce-2d97-4ee3-ab55-80fb3ebd433a",
  *       "timestamp": "2017-01-05T14:34:29.561Z",
+ *       "serverTimestamp": "2017-01-05T14:17:14.968Z",
  *       "device": "0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80",
- *       "readings": [
- *         {
- *           "type": "latitude",
- *           "value": "100.01",
- *           "_id": "586e5975161aba63da03687c"
- *         },
- *         {
- *           "type": "longitude",
- *           "value": "100.01",
- *           "_id": "586e5975161aba63da03687b"
- *         }
+ *       "readings":
+ *         [
+ *           {
+ *             "type": "latitude",
+ *             "value": "100.01",
+ *             "_id": "586e5975161aba63da03687c"
+ *           },
+ *           {
+ *             "type": "longitude",
+ *             "value": "100.01",
+ *             "_id": "586e5975161aba63da03687b"
+ *           },
+ *           {
+ *             "type": "charging status",
+ *             "value": "discharging"
+ *           },
+ *           {
+ *             "type": "current charge",
+ *             "value": "85"
+ *           }
  *       ]
  *     }
  */
@@ -110,17 +122,29 @@ exports.getDeviceReading = function (req, res) {
  *
  * @apiParam (deviceReading) {json} deviceReading Give a device reading as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
- *       {
- *         "device":"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80",
- *         "readings": [{
+ *     {
+ *       "device":"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80",
+ *       "timestamp": 1483625834968,
+ *       "readings":
+ *         [
+ *           {
  *             "type": "latitude",
  *             "value": "100.01"
  *           },
  *           {
  *             "type": "longitude",
  *             "value": "100.01"
- *           }]
- *       }
+ *           },
+ *           {
+ *             "type": "charging status",
+ *             "value": "discharging"
+ *           },
+ *           {
+ *             "type": "current charge",
+ *             "value": "85"
+ *           }
+ *         ]
+ *     }
  *
  * @apiSuccess (201) {DeviceReading} deviceReading Created device reading is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
@@ -128,6 +152,7 @@ exports.getDeviceReading = function (req, res) {
  *     {
  *       "uuid": "6a91cf1d-e241-48c7-955d-4cd470ec5afb",
  *       "timestamp": 1483625834968,
+ *       "serverTimestamp": 1483625834968,
  *       "device": "0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80",
  *       "readings":
  *         [
@@ -138,6 +163,14 @@ exports.getDeviceReading = function (req, res) {
  *           {
  *             "type": "longitude",
  *             "value": "100.01"
+ *           },
+ *           {
+ *             "type": "charging status",
+ *             "value": "discharging"
+ *           },
+ *           {
+ *             "type": "current charge",
+ *             "value": "85"
  *           }
  *         ]
  *     }
@@ -153,7 +186,8 @@ exports.addDeviceReading = function (req, res) {
 
   var deviceReading = {
     uuid: utils.getUuid(),
-    timestamp: utils.getTimestamp(),
+    timestamp: req.body.timestamp,
+    serverTimestamp: utils.getTimestamp(),
     device: req.body.device,
     readings: [],
   };

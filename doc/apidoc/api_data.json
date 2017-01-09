@@ -362,7 +362,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"device\":\"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\": [{\n      \"type\": \"latitude\",\n      \"value\": \"100.01\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\"\n    }]\n}",
+          "content": "{\n  \"device\":\"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"timestamp\": 1483625834968,\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"charging status\",\n        \"value\": \"discharging\"\n      },\n      {\n        \"type\": \"current charge\",\n        \"value\": \"85\"\n      }\n    ]\n}",
           "type": "json"
         }
       ]
@@ -382,7 +382,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n  \"timestamp\": 1483625834968,\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\"\n      }\n    ]\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n  \"timestamp\": 1483625834968,\n  \"serverTimestamp\": 1483625834968,\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"charging status\",\n        \"value\": \"discharging\"\n      },\n      {\n        \"type\": \"current charge\",\n        \"value\": \"85\"\n      }\n    ]\n}",
           "type": "json"
         }
       ]
@@ -451,7 +451,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n      \"uuid\": \"caf95dc0-3a6c-44e1-9fee-545f22b43b5c\",\n      \"timestamp\": \"2017-01-05T12:47:08.240Z\",\n      \"readings\": [\n        {\n          \"type\": \"latitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a5320\"\n        },\n        {\n          \"type\": \"longitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a531f\"\n        }\n      ]\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n      \"uuid\": \"caf95dc0-3a6c-44e1-9fee-545f22b43b5c\",\n      \"timestamp\": \"2017-01-05T12:47:08.240Z\",\n      \"serverTimestamp\": \"2017-01-05T14:17:14.968Z\",\n      \"readings\": [\n        {\n          \"type\": \"latitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a5320\"\n        },\n        {\n          \"type\": \"longitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a531f\"\n        }\n      ]\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -498,7 +498,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n    \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n    \"timestamp\": \"2017-01-05T14:17:14.968Z\",\n    \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n    \"readings\": [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbf\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbe\"\n    }\n  ]\n},\n{\n  \"uuid\": \"047919ce-2d97-4ee3-ab55-80fb3ebd433a\",\n  \"timestamp\": \"2017-01-05T14:34:29.561Z\",\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\": [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e5975161aba63da03687c\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e5975161aba63da03687b\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n    \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n    \"timestamp\": \"2017-01-05T14:17:14.968Z\",\n    \"serverTimestamp\": \"2017-01-05T14:17:14.968Z\",\n    \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n    \"readings\": [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbf\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbe\"\n    }\n  ]\n},\n{\n  \"uuid\": \"047919ce-2d97-4ee3-ab55-80fb3ebd433a\",\n  \"timestamp\": \"2017-01-05T14:34:29.561Z\",\n  \"serverTimestamp\": \"2017-01-05T14:17:14.968Z\",\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\",\n        \"_id\": \"586e5975161aba63da03687c\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\",\n        \"_id\": \"586e5975161aba63da03687b\"\n      },\n      {\n        \"type\": \"charging status\",\n        \"value\": \"discharging\"\n      },\n      {\n        \"type\": \"current charge\",\n        \"value\": \"85\"\n      }\n  ]\n}",
           "type": "json"
         }
       ]
