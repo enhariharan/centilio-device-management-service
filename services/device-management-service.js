@@ -1,4 +1,4 @@
-var Device = require('../models/device-model.js'),
+var Device = require('../models/device-model.js').Device,
     DeviceTypeManagementService = require('./device-type-management-service.js');
 
 exports.getAllDevices = function(callback) {

@@ -1,4 +1,4 @@
-var DeviceReading = require('../models/device-reading-model.js'),
+var DeviceReading = require('../models/device-reading-model.js').DeviceReading,
     Device = require('../models/device-model.js'),
     DeviceReadingManagementService = require('./device-reading-management-service.js');
 

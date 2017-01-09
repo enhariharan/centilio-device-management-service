@@ -1,4 +1,4 @@
-var DeviceParam = require('../models/device-param-model.js'),
+var DeviceParam = require('../models/device-param-model.js').DeviceParam,
     DeviceTypeManagementService = require('./device-type-management-service.js');
 
 exports.getAllDeviceParams = function(callback) {
