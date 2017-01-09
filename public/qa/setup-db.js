@@ -177,33 +177,43 @@ var userClient2retail = new User({uuid: utilities.getUuid(), timestamp: utilitie
 var users = [userClient1corp1, userClient2corp1, userClient1corp2, userClient2corp2,
   userClient1retail, userClient2retail];
 
-var device1Reading1 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device1Reading1 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.01'}, {type: 'longitude', value: '100.001'}, {type: 'charging status', value: 'charging'}, {type: 'current charge', value: '80'}]});
-var device1Reading2 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device1Reading2 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'charging'}, {type: 'current charge', value: '85'}]});
-var device1Reading3 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device1Reading3 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'charging'}, {type: 'current charge', value: '90'}]});
-var device1Reading4 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device1Reading4 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'charging'}, {type: 'current charge', value: '95'}]});
-var device1Reading5 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device1Reading5 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'charging'}, {type: 'current charge', value: '100'}]});
-var device2Reading1 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device2Reading1 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'discharging'}, {type: 'current charge', value: '100'}]});
-var device2Reading2 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device2Reading2 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'discharging'}, {type: 'current charge', value: '95'}]});
-var device2Reading3 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device2Reading3 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'discharging'}, {type: 'current charge', value: '90'}]});
-var device2Reading4 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device2Reading4 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'discharging'}, {type: 'current charge', value: '85'}]});
-var device2Reading5 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), device: device1.uuid,
+var device2Reading5 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
   readings: [{type: 'latitude', value: '100.001'}, {type: 'longitude', value: '100.001'},
   {type: 'charging status', value: 'discharging'}, {type: 'current charge', value: '75'}]});
 var deviceReadings = [
