@@ -19,5 +19,4 @@ var deviceParamSchema = Schema({
   deviceType: {type: String, ref: 'DeviceType'},
 });
 
-var DeviceParam = mongoose.model('DeviceParam', deviceParamSchema);
-module.exports = DeviceParam;
+exports.DeviceParam = mongoose.model('DeviceParam', deviceParamSchema);

@@ -175,7 +175,7 @@ define({ "api": [
     "url": "/deviceParams",
     "title": "Add a new device param",
     "name": "addDeviceParam",
-    "group": "DeviceParam",
+    "group": "Device_Params",
     "parameter": {
       "fields": {
         "deviceParam": [
@@ -240,7 +240,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-params-controller.js",
-    "groupTitle": "DeviceParam",
+    "groupTitle": "Device_Params",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceParams"
@@ -252,7 +252,7 @@ define({ "api": [
     "url": "/deviceParams",
     "title": "Get all available device params",
     "name": "getAllDeviceParams",
-    "group": "DeviceParam",
+    "group": "Device_Params",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -287,7 +287,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-params-controller.js",
-    "groupTitle": "DeviceParam",
+    "groupTitle": "Device_Params",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceParams"
@@ -299,7 +299,7 @@ define({ "api": [
     "url": "/deviceParams/:uuid",
     "title": "Get device param by given uuid",
     "name": "getDeviceParam",
-    "group": "DeviceParam",
+    "group": "Device_Params",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -334,7 +334,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-params-controller.js",
-    "groupTitle": "DeviceParam",
+    "groupTitle": "Device_Params",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceParams/:uuid"
@@ -346,7 +346,7 @@ define({ "api": [
     "url": "/deviceReadings",
     "title": "Add a new device reading",
     "name": "addDeviceReading",
-    "group": "DeviceReading",
+    "group": "Device_Readings",
     "parameter": {
       "fields": {
         "deviceReading": [
@@ -362,7 +362,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"uuid\": \"caf95dc0-3a6c-44e1-9fee-545f22b43b5c\",\n  \"timestamp\": 1483620428240,\n  \"readings\":\n  [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\"\n    }\n  ]\n}",
+          "content": "{\n  \"device\":\"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\": [{\n      \"type\": \"latitude\",\n      \"value\": \"100.01\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\"\n    }]\n}",
           "type": "json"
         }
       ]
@@ -382,7 +382,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"caf95dc0-3a6c-44e1-9fee-545f22b43b5c\",\n  \"timestamp\": 1483620428240,\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\"\n      }\n    ]\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n  \"timestamp\": 1483625834968,\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\":\n    [\n      {\n        \"type\": \"latitude\",\n        \"value\": \"100.01\"\n      },\n      {\n        \"type\": \"longitude\",\n        \"value\": \"100.01\"\n      }\n    ]\n}",
           "type": "json"
         }
       ]
@@ -411,7 +411,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-readings-controller.js",
-    "groupTitle": "DeviceReading",
+    "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceReadings"
@@ -423,7 +423,7 @@ define({ "api": [
     "url": "/deviceReadings",
     "title": "Get all available device readings",
     "name": "getAllDeviceReadings",
-    "group": "DeviceReading",
+    "group": "Device_Readings",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -458,7 +458,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-readings-controller.js",
-    "groupTitle": "DeviceReading",
+    "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceReadings"
@@ -470,7 +470,7 @@ define({ "api": [
     "url": "/deviceReadings/:uuid",
     "title": "Get device reading by given uuid",
     "name": "getDeviceReading",
-    "group": "DeviceReading",
+    "group": "Device_Readings",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -498,14 +498,14 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n      \"uuid\": \"caf95dc0-3a6c-44e1-9fee-545f22b43b5c\",\n      \"timestamp\": \"2017-01-05T12:47:08.240Z\",\n      \"readings\": [\n        {\n          \"type\": \"latitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a5320\"\n        },\n        {\n          \"type\": \"longitude\",\n          \"value\": \"100.01\",\n          \"_id\": \"586e404cc3bbdf51608a531f\"\n        }\n      ]\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceReadings\": [\n    {\n    \"uuid\": \"6a91cf1d-e241-48c7-955d-4cd470ec5afb\",\n    \"timestamp\": \"2017-01-05T14:17:14.968Z\",\n    \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n    \"readings\": [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbf\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e556a0f758160e6df6fbe\"\n    }\n  ]\n},\n{\n  \"uuid\": \"047919ce-2d97-4ee3-ab55-80fb3ebd433a\",\n  \"timestamp\": \"2017-01-05T14:34:29.561Z\",\n  \"device\": \"0a1da6bc-eb49-4f31-9bb1-83ed46c1eb80\",\n  \"readings\": [\n    {\n      \"type\": \"latitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e5975161aba63da03687c\"\n    },\n    {\n      \"type\": \"longitude\",\n      \"value\": \"100.01\",\n      \"_id\": \"586e5975161aba63da03687b\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
     "filename": "./controllers/device-readings-controller.js",
-    "groupTitle": "DeviceReading",
+    "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceReadings/:uuid"
@@ -517,7 +517,7 @@ define({ "api": [
     "url": "/devicetypes",
     "title": "Add a new device type",
     "name": "addDeviceType",
-    "group": "DeviceType",
+    "group": "Device_Type",
     "parameter": {
       "fields": {
         "deviceType": [
@@ -582,7 +582,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-types-controller.js",
-    "groupTitle": "DeviceType",
+    "groupTitle": "Device_Type",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//devicetypes"
@@ -594,7 +594,7 @@ define({ "api": [
     "url": "/deviceTypes",
     "title": "Get all available device types",
     "name": "getAllDeviceTypes",
-    "group": "DeviceType",
+    "group": "Device_Type",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -629,7 +629,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-types-controller.js",
-    "groupTitle": "DeviceType",
+    "groupTitle": "Device_Type",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//deviceTypes"
@@ -641,7 +641,7 @@ define({ "api": [
     "url": "/devicetypes/:uuid",
     "title": "Get device type by given uuid",
     "name": "getDeviceType",
-    "group": "DeviceType",
+    "group": "Device_Type",
     "parameter": {
       "fields": {
         "Parameter": [
@@ -676,7 +676,7 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "./controllers/device-types-controller.js",
-    "groupTitle": "DeviceType",
+    "groupTitle": "Device_Type",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//devicetypes/:uuid"

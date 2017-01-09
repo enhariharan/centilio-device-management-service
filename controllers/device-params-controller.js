@@ -4,7 +4,7 @@ var DeviceParamManagementService = require('../services/device-param-management-
 /**
  * @api {get} /deviceParams Get all available device params
  * @apiName getAllDeviceParams
- * @apiGroup DeviceParam
+ * @apiGroup Device Params
  *
  * @apiParam None
  *
@@ -49,7 +49,7 @@ var DeviceParamManagementService = require('../services/device-param-management-
 /**
  * @api {get} /deviceParams/:uuid Get device param by given uuid
  * @apiName getDeviceParam
- * @apiGroup DeviceParam
+ * @apiGroup Device Params
  *
  * @apiParam None
  *
@@ -82,7 +82,7 @@ exports.getDeviceParam = function (req, res) {
 /**
  * @api {post} /deviceParams Add a new device param
  * @apiName addDeviceParam
- * @apiGroup DeviceParam
+ * @apiGroup Device Params
  *
  * @apiParam (deviceParam) {json} deviceParam Give a device param as JSON.  UUID and timestamp are automatically generated.
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:

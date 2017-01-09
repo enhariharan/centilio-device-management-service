@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
+    Device = require('./device-model.js'),
     DeviceParam = require('./device-param-model.js');
 
 var deviceReadingSchema = Schema({
@@ -8,7 +9,7 @@ var deviceReadingSchema = Schema({
   timestamp: {type: Date, required: true},
 
   // device - reference to the device whose readings are beings stored.
-  device: {type: String, ref: 'DeviceParam'},
+  device: {type: String, ref: 'Device'},
 
   // array of readings from the device
   readings: [{
@@ -21,5 +22,4 @@ var deviceReadingSchema = Schema({
   }],
 });
 
-var Device = mongoose.model('DeviceReading', deviceReadingSchema);
-module.exports = Device;
+exports.DeviceReading = mongoose.model('DeviceReading', deviceReadingSchema);

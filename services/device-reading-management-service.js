@@ -1,4 +1,5 @@
 var DeviceReading = require('../models/device-reading-model.js'),
+    Device = require('../models/device-model.js'),
     DeviceReadingManagementService = require('./device-reading-management-service.js');
 
 exports.getAllDeviceReadings = function(callback) {
@@ -18,6 +19,7 @@ exports.getAllDeviceReadings = function(callback) {
         var devReading = {
           uuid: deviceReading.uuid,
           timestamp: deviceReading.timestamp,
+          device: deviceReading.device,
           readings: [],
         };
         deviceReading.readings.forEach(function(reading) {
@@ -48,6 +50,7 @@ exports.getDeviceReading = function(uuid, callback) {
         var devReading = {
           uuid: deviceReading.uuid,
           timestamp: deviceReading.timestamp,
+          device: deviceReading.device,
           readings: [],
         };
         deviceReading.readings.forEach(function(reading) {
@@ -61,14 +64,26 @@ exports.getDeviceReading = function(uuid, callback) {
 }
 
 exports.addDeviceReading = function(deviceReading, callback) {
-  console.info('deviceReading: ' + JSON.stringify(deviceReading));
   var deviceReadingToSave = new DeviceReading(deviceReading);
-  console.info('deviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
+
+  // Validate that the device mentioned in the POST is present in the DB
+  if (deviceReading.device === undefined || deviceReading.device === null) {
+    console.error('Device uuid not provided in the device reading.');
+    return callback(400);
+  }
+  Device.find({uuid: deviceReading.device}, function(err){
+    if (err) {
+      console.error('Device uuid was incorrect in the device reading.');
+      return callback(400);
+    }
+  });
+  deviceReadingToSave.device = deviceReading.device;
 
   // Now save new device reading into collection "devicereadings"
+  console.error('deviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
   deviceReadingToSave.save(function(err) {
     if (err) {
-      console.log('Error while saving device reading to database.');
+      console.log('Error while saving device reading to database.' + err.stack);
     }
     return callback(err);
   });
