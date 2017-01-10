@@ -155,7 +155,7 @@ exports.addClient = function(clientDTO, callback) {
   });
 }
 
-var _getClient = function(uuid) {
+var _getClient = function(clientUuid) {
   return new Promise(
     function(resolve, reject) {
       // initialize the query result that will be sent back
@@ -174,10 +174,10 @@ var _getClient = function(uuid) {
       };
 
       // initialize async queries to be done from the database and exectue them
-      var findClientQueryPromise = Client.findOne({uuid: uuid}).exec();
-      var findAllAddressesForClientQueryPromise = Address.find({client: uuid}).exec();
-      var findAllEmailsForClientQueryPromise = Email.find({client: uuid}).exec();
-      var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: uuid}).exec();
+      var findClientQueryPromise = Client.findOne({uuid: clientUuid}).exec();
+      var findAllAddressesForClientQueryPromise = Address.find({client: clientUuid}).exec();
+      var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
+      var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
@@ -240,3 +240,8 @@ var _fillDtoWithClientContactNumberDetails = function(clientDTO, contactNumbers)
     });
   }
 }
+
+var _getClientByUser = function(username) {
+  var user = UserManagementService.getUser({username: username});
+  return getClient(user.client);
+};
