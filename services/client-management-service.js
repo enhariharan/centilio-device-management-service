@@ -39,12 +39,74 @@ exports.getAllClients = function(callback) {
   });
 }
 
-exports.getClient = function(uuid) {
-  return _getClient(uuid);
+exports.getClient = function(clientUuid) {
+  return new Promise(
+    (resolve, reject) => {
+      // initialize the query result that will be sent back
+      var clientDTO = { uuid: '',
+        timestamp: null,
+        corporateName: '',
+        firstName: '',
+        lastName: '',
+        middleName: '',
+        type: '',
+        role: '',
+        addresses: [],
+        emails: [],
+        contactNumbers: [] };
+
+      // initialize async queries to be done from the database and exectue them
+      var findClientQueryPromise = Client.findOne({uuid: clientUuid}).exec();
+      var findAllAddressesForClientQueryPromise = Address.find({client: clientUuid}).exec();
+      var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
+      var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
+
+      // Now get the results of the async queries and collect all results into the result DTO
+      findClientQueryPromise.then(
+        client => {
+          console.log('\nclient: ' + client);
+          _fillDtoWithClientDetails(clientDTO, client);
+          return findAllAddressesForClientQueryPromise;
+        }
+      ).then(
+        addresses => {
+          console.log('\naddresses: ' + addresses);
+          _fillDtoWithClientAdressDetails(clientDTO, addresses);
+          return findAllEmailsForClientQueryPromise;
+        }
+      ).then(
+        emails => {
+          console.log('\nemails: ' + emails);
+          _fillDtoWithClientEmailDetails(clientDTO, emails);
+          return findAllContactNumbersForClientQueryPromise;
+        }
+      ).then(
+        contactNumbers => {
+          console.log('\ncontactNumbers: ' + contactNumbers);
+          _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
+          console.info('\nclientDTO at the very end ====> : ' + JSON.stringify(clientDTO));
+          resolve(clientDTO);
+        }
+      ).catch(err => { reject(err); });
+    }
+  );
 }
 
-exports.getClientByUser = function(user) {
-  return _getClientByUser(user);
+exports.getClientByUsername = function(username) {
+  return new Promise(
+    (resolve, reject) => {
+      console.info('\ngetClientByUsername() called with username: ', username);
+      UserManagementService.getUser({username: username})
+      .then(user => {
+        console.info('\ngetClientByUsername() called with username: ', username);
+        console.info('\nuser: ', user);
+        return _getClient(user.client);
+      }).then(client => {
+        console.info('\nclient: ', client);
+        resolve(client);
+      });
+    }
+  );
 }
 
 exports.addClient = function(clientDTO, callback) {
@@ -155,57 +217,6 @@ exports.addClient = function(clientDTO, callback) {
   });
 }
 
-var _getClient = function(clientUuid) {
-  return new Promise(
-    function(resolve, reject) {
-      // initialize the query result that will be sent back
-      var clientDTO = {
-        uuid: '',
-        timestamp: null,
-        corporateName: '',
-        firstName: '',
-        lastName: '',
-        middleName: '',
-        type: '',
-        role: '',
-        addresses: [],
-        emails: [],
-        contactNumbers: [],
-      };
-
-      // initialize async queries to be done from the database and exectue them
-      var findClientQueryPromise = Client.findOne({uuid: clientUuid}).exec();
-      var findAllAddressesForClientQueryPromise = Address.find({client: clientUuid}).exec();
-      var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
-      var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
-
-      // Now get the results of the async queries and collect all results into the result DTO
-      findClientQueryPromise.then(
-        client => {
-          _fillDtoWithClientDetails(clientDTO, client);
-          return findAllAddressesForClientQueryPromise;
-        }
-      ).then(
-        addresses => {
-          _fillDtoWithClientAdressDetails(clientDTO, addresses);
-          return findAllEmailsForClientQueryPromise;
-        }
-      ).then(
-        emails => {
-          _fillDtoWithClientEmailDetails(clientDTO, emails);
-          return findAllContactNumbersForClientQueryPromise;
-        }
-      ).then(
-        contactNumbers => {
-          _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
-          console.info('\nclientDTO at the very end ====> : ' + JSON.stringify(clientDTO));
-          resolve(clientDTO);
-        }
-      ).catch(err => { reject(err); });
-    }
-  );
-};
-
 var _fillDtoWithClientDetails = function(clientDTO, client) {
   clientDTO.uuid = client.uuid;
   clientDTO.timestamp = client.timestamp;
@@ -240,8 +251,3 @@ var _fillDtoWithClientContactNumberDetails = function(clientDTO, contactNumbers)
     });
   }
 }
-
-var _getClientByUser = function(username) {
-  var user = UserManagementService.getUser({username: username});
-  return getClient(user.client);
-};
