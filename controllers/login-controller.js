@@ -1,5 +1,6 @@
 var basicAuth = require('basic-auth'),
-    UserManagementService = require('../services/user-management-service');
+    UserManagementService = require('../services/user-management-service'),
+    ClientManagementService = require('../services/client-management-service');
 
 /**
  * @api {get} /login login into the device manager
@@ -66,7 +67,6 @@ exports.login = function (req, res) {
 
   // Get the credentials
   var credentials = basicAuth(req);
-  console.info('credentials: ' + JSON.stringify(credentials));
 
   // validate if the user is present and passwords match
   // if match found, send back client details
@@ -75,10 +75,10 @@ exports.login = function (req, res) {
   // lest he/she go fishing with different username password combos.
   UserManagementService.getUser(credentials)
   .then(user => {
-    console.info('user: ' + JSON.stringify(user));
-    ClientManagementService.getClientByUser(user.username);
+    return ClientManagementService.getClient(user.client);
   })
   .then( client => {
+    console.info('\nclient: ' + client + '\n');
     res.status(200).send(client);
   })
   .catch(err => {res.status(200).send('OK');});
