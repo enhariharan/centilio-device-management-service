@@ -1,7 +1,7 @@
 var express = require('express'),
     http = require('http'),
     credentials = require('./credentials.js'),
-    mongoose = require('mongoose')
+    mongoose = require('mongoose'),
     cors = require('cors'),
     app = express();
 
@@ -17,7 +17,7 @@ app.use(express.static(__dirname + '/public'));
 // http://enable-cors.org/server_expressjs.html
 // https://www.npmjs.com/package/cors
 app.use(cors()); // enable CORS across the board
-app.options('*', cors()) // enable CORS pre-flight reqeusts across the board
+app.options('*', cors()); // enable CORS pre-flight reqeusts across the board
 
 // configure loggers as per environment
 switch (app.get('env')) {
