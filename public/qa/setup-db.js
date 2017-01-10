@@ -151,27 +151,27 @@ var contactNumbers = [cn1Client1Corp1, cn1Client2Corp1, cn1Client1Corp2,
   cn1Client2retail, cn2Client2retail];
 
 var userClient1corp1 = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient1Corp1', password: 'password',
   status: 'activated', gender: 'male', profilePicPath: '//some/example/path',
   client: client1corp1.uuid, role: roleUser.uuid});
 var userClient2corp1 = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient2Corp1', password: 'password',
   status: 'activated', gender: 'female', profilePicPath: '//some/example/path',
   client: client2corp1.uuid, role: roleAdmin.uuid});
 var userClient1corp2 = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient1Corp2', password: 'password',
   status: 'activated', gender: 'female', profilePicPath: '//some/example/path',
   client: client1corp2.uuid, role: roleUser.uuid});
 var userClient2corp2 = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient2corp2', password: 'password',
   status: 'activated', gender: 'male', profilePicPath: '//some/example/path',
   client: client2corp2.uuid, role: roleAdmin.uuid});
 var userClient1retail = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient1retail', password: 'password',
   status: 'activated', gender: 'male', profilePicPath: '//some/example/path',
   client: client1retail.uuid, role: roleUser.uuid});
 var userClient2retail = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-  username: 'userClient1Corp1', password: 'passwordclient1corp1',
+  username: 'userClient2retail', password: 'password',
   status: 'activated', gender: 'female', profilePicPath: '//some/example/path',
   client: client2retail.uuid, role: roleUser.uuid});
 var users = [userClient1corp1, userClient2corp1, userClient1corp2, userClient2corp2,
