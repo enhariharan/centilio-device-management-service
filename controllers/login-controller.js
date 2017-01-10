@@ -78,7 +78,6 @@ exports.login = function (req, res) {
     return ClientManagementService.getClient(user.client);
   })
   .then( client => {
-    console.info('\nclient: ' + client + '\n');
     res.status(200).send(client);
   })
   .catch(err => {res.status(200).send('OK');});
