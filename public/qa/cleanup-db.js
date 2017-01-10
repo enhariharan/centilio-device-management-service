@@ -18,7 +18,7 @@ var DeviceType = require('../../models/device-type-model').DeviceType;
 
 var opts = {
  server: {
-   secketOptions: { keepAlive: 1 }
+   socketOptions: { keepAlive: 1 }
  }
 };
 mongoose.connect(credentials.mongo.test.connectionString, opts);

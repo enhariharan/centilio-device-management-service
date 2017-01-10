@@ -1,15 +1,16 @@
 var assert = require('chai').assert;
 var ClientManagementService = require('../../services/client-management-service.js');
-var Client = require('../../models/client-model.js');
+var Client = require('../../models/client-model.js').Client;
 var Utils = require('../../models/utilities.js');
 var mongoose = require('mongoose');
 var credentials = require('../../credentials.js');
 var opts = {
   server: {
-    secketOptions: { keepAlive: 1 }
+    socketOptions: { keepAlive: 1 }
   }
 };
-mongoose.connect(credentials.mongo.development.connectionString, opts);
+
+var dbConnection = mongoose.createConnection(credentials.mongo.development.connectionString, opts);
 
 suite('ClientManagementService Unit tests', function() {
   test('at least one address should be provided for a new Client to be saved successfully', function(done) {
@@ -72,3 +73,5 @@ suite('ClientManagementService Unit tests', function() {
     done();
   });
 });
+
+dbConnection.close();

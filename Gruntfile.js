@@ -10,6 +10,7 @@ module.exports = function(grunt) {
         src: [
           'public/qa/tests-stress.js',
           'public/qa/tests-unit-client-management-service.js',
+          'public/qa/tests-integ-login-controller.js',
         ],
         options: {ui: 'tdd'},
       }

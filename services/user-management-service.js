@@ -8,14 +8,13 @@ exports.getUser = function(credentials) {
       .then(
         users => {
           if (users !== null && users.length !== 1) reject(500);
-          var userDTO = {};
-          console.info('users: ' + JSON.stringify(users));
-          userDTO.username = users[0].username;
-          userDTO.gender = users[0].gender;
-          userDTO.profilePicPath = users[0].profilePicPath;
-          userDTO.client = users[0].client;
-          userDTO.role = users[0].role;
-          console.info('userDTO: ' + JSON.stringify(userDTO));
+          var userDTO = {
+            username: users[0].username,
+            gender: users[0].gender,
+            profilePicPath: users[0].profilePicPath,
+            client: users[0].client,
+            role: users[0].role
+          };
           resolve(userDTO);
         }
       ).catch(err => { reject(err); });
@@ -33,9 +32,9 @@ exports.addUser = function(credentials) {
         password: credentials.pass,
         status: 'registered',
       });
-      var findUserQueryPromise = User.find({username: credentials.name}).exec();
 
-      findUserQueryPromise.then(
+      User.find({username: credentials.name}).exec()
+      .then(
         user => {
           console.info('\nusers found: ' + JSON.stringify(user));
           if (user === null || user.length === 0) return userToSave.save();
