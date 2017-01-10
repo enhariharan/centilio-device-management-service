@@ -1,9 +1,9 @@
-var Client = require('../models/client-model.js').Client;
-var Address = require('../models/client-model.js').Address;
-var Email = require('../models/client-model.js').Email;
-var ContactNumber = require('../models/client-model.js').ContactNumber;
+var Client = require('../models/client-model').Client;
+var Address = require('../models/client-model').Address;
+var Email = require('../models/client-model').Email;
+var ContactNumber = require('../models/client-model').ContactNumber;
 var Validator = require('validator');
-var RoleManagementService = require('./role-management-service.js');
+var RoleManagementService = require('./role-management-service');
 
 exports.getAllClients = function(callback) {
   Client.find(function (err, clients) {
