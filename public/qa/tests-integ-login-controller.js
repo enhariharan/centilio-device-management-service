@@ -1,29 +1,22 @@
-var assert = require('chai').assert;
-var ClientManagementService = require('../../services/client-management-service.js');
-var Client = require('../../models/client-model.js').Client;
-var User = require('../../models/user-model.js').User;
-var Utils = require('../../models/utilities.js');
-var mongoose = require('mongoose');
-var restler = require('restler');
-var credentials = require('../../credentials.js');
-var opts = {
-  server: {
-    secketOptions: { keepAlive: 1 }
-  }
-};
-mongoose.connect(credentials.mongo.development.connectionString, opts);
+var assert = require('chai').assert,
+    mongoose = require('mongoose'),
+    restler = require('restler'),
 
-var baseurl = 'http://localhost:4123';
-var loginurl = baseurl + '/login';
+    ClientManagementService = require('../../services/client-management-service.js'),
+    Client = require('../../models/client-model.js').Client,
+    User = require('../../models/user-model.js').User,
+
+    credentials = require('../../credentials.js'),
+
+    opts = { server: { socketOptions: { keepAlive: 1 } } },
+    dbConnection = mongoose.createConnection(credentials.mongo.development.connectionString, opts),
+
+    baseurl = 'http://localhost:' + credentials.server.port,
+    loginurl = baseurl + '/login';
 
 suite('login controller integration tests', function() {
   test('getUser with proper credentials must return a client', (done) => {
-    var options = {
-      method: 'post',
-      username: 'userClient1Corp1',
-      password: 'password',
-    };
-    restler.get(loginurl, options)
+    restler.get(loginurl, { method: 'post', username: 'userClient1Corp1', password: 'password' })
     .on('success', client => {
       assert(client !== null);
       assert(client.corporateName === 'corporation 1');
@@ -59,4 +52,4 @@ suite('login controller integration tests', function() {
   });
 });
 
-// mongoose.connection.close();
+dbConnection.close();

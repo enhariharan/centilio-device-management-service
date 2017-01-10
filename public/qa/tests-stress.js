@@ -1,12 +1,13 @@
-var loadtest = require('loadtest');
-var expect = require('chai').expect;
+var loadtest = require('loadtest'),
+    expect = require('chai').expect,
+    credentials = require('../../credentials');
 
 suite('Stress tests', function() {
   test('Homepage should handle 500 requests in a second', function(done) {
     var options = {
-      url: 'http://localhost:3000',
+      url: 'http://localhost:' + credentials.server.port,
       concurrency: 4,
-      maxRequests: 100
+      maxRequests: 600
     };
 
     loadtest.loadTest(options, function(err, result) {
