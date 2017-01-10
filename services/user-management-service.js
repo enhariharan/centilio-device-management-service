@@ -10,12 +10,12 @@ exports.getUser = function(credentials) {
           if (users !== null && users.length !== 1) reject(500);
           var userDTO = {};
           console.info('users: ' + JSON.stringify(users));
-          console.info('userDTO: ' + JSON.stringify(userDTO));
           userDTO.username = users[0].username;
           userDTO.gender = users[0].gender;
           userDTO.profilePicPath = users[0].profilePicPath;
           userDTO.client = users[0].client;
           userDTO.role = users[0].role;
+          console.info('userDTO: ' + JSON.stringify(userDTO));
           resolve(userDTO);
         }
       ).catch(err => { reject(err); });
@@ -48,26 +48,6 @@ exports.addUser = function(credentials) {
         .catch(err => {
           console.info('\nerror: ' + JSON.stringify(err) + err.stack);
         });
-
-      // User.find({username: credentials.name}).exec()
-      // .then(
-      //   users => {
-      //     console.info('\nusers found: ' + JSON.stringify(users));
-      //     if (users !== null && users.length !== 0){
-      //       console.info('\nusers already exist: ' + JSON.stringify(users));
-      //       reject(400);
-      //     }
-      //     return userToSave.save();
-      //   })
-      //   .then(user => {
-      //     user.password = 'Not Displayed';
-      //     console.info('\nadded user: ' + JSON.stringify(user));
-      //     resolve(user);
-      //   })
-      //   .catch(err => {
-      //     console.error('error while saving new user: ' + err.stack);
-      //     reject(err);
-      //   });
       }
     );
   };

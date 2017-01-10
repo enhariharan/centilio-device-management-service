@@ -76,7 +76,7 @@ exports.login = function (req, res) {
   UserManagementService.getUser(credentials)
   .then(user => {
     console.info('user: ' + JSON.stringify(user));
-    ClientManagementService.getClientByUser(user);
+    ClientManagementService.getClientByUser(user.username);
   })
   .then( client => {
     res.status(200).send(client);
