@@ -2,6 +2,7 @@ var Client = require('../models/client-model').Client;
 var Address = require('../models/client-model').Address;
 var Email = require('../models/client-model').Email;
 var ContactNumber = require('../models/client-model').ContactNumber;
+var Device = require('../models/device-model').Device;
 var Validator = require('validator');
 var RoleManagementService = require('./role-management-service');
 
@@ -31,6 +32,7 @@ exports.getAllClients = function(callback) {
           addresses: client.addresses,
           emails: client.emails,
           contactNumbers: client.contactNumbers,
+          devices: client.devices,
         };
         return clientDTO;
       }),
@@ -53,37 +55,42 @@ exports.getClient = function(clientUuid) {
         role: '',
         addresses: [],
         emails: [],
-        contactNumbers: [] };
+        contactNumbers: [],
+        devices: [],
+       };
 
       // initialize async queries to be done from the database and exectue them
       var findClientQueryPromise = Client.findOne({uuid: clientUuid}).exec();
       var findAllAddressesForClientQueryPromise = Address.find({client: clientUuid}).exec();
       var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
       var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
+      var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
         client => {
-          console.log('\nclient: ' + client);
           _fillDtoWithClientDetails(clientDTO, client);
           return findAllAddressesForClientQueryPromise;
         }
       ).then(
         addresses => {
-          console.log('\naddresses: ' + addresses);
           _fillDtoWithClientAdressDetails(clientDTO, addresses);
           return findAllEmailsForClientQueryPromise;
         }
       ).then(
         emails => {
-          console.log('\nemails: ' + emails);
           _fillDtoWithClientEmailDetails(clientDTO, emails);
           return findAllContactNumbersForClientQueryPromise;
         }
       ).then(
         contactNumbers => {
-          console.log('\ncontactNumbers: ' + contactNumbers);
           _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
+          return findAllDevicesForClientQueryPromise;
+        }
+      ).then(
+        devices => {
+          console.log('\ndevices: ' + devices);
+          _fillDtoWithDeviceDetails(clientDTO, devices);
           console.info('\nclientDTO at the very end ====> : ' + JSON.stringify(clientDTO));
           resolve(clientDTO);
         }
@@ -230,24 +237,24 @@ var _fillDtoWithClientDetails = function(clientDTO, client) {
 
 var _fillDtoWithClientAdressDetails = function(clientDTO, addresses) {
   if (addresses.length != 0) {
-    addresses: addresses.map(function(address) {
-      clientDTO.addresses.push(address);
-    });
+    addresses: addresses.map(a => { clientDTO.addresses.push(a); });
   }
 }
 
 var _fillDtoWithClientEmailDetails = function(clientDTO, emails) {
   if (emails.length != 0) {
-    emails: emails.map(function(email) {
-      clientDTO.emails.push(email);
-    });
+    emails: emails.map(e => { clientDTO.emails.push(e); });
   }
 }
 
 var _fillDtoWithClientContactNumberDetails = function(clientDTO, contactNumbers) {
   if (contactNumbers.length != 0) {
-    contactNumbers: contactNumbers.map(function(contactNumber) {
-      clientDTO.contactNumbers.push(contactNumber);
-    });
+    contactNumbers: contactNumbers.map(c => { clientDTO.contactNumbers.push(c); });
+  }
+}
+
+var _fillDtoWithDeviceDetails = function(clientDTO, devices) {
+  if (devices.length != 0) {
+    devices: devices.map(d => { clientDTO.devices.push(d); });
   }
 }

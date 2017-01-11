@@ -47,6 +47,12 @@ suite('login controller integration tests', function() {
       assert(client.contactNumbers[0].client === client.uuid);
       assert(client.contactNumbers[0].number === '+911234567890');
       assert(client.contactNumbers[0].type === 'work');
+      assert(client.devices[0].client === client.uuid);
+      assert(client.devices[0].name === 'device 1');
+      assert(client.devices[0].status === 'online');
+      assert(client.devices[1].client === client.uuid);
+      assert(client.devices[1].name === 'device 2');
+      assert(client.devices[1].status === 'online');
       done();
     });
   });

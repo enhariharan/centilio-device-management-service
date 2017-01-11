@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    DeviceType = require('./device-type-model.js');
+    DeviceType = require('./device-type-model.js'),
+    DeviceType = require('./client-model.js');
 
 var deviceSchema = Schema({
   // unique id and created timestamp
@@ -19,6 +20,9 @@ var deviceSchema = Schema({
 
   // device type. stores uuid of device type which must be aleady present in "devicetypes" collection.
   deviceType: {type: String, ref: 'DeviceType'},
+
+  // client. reference to the client that owns this device.
+  client: {type: String, ref: 'Client'},
 });
 
 exports.Device = mongoose.model('Device', deviceSchema);

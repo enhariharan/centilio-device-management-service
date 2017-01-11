@@ -53,17 +53,6 @@ var deviceParamTemperature = new DeviceParam(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'temperature', description: 'temperature of the device position', deviceType: deviceTypeMobile.uuid});
 var deviceParams = [deviceParamLatitude, deviceParamLongitude, deviceParamChargingStatus, deviceParamBrightness, deviceParamTemperature];
 
-var device1 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'device 1', status: 'online', deviceType: deviceTypeMobile.uuid});
-var device2 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'device 2', status: 'online', deviceType: deviceTypeMobile.uuid});
-var device3 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'device 3', status: 'online', deviceType: deviceTypeHomeAppliance.uuid});
-var device4 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'device 4', status: 'online', deviceType: deviceTypeLight.uuid});
-var devices = [device1, device2, device3, device4];
-
-
 var client1corp1 = new Client(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 1',   firstName: 'Ashok', lastName: 'Kumar', middleName: 'M', type: 'corporate'});
 var client2corp1 = new Client(
@@ -77,6 +66,20 @@ var client1retail = new Client(
 var client2retail = new Client(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Kishore Subramanian',   firstName: 'Kishore', lastName: 'Subramanian', type: 'retail'});
 var clients = [client1corp1, client2corp1, client1corp2, client2corp2, client1retail, client2retail];
+
+var device1 = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+    name: 'device 1', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
+var device2 = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+    name: 'device 2', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
+var device3 = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+    name: 'device 3', status: 'online', deviceType: deviceTypeHomeAppliance.uuid, client: client2corp1.uuid});
+var device4 = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+    name: 'device 4', status: 'online', deviceType: deviceTypeLight.uuid, client: client1retail.uuid});
+var devices = [device1, device2, device3, device4];
 
 var address1Client1Corp1 = new Address({client:client1corp1.uuid,
   line1:'123, HiTec City', line2: '', city: 'Hyderabad', state: 'Telangana',
