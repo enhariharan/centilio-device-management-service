@@ -109,7 +109,7 @@ exports.login = function (req, res) {
     if (err == 400) {
       console.error('400 - incorrect username or password');
       res.status(err).send('400 - incorrect username or password');
-    };
+    }
   });
 };
 
