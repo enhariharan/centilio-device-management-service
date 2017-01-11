@@ -7,7 +7,9 @@ exports.getUser = function(credentials) {
       User.find({username: credentials.name}).exec()
       .then(
         users => {
+          if (users !== null && users.length === 0) reject(400);
           if (users !== null && users.length !== 1) reject(500);
+          if (users[0].password === credentials.pass) reject(400);
           var userDTO = {
             username: users[0].username,
             gender: users[0].gender,
