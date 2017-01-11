@@ -11,56 +11,79 @@ var basicAuth = require('basic-auth'),
  *
  * @apiSuccess (200) {Client[]} clients Array of client matching the credentials.
  * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
- *     {
- *       "clients": [
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "uuid":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *     "timestamp":"2017-01-11T03:13:20.880Z",
+ *     "corporateName":"corporation 1",
+ *     "firstName":"Ashok",
+ *     "lastName":"Kumar",
+ *     "middleName":"M",
+ *     "type":"corporate",
+ *     "addresses":[
  *       {
- *         "uuid": "491eeac5-f7c5-4c08-a19a-0dc376098702",
- *         "timestamp": "2016-12-30T12:32:20.819Z",
- *         "name": "Ashok Kumar",
- *         "type": "retail"
- *         "addresses" :
- *           [
- *             {
- *               "line1" : "123, ABC Road",
- *               "line2" : "DEF Blvd",
- *               "city" : "GHIJK City",
- *               "state" : "LM State",
- *               "countryCode" : "IN",
- *               "zipCode" : "NOPQRS",
- *               "latitude" : "100.01",
- *               "longitude" : "100.01",
- *               "type" : "work",
- *               "uuid" : "9eab071b-529a-4175-8033-7043a8fcc510",
- *               "timestamp" : ISODate("2016-12-31T06:34:50.615Z"),
- *               "status" : "active",
- *               "_id" : ObjectId("5867518afc5bcb32f456f9c5")
- *             },
- *             {
- *               "line1" : "Address line 1",
- *               "line2" : "Address line 2",
- *               "city" : "City name",
- *               "state" : "State Code",
- *               "countryCode" : "country Code",
- *               "zipCode" : "ZiPCoDe",
- *               "latitude" : "100.01",
- *               "longitude" : "100.01",
- *               "type" : "home",
- *               "uuid" : "9eab071b-529a-4175-8033-7043a8fcc510",
- *               "timestamp" : ISODate("2016-12-31T06:34:50.615Z"),
- *               "status" : "active",
- *               "_id" : ObjectId("5867518afc5bcb32f456f9c5")
- *             },
- *           ]
- *         },
- *         {
- *           "uuid": "491eeac5-f7c5-4c08-a19a-0dc376098612",
- *           "timestamp": "2016-12-28T12:32:20.819Z",
- *           "name": "Centilio",
- *           "type": "corporate"
- *         },
- *       ]
- *     }
+ *         "_id":"5875a2d0c9dcff18d0012600",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *         "line1":"123, HiTec City",
+ *         "line2":"",
+ *         "city":"Hyderabad",
+ *         "state":"Telangana",
+ *         "countryCode":"IN",
+ *         "zipCode":"500081",
+ *         "latitude":"17.447162",
+ *         "longitude":"78.376808",
+ *         "type":"work",
+ *         "status":"active","__v":0
+ *       }
+ *     ],
+ *     "emails":[
+ *       {
+ *         "_id":"5875a2d0c9dcff18d001260a",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *         "email":"client1@corp1.com",
+ *         "type":"work","__v":0
+ *       },
+ *       {
+ *         "_id":"5875a2d0c9dcff18d001260b",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *         "email":"client.1@corp1.com",
+ *         "type":"work","__v":0
+ *       },
+ *       {
+ *         "_id":"5875a2d0c9dcff18d001260c",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *         "email":"client.1@gmail.com",
+ *         "type":"personal","__v":0
+ *       }
+ *     ],
+ *     "contactNumbers":[
+ *       {
+ *         "_id":"5875a2d0c9dcff18d0012614",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920",
+ *         "number":"+911234567890","type":"work","__v":0
+ *       }
+ *     ],
+ *     "devices":[
+ *       {
+ *         "_id":"5875a2d0c9dcff18d00125fc",
+ *         "uuid":"aeaadfde-e668-4c2c-94e5-249cb8523334",
+ *         "timestamp":"2017-01-11T03:13:20.882Z",
+ *         "name":"device 1",
+ *         "status":"online",
+ *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
+ *       },
+ *       {
+ *         "_id":"5875a2d0c9dcff18d00125fd",
+ *         "uuid":"25efe540-a3ba-4156-bfbc-7b252341dca3",
+ *         "timestamp":"2017-01-11T03:13:20.883Z",
+ *         "name":"device 2",
+ *         "status":"online",
+ *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
+ *       }
+ *     ]
+ *   }
  */
 exports.login = function (req, res) {
   "use strict";
