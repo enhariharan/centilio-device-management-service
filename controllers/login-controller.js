@@ -93,9 +93,7 @@ exports.login = function (req, res) {
 
   // validate if the user is present and passwords match
   // if match found, send back client details
-  // if match not found, send back a dummy 'OK' message since...
-  // ... since we do not want the user to know he sent incorrect username/password
-  // lest he/she go fishing with different username password combos.
+  // if match not found, send error code 400 or 500 as needed
   UserManagementService.getUser(credentials)
   .then(user => {
     return ClientManagementService.getClient(user.client);
@@ -103,7 +101,16 @@ exports.login = function (req, res) {
   .then( client => {
     res.status(200).send(client);
   })
-  .catch(err => {res.status(200).send('OK');});
+  .catch(err => {
+    if (err == 500) {
+      console.error('500 - error fetching user details');
+      res.status(err).send('500 - error fetching user details');
+    }
+    if (err == 400) {
+      console.error('400 - incorrect username or password');
+      res.status(err).send('400 - incorrect username or password');
+    };
+  });
 };
 
 /**
