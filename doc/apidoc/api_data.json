@@ -704,7 +704,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\"\n},",
+          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
           "type": "json"
         }
       ]
@@ -724,7 +724,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"status\": \"new\"\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
           "type": "json"
         }
       ]
@@ -793,7 +793,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"devices\":\n    [\n      {\n        \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n        \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n        \"name\":\"Device 01\",\n        \"latitude\":\"100.001\",\n        \"longitude\":\"100.001\",\n        \"status\":\"new\"\n      },\n      {\n        \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890124\",\n        \"timestamp\":\"2016-12-28T11:52:28.637Z\",\n        \"name\":\"Device 02\",\n        \"latitude\":\"100.001\",\n        \"longitude\":\"100.001\",\n        \"status\":\"new\"\n      },\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  },\n  {\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890124\",\n    \"timestamp\":\"2016-12-28T11:52:28.637Z\",\n    \"name\":\"Device 02\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  }]\n}",
           "type": "json"
         }
       ]
@@ -840,7 +840,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"devices\":\n    [\n      {\n        \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n        \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n        \"name\":\"Device 01\",\n        \"latitude\":\"100.001\",\n        \"longitude\":\"100.001\",\n        \"status\":\"new\"\n      }\n    ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\"\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  }]\n}",
           "type": "json"
         }
       ]
