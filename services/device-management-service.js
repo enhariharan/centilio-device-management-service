@@ -67,17 +67,16 @@ exports.getDevice = function(uuid, callback) {
 exports.addDevice = function(device, callback) {
   console.info('device: ' + JSON.stringify(device));
   var deviceToSave = new Device(device);
-  deviceToSave.deviceType = device.deviceType.uuid;
+  deviceToSave.deviceType = device.deviceType;
   console.info('deviceToSave: ' + JSON.stringify(deviceToSave));
-
 
   // validate that the deviceType already exists in the devicetypes collection.
   if (deviceToSave.deviceType == undefined || deviceToSave.deviceType == null) {
         console.log('device does not have a valid device type.');
         return callback(400);
   }
-  console.info('deviceToSave.deviceType.uuid: ' + deviceToSave.deviceType.uuid);
-  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType.uuid, function(err) {
+  console.info('deviceToSave.deviceType: ' + deviceToSave.deviceType);
+  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType, function(err) {
     if (err) {
       console.log('device does not have a valid device type.');
       return callback(400);
