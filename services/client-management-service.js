@@ -3,6 +3,7 @@ var Address = require('../models/client-model').Address;
 var Email = require('../models/client-model').Email;
 var ContactNumber = require('../models/client-model').ContactNumber;
 var Device = require('../models/device-model').Device;
+var Role = require('../models/role-model').Role;
 var Validator = require('validator');
 var RoleManagementService = require('./role-management-service');
 
@@ -41,7 +42,7 @@ exports.getAllClients = function(callback) {
   });
 }
 
-exports.getClient = function(clientUuid) {
+exports.getClient = function(clientUuid, roleUuid) {
   return new Promise(
     (resolve, reject) => {
       // initialize the query result that will be sent back
@@ -65,6 +66,7 @@ exports.getClient = function(clientUuid) {
       var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
       var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
       var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
+      var findRoleQueryPromise = Role.find({uuid: roleUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
@@ -85,6 +87,11 @@ exports.getClient = function(clientUuid) {
       ).then(
         contactNumbers => {
           _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
+          return findRoleQueryPromise;
+        }
+      ).then(
+        role => {
+          clientDTO.role = role[0].name;
           return findAllDevicesForClientQueryPromise;
         }
       ).then(
