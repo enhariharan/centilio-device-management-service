@@ -89,9 +89,7 @@ exports.getClient = function(clientUuid) {
         }
       ).then(
         devices => {
-          console.log('\ndevices: ' + devices);
           _fillDtoWithDeviceDetails(clientDTO, devices);
-          console.info('\nclientDTO at the very end ====> : ' + JSON.stringify(clientDTO));
           resolve(clientDTO);
         }
       ).catch(err => { reject(err); });

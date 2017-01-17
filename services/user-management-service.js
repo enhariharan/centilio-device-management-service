@@ -38,12 +38,14 @@ exports.addUser = function(credentials) {
       User.find({username: credentials.name}).exec()
       .then(
         user => {
-          console.info('\nusers found: ' + JSON.stringify(user));
-          if (user === null || user.length === 0) return userToSave.save();
-          else reject(400);
+          if (user === undefined || user === null || user.length === 0) return userToSave.save();
+          else {
+            console.info('\nuser ' + user +  ' already exists');
+            reject(400);
+          }
         })
         .then(user => {
-          console.info('\nusers saved: ' + JSON.stringify(user));
+          console.info('\nuser saved: ' + user);
           resolve(user);
         })
         .catch(err => {

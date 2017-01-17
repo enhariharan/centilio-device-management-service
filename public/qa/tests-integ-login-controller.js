@@ -7,14 +7,64 @@ var assert = require('chai').assert,
     User = require('../../models/user-model.js').User,
 
     credentials = require('../../credentials.js'),
-
     opts = { server: { socketOptions: { keepAlive: 1 } } },
-    dbConnection = mongoose.createConnection(credentials.mongo.development.connectionString, opts),
+    dbConnection = mongoose.createConnection(credentials.mongo.test.connectionString, opts),
 
     baseurl = 'http://localhost:' + credentials.server.port,
     loginurl = baseurl + '/login';
 
-suite('login controller integration tests', function() {
+suite('login router integration tests - ', function() {
+  suiteSetup(
+    () => {
+      console.log('suiteSetup()');
+      require('./cleanup-db').cleanup();
+      // require('./setup-db').setup();
+    }
+  );
+
+  test('addUser with proper credentials must add a new client', (done) => {
+    var testUserName = 'newUser1',
+        testPassword = 'password12';
+
+    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    .on('complete', (result, res) => {
+      console.log('result is ' + JSON.stringify(result));
+      assert(result !== null && result !== '' && result !== undefined);
+      assert(result === 'Created');
+      done();
+    })
+    .on('fail', (data, res) => {
+      console.log('data: ' + JSON.stringify(data));
+      assert(false);
+      done();
+    })
+  });
+
+  test('addUser with existing username must return error code 400', (done) => {
+    var testUserName = 'newUser1';
+    var testPassword = 'password12';
+
+    // create a new user with username as in testUserNameand verify that it was created properly
+    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    .on('success', responseStatus => {
+      assert(responseStatus !== null && responseStatus !== '' && responseStatus !== undefined);
+      assert(responseStatus === 'Created');
+    });
+
+    // now try to create a new user with the same user name
+    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    .on('success', responseStatus => {
+      console.log('responseStatus on success: ' + responseStatus);
+      assert(false);
+    })
+    .on('error', responseStatus => {
+      console.log('responseStatus on error: ' + responseStatus);
+      assert(responseStatus === 400);
+    });
+
+    done();
+  });
+
   test('getUser with proper credentials must return a client', (done) => {
     restler.get(loginurl, { method: 'post', username: 'userClient1Corp1', password: 'password' })
     .on('success', client => {
