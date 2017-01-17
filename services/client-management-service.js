@@ -71,6 +71,7 @@ exports.getClient = function(clientUuid, roleUuid) {
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
         client => {
+          if (client === null) resolve(clientDTO);
           _fillDtoWithClientDetails(clientDTO, client);
           return findAllAddressesForClientQueryPromise;
         }
