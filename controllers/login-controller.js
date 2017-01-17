@@ -120,7 +120,13 @@ exports.login = function (req, res) {
  *
  * @apiParam (user) {Credentials} credentials Credentials sent as authentication headera
  * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.
- *                  {json} Request-header Basic Authentication details must ne set. This should be changed to stateless JWT based token based authentication.
+ *                  {json} Request-header Basic Authentication details must ne set. This should be changed to
+ *                         stateless JWT based token based authentication.
+ *                  {json} Request-body should send the role type in the following format.
+ * {
+ *   role: "83356361-e0a4-4942-98b8-1a1c8ad4c943"
+ * }
+ *
  * @apiSuccess (201) {User} user Created user is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 201 Created
@@ -135,8 +141,11 @@ exports.addUser = function (req, res) {
 
   // Get the credentials
   var credentials = basicAuth(req);  // TODO: Change this to JWT based stateless token based authentication
+  var roleUuid = req.body.role;
+  console.info('credentials: ' + JSON.stringify(credentials));
+  console.info('roleUuid: ' + JSON.stringify(roleUuid));
 
-  UserManagementService.addUser(credentials)
+  UserManagementService.addUser(credentials, roleUuid)
   .then(user => {
     console.info('in controller - added new user: ' + JSON.stringify(user));
     return res.sendStatus(201);

@@ -24,7 +24,7 @@ exports.getUser = function(credentials) {
   );
 };
 
-exports.addUser = function(credentials) {
+exports.addUser = function(credentials, roleUuid) {
   return new Promise(
     function(resolve, reject) {
       var userToSave = new User({
@@ -32,6 +32,7 @@ exports.addUser = function(credentials) {
         timestamp: Utilities.getTimestamp(),
         username: credentials.name,
         password: credentials.pass,
+        role: roleUuid,
         status: 'registered',
       });
 
