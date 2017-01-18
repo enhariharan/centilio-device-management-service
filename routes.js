@@ -8,6 +8,7 @@ var main = require('./controllers/main.js'),
     roles = require('./controllers/roles-controller.js'),
     deviceTypes = require('./controllers/device-types-controller.js'),
     deviceReadings = require('./controllers/device-readings-controller.js'),
+    user = require('./controllers/user-controller.js'),
     login = require('./controllers/login-controller.js');
 
 module.exports = function(app) {
@@ -43,6 +44,9 @@ module.exports = function(app) {
   app.post('/roles', jsonParser, roles.addRole);
 
   app.get('/login', login.login);
-  app.post('/login', login.addUser);
-  app.put('/login', login.updateUser);
+  // app.post('/login', login.addUser);
+  // app.put('/login', login.updateUser);
+
+  app.post('/users', user.addUser);
+  app.put('/users', user.updateUser);
 };
