@@ -1,8 +1,13 @@
-var utils = require('../models/utilities.js');
-var ClientManagementService = require('../services/client-management-service.js');
+var utils = require('../models/utilities.js'),
+    ClientManagementService = require('../services/client-management-service.js'),
+    UserManagementService = require('../services/user-management-service.js'),
+    RoleManagementService = require('../services/role-management-service.js'),
+    basicAuth = require('basic-auth');
 
 /**
- * @api {get} /clients Get all available clients
+ * @api {get} /clients Get all available clients according to these rules:
+ *                     - If logged in user is admin, then all users belonging to his/her company are returned.
+ *                     - If logged in user is not admin, then error code 403 is returned.
  * @apiName getAllClients
  * @apiGroup Client
  *
@@ -10,7 +15,7 @@ var ClientManagementService = require('../services/client-management-service.js'
  *
  * @apiSuccess (200) {Client[]} clients Array of clients.
  * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
+ *    HTTP/1.1 200 OK
  *    {
  *      "clients": [
  *        {
@@ -63,12 +68,36 @@ var ClientManagementService = require('../services/client-management-service.js'
  */
 exports.getAllClients = function (req, res) {
   "use strict";
-  ClientManagementService.getAllClients(function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading clients from DB');
-
+  var credentials = basicAuth(req);
+  var client = null;
+  console.info('getAlLClients()');
+  UserManagementService.getUser(credentials).then(user => {
+    console.info('user: ' + JSON.stringify(user));
+    if (!user || user === undefined || !user.role || user.role === undefined) {
+      console.error('403 - Invalid login credentials');
+      return res.sendStatus(403);
+    }
+    client = user.client;
+    return RoleManagementService.getRole(user.role);
+  })
+  .then(role => {
+    console.info('in controller role: ' + JSON.stringify(role));
+    if (!role || role === undefined || role.name !== 'admin') {
+      console.error('403 - Invalid role sent in credentials.');
+      return res.sendStatus(403);
+    }
+    return ClientManagementService.getClient(client, role.uuid, false);
+  })
+  .then(client => {
+    console.log('logged in client: ' + JSON.stringify(client));
+    return ClientManagementService.getAllClientsByCorporate(client.corporateName);
+  })
+  .then(context => {
     if (!context) return res.status('200').send('No clients found in DB...');
-
     return res.status('200').send(context);
+  })
+  .catch(err => {
+    console.error('error: ' + err.stack);
   });
 };
 
