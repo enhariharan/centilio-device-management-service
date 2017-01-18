@@ -23,14 +23,12 @@ suite('devices router integration tests - ', () => {
       result.devices.forEach(device => {
         // From this list, validate specifically the device readings of the device named 'device 1'
         if (device.name === 'device 1') {
-          console.info('device: ' + JSON.stringify(device));
           restler.get(url+'/'+device.uuid+'/deviceReadings')
           .on('complete', (result, response) => {
             assert(result !== null);
             assert(result.deviceReadings !== null);
             assert(result.deviceReadings.length > 0);
             result.deviceReadings.forEach(dr => {
-              console.info('\nchecking device reading: ' + JSON.stringify(dr));
               assert(dr.device === device.uuid);
             });
             done();
