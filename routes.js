@@ -20,6 +20,7 @@ module.exports = function(app) {
 
   app.get('/devices', devices.getAllDevices);
   app.get('/devices/:uuid', devices.getDevice);
+  app.get('/devices/:uuid/deviceReadings', devices.getDeviceReadingsByDeviceUuid);
   app.post('/devices', jsonParser, devices.addDevice);
 
   app.get('/deviceParams', deviceParams.getAllDeviceParams);

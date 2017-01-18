@@ -59,7 +59,7 @@ suite('login router integration tests - ', function() {
   });
 
   test('getUser with proper credentials must return a client', (done) => {
-    restler.get(loginurl, { method: 'post', username: 'userClient1Corp1', password: 'password' })
+    restler.get(loginurl, { method: 'get', username: 'userClient1Corp1', password: 'password' })
     .on('success', client => {
       assert(client !== null);
       assert(client.corporateName === 'corporation 1');
