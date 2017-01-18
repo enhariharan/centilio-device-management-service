@@ -71,6 +71,7 @@ var basicAuth = require('basic-auth'),
  *         "name":"device 1",
  *         "status":"online",
  *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "deviceId":"01234567890123456789",
  *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
  *       },
  *       {
@@ -80,6 +81,7 @@ var basicAuth = require('basic-auth'),
  *         "name":"device 2",
  *         "status":"online",
  *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "deviceId":"01234567890123456789",
  *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
  *       }
  *     ]

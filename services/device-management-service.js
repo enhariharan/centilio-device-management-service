@@ -24,6 +24,7 @@ exports.getAllDevices = function(callback) {
           longitude: device.longitude,
           status: device.status,
           deviceType: device.deviceType,
+          deviceId: device.deviceId
         };
         return dev;
       }),
@@ -34,7 +35,6 @@ exports.getAllDevices = function(callback) {
 }
 
 exports.getDevice = function(uuid, callback) {
-
   Device.find({uuid: uuid}, function (err, devices) {
     if (err) {
       console.error('error while reading devices from DB = ' + err);
@@ -57,6 +57,39 @@ exports.getDevice = function(uuid, callback) {
           longitude: device.longitude,
           status: device.status,
           deviceType: device.deviceType,
+          deviceId: device.deviceId,
+        };
+        return dev;
+      }),
+    };
+    return callback(0, context);
+  });
+}
+
+exports.getDevicesByClient = function(clientUuid, callback) {
+  Device.find({client: clientUuid}, function (err, devices) {
+    if (err) {
+      console.error('error while reading devices from DB = ' + err);
+      return callback(err, null);
+    }
+
+    if (!devices.length) {
+      console.error('No devices found in DB...');
+      return callback(0, null);
+    }
+
+    var context = {
+      devices: devices.map(function(device) {
+        var dev = {
+          uuid: device.uuid,
+          timestamp: device.timestamp,
+          serverTimestamp: device.serverTimestamp,
+          name: device.name,
+          latitude: device.latitude,
+          longitude: device.longitude,
+          status: device.status,
+          deviceType: device.deviceType,
+          deviceId: device.deviceId,
         };
         return dev;
       }),
