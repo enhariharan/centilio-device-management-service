@@ -30,7 +30,7 @@ suite('login router integration tests - ', function() {
       console.log('data: ' + JSON.stringify(data));
       assert(false);
       done();
-    })
+    });
   });
 
   test('addUser with existing username must return error code 400', (done) => {

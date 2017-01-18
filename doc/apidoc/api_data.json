@@ -855,6 +855,53 @@
     ]
   },
   {
+    "type": "get",
+    "url": "/devices/:uuid/deviceReadings",
+    "title": "Get device readings by given device uuid",
+    "name": "getDeviceReadingsByDeviceUuid",
+    "group": "Device",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "None",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Device",
+            "optional": false,
+            "field": "Device",
+            "description": "<p>readings array as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": " HTTP/1.1 200 OK\n {\n   \"deviceReadings\": [{\n     \"uuid\": \"f982cea9-d271-445d-a937-6a5dafef6d29\",\n     \"timestamp\": \"2017-01-18T07:14:34.472Z\",\n     \"device\": \"20e7edea-0db9-4595-844f-c42b1b6e3951\",\n     \"readings\": [{\n         \"type\": \"latitude\",\n         \"value\": \"100.01\",\n         \"_id\": \"587f15da8636f73e30eff809\"\n       }, {\n         \"type\": \"longitude\",\n         \"value\": \"100.001\",\n         \"_id\": \"587f15da8636f73e30eff808\"\n       }, {\n         \"type\": \"charging status\",\n         \"value\": \"charging\",\n         \"_id\": \"587f15da8636f73e30eff807\"\n       }, {\n         \"type\": \"current charge\",\n         \"value\": \"80\",\n         \"_id\": \"587f15da8636f73e30eff806\"\n       }]\n   },\n   ...\n   ...\n]}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/devices-controller.js",
+    "groupTitle": "Device",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//devices/:uuid/deviceReadings"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/roles",
     "title": "Add a new role",
@@ -999,7 +1046,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.",
-          "content": "{json} Request-header Basic Authentication details must ne set. This should be changed to stateless JWT based token based authentication.",
+          "content": "                 {json} Request-header Basic Authentication details must ne set. This should be changed to\n                        stateless JWT based token based authentication.\n                 {json} Request-body should send the role type in the following format.\n{\n  role: \"83356361-e0a4-4942-98b8-1a1c8ad4c943\"\n}",
           "type": "json"
         }
       ]
