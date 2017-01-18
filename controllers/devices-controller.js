@@ -175,6 +175,7 @@ exports.addDevice = function (req, res) {
   var device = {
     uuid: utils.getUuid(),
     timestamp: utils.getTimestamp(),
+    deviceId: req.body.deviceId,
     name: req.body.name,
     latitude: req.body.latitude,
     longitude: req.body.longitude,
