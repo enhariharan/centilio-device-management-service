@@ -94,17 +94,31 @@ exports.getDevice = function (req, res) {
  * @apiSuccessExample {json} Success-Response:
  *   HTTP/1.1 200 OK
  *   {
- *     "devices": [{
- *       "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
- *       "timestamp":"2016-12-30T11:52:28.637Z",
- *       "name":"Device 01",
- *       "latitude":"100.001",
- *       "longitude":"100.001",
- *       "status":"new"
- *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
- *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *     }]
- *   }
+ *     "deviceReadings": [{
+ *       "uuid": "f982cea9-d271-445d-a937-6a5dafef6d29",
+ *       "timestamp": "2017-01-18T07:14:34.472Z",
+ *       "device": "20e7edea-0db9-4595-844f-c42b1b6e3951",
+ *       "readings": [{
+ *           "type": "latitude",
+ *           "value": "100.01",
+ *           "_id": "587f15da8636f73e30eff809"
+ *         }, {
+ *           "type": "longitude",
+ *           "value": "100.001",
+ *           "_id": "587f15da8636f73e30eff808"
+ *         }, {
+ *           "type": "charging status",
+ *           "value": "charging",
+ *           "_id": "587f15da8636f73e30eff807"
+ *         }, {
+ *           "type": "current charge",
+ *           "value": "80",
+ *           "_id": "587f15da8636f73e30eff806"
+ *         }]
+ *     },
+ *     ...
+ *     ...
+ *  ]}
  */
 exports.getDeviceReadingsByDeviceUuid = function (req, res) {
   "use strict";
