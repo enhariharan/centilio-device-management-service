@@ -127,7 +127,7 @@ exports.addClient = function(clientDTO, callback) {
 
   // validate role.  Cannot be empty and the role must be present in collection "roles"
   if (clientDTO.role === undefined || clientDTO.role === null) {
-    console.error("'addresses' cannot be empty.  Please provide at least one address.");
+    console.error("'role' cannot be empty.");
     return callback(400);
   }
 

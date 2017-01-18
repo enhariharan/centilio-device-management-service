@@ -24,29 +24,30 @@ exports.getUser = function(credentials) {
   );
 };
 
-exports.addUser = function(credentials, roleUuid) {
+exports.addUser = function(credentials, newUserDetails) {
   return new Promise(
-    function(resolve, reject) {
+    (resolve, reject) => {
       var userToSave = new User({
         uuid: Utilities.getUuid(),
         timestamp: Utilities.getTimestamp(),
-        username: credentials.name,
-        password: credentials.pass,
-        role: roleUuid,
-        status: 'registered',
+        username: newUserDetails.email,
+        password: newUserDetails.password,
+        role: newUserDetails.role,
+        status: 'new user',
+        profilePicPath: '',
+        client: ''
       });
 
       User.find({username: credentials.name}).exec()
       .then(
         user => {
-          if (user === undefined || user === null || user.length === 0) return userToSave.save();
-          else {
-            console.info('\nuser ' + user +  ' already exists');
+          if (user === undefined || user === null || user.length === 0) {
+            console.error('Incorrect admin credentials sent while adding new user');
             reject(400);
           }
+          return userToSave.save();
         })
         .then(user => {
-          console.info('\nuser saved: ' + user);
           resolve(user);
         })
         .catch(err => {
