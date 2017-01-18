@@ -38,11 +38,12 @@ var DeviceManagementService = require('../services/device-management-service.js'
   "use strict";
 
   DeviceManagementService.getAllDevices(function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading devices from DB');
+    if (err) return res.status(500).send('error encountered while reading devices from DB');
 
-    if (!context) return res.status('200').send('No devices found in DB...');
+    if (!context) return res.status(200).send('No devices found in DB...');
 
-    return res.status('200').send(context);
+    console.info('\ncontext: ' + JSON.stringify(context));
+    return res.status(200).send(context);
   });
 };
 
@@ -74,6 +75,41 @@ exports.getDevice = function (req, res) {
   var uuid = req.params.uuid;
   DeviceManagementService.getDevice(uuid, function (err, context) {
     if (err) return res.status('500').send('error encountered while reading device from DB');
+
+    if (!context) return res.status('400').send('No such device found in DB...');
+
+    return res.status('200').send(context);
+  });
+};
+
+/**
+ * @api {get} /devices/:uuid/deviceReadings Get device readings by given device uuid
+ * @apiName getDeviceReadingsByDeviceUuid
+ * @apiGroup Device
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Device} Device readings array as JSON.
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "devices": [{
+ *       "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
+ *       "timestamp":"2016-12-30T11:52:28.637Z",
+ *       "name":"Device 01",
+ *       "latitude":"100.001",
+ *       "longitude":"100.001",
+ *       "status":"new"
+ *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     }]
+ *   }
+ */
+exports.getDeviceReadingsByDeviceUuid = function (req, res) {
+  "use strict";
+  var uuid = req.params.uuid;
+  DeviceReadingsManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
+    if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
 
     if (!context) return res.status('400').send('No such device found in DB...');
 

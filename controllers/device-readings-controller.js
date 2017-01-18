@@ -184,8 +184,9 @@ exports.addDeviceReading = function (req, res) {
     return res.status(400).send('Bad Request');
   }
 
-  console.info('req.headers: ' + JSON.stringify(req.headers));
-  console.info('req.body: ' + JSON.stringify(req.body));
+  console.info('\nreq.headers: ' + JSON.stringify(req.headers));
+  console.info('\nreq.body: ' + JSON.stringify(req.body));
+  console.info('\nreq.body.readings: ' + JSON.stringify(req.body.readings));
 
   var deviceReading = {
     uuid: utils.getUuid(),
@@ -198,7 +199,7 @@ exports.addDeviceReading = function (req, res) {
     deviceReading.readings.push(reading);
   });
 
-  console.info('deviceReading: ' + JSON.stringify(deviceReading));
+  console.info('\ndeviceReading: ' + JSON.stringify(deviceReading));
 
   DeviceReadingManagementService.addDeviceReading(deviceReading, function (err) {
     if (err === 400) {

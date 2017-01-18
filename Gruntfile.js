@@ -12,6 +12,7 @@ module.exports = function(grunt) {
           'public/qa/tests-unit-client-management-service.js',
           'public/qa/tests-integ-login-controller.js',
           'public/qa/tests-integ-device-readings-controller.js',
+          'public/qa/tests-integ-devices-controller.js'
         ],
         options: {ui: 'tdd'},
       }
