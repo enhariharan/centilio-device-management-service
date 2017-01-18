@@ -1,13 +1,14 @@
 var utils = require('../models/utilities.js'),
     DeviceManagementService = require('../services/device-management-service.js'),
+    UserManagementService = require('../services/user-management-service.js'),
     DeviceReadingManagementService = require('../services/device-reading-management-service.js');
 
 /**
- * @api {get} /devices Get all available devices
+ * @api {get} /devices Get all available devices belonging to logged in user
  * @apiName getAllDevices
  * @apiGroup Device
  *
- * @apiParam None
+ * @apiParam {json} Request-header must contain the credentials of logged in user
  *
  * @apiSuccess (200) {Device[]} devices Array of devices.
  * @apiSuccessExample {json} Success-Response:
@@ -20,6 +21,7 @@ var utils = require('../models/utilities.js'),
  *       "latitude":"100.001",
  *       "longitude":"100.001",
  *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *       "deviceId":"01234567890123456789",
  *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *       "status":"new"
  *     },
@@ -30,6 +32,7 @@ var utils = require('../models/utilities.js'),
  *       "latitude":"100.001",
  *       "longitude":"100.001",
  *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *       "deviceId":"01234567890123456789",
  *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *       "status":"new"
  *     }]
@@ -38,14 +41,23 @@ var utils = require('../models/utilities.js'),
  exports.getAllDevices = function (req, res) {
   "use strict";
 
-  DeviceManagementService.getAllDevices(function (err, context) {
-    if (err) return res.status(500).send('error encountered while reading devices from DB');
-
-    if (!context) return res.status(200).send('No devices found in DB...');
-
-    console.info('\ncontext: ' + JSON.stringify(context));
-    return res.status(200).send(context);
-  });
+  // validate credentials
+  var credentials = basicAuth(req);
+  UserManagementService.getUser(credentials).then(
+    user => {
+      if (!user || user === undefined) {
+        console.error('400 - Invalid login credentials');
+        return res.sendStatus(400);
+      } else {
+        DeviceManagementService.getDevicesByClient(user.client, (err, context) => {
+          if (err) return res.status(500).send('error encountered while reading devices from DB');
+          if (!context) return res.status(200).send('No devices found in DB...');
+          console.info('\ndevices: ' + JSON.stringify(context));
+          return res.status(200).send(context);
+        });
+      }
+    }
+  );
 };
 
 /**
@@ -67,6 +79,7 @@ var utils = require('../models/utilities.js'),
  *       "longitude":"100.001",
  *       "status":"new"
  *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *       "deviceId": "01234567890123456789",
  *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *     }]
  *   }
@@ -76,9 +89,7 @@ exports.getDevice = function (req, res) {
   var uuid = req.params.uuid;
   DeviceManagementService.getDevice(uuid, function (err, context) {
     if (err) return res.status('500').send('error encountered while reading device from DB');
-
     if (!context) return res.status('400').send('No such device found in DB...');
-
     return res.status('200').send(context);
   });
 };
@@ -125,9 +136,7 @@ exports.getDeviceReadingsByDeviceUuid = function (req, res) {
   var uuid = req.params.uuid;
   DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
     if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
-
     if (!context) return res.status('400').send('No such device found in DB...');
-
     return res.status('200').send(context);
   });
 };
@@ -145,6 +154,7 @@ exports.getDeviceReadingsByDeviceUuid = function (req, res) {
  *     "longitude":"100.001",
  *     "status":"new",
  *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
  *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *   },
  *
@@ -158,6 +168,7 @@ exports.getDeviceReadingsByDeviceUuid = function (req, res) {
  *     "latitude": "103.001",
  *     "longitude": "103.001",
  *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
  *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *     "status": "new"
  *   }

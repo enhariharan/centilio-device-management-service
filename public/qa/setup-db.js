@@ -74,16 +74,16 @@ var clientSaiRajesh = new Client(
 var clients = [client1corp1, client2corp1, client1corp2, client2corp2, client1retail, client2retail, clientSurya, clientLydor, clientSaiRajesh];
 
 var device1 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: null,
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '123456789012345',
     name: 'device 1', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
 var device2 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: null,
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '234567890123456',
     name: 'device 2', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
 var device3 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: null,
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '345678901234567',
     name: 'device 3', status: 'online', deviceType: deviceTypeHomeAppliance.uuid, client: client2corp1.uuid});
 var device4 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: null,
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '456789012345678',
     name: 'device 4', status: 'online', deviceType: deviceTypeLight.uuid, client: client1retail.uuid});
 var deviceSurya = new Device(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '865980021035123',
