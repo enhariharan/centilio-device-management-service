@@ -14,13 +14,6 @@ var assert = require('chai').assert,
     loginurl = baseurl + '/login';
 
 suite('login router integration tests - ', function() {
-  suiteSetup(
-    () => {
-      console.log('suiteSetup()');
-      require('./cleanup-db').cleanup();
-      // require('./setup-db').setup();
-    }
-  );
 
   test('addUser with proper credentials must add a new client', (done) => {
     var testUserName = 'newUser1',

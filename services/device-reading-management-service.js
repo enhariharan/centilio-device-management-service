@@ -1,5 +1,5 @@
 var DeviceReading = require('../models/device-reading-model.js').DeviceReading,
-    Device = require('../models/device-model.js'),
+    Device = require('../models/device-model.js').Device,
     DeviceReadingManagementService = require('./device-reading-management-service.js');
 
 exports.getAllDeviceReadings = function(callback) {
