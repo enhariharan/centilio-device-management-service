@@ -1,5 +1,5 @@
 var utils = require('../models/utilities.js'),
-    DeviceManagementService = require('../services/device-management-service.js')
+    DeviceManagementService = require('../services/device-management-service.js'),
     DeviceReadingManagementService = require('../services/device-reading-management-service.js');
 
 /**

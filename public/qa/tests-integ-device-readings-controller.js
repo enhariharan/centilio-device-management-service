@@ -51,7 +51,7 @@ suite('device readings router integration tests - ', function() {
       console.log('data: ' + JSON.stringify(data));
       assert(false);
       done();
-    })
+    });
   });
 });
 
