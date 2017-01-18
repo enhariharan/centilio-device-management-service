@@ -69,6 +69,7 @@ var utils = require('../models/utilities.js'),
 exports.getAllClients = function (req, res) {
   "use strict";
   var credentials = basicAuth(req);
+  if (credentials === undefined || !credentials) return res.sendStatus(403);
   var client = null;
   console.info('getAlLClients()');
   UserManagementService.getUser(credentials).then(user => {
