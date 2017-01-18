@@ -1,4 +1,5 @@
 var utils = require('../models/utilities.js'),
+    basicAuth = require('basic-auth'),
     DeviceManagementService = require('../services/device-management-service.js'),
     UserManagementService = require('../services/user-management-service.js'),
     DeviceReadingManagementService = require('../services/device-reading-management-service.js');
@@ -46,8 +47,8 @@ var utils = require('../models/utilities.js'),
   UserManagementService.getUser(credentials).then(
     user => {
       if (!user || user === undefined) {
-        console.error('400 - Invalid login credentials');
-        return res.sendStatus(400);
+        console.error('403 - Invalid login credentials');
+        return res.sendStatus(403);
       } else {
         DeviceManagementService.getDevicesByClient(user.client, (err, context) => {
           if (err) return res.status(500).send('error encountered while reading devices from DB');
