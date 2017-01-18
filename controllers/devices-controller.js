@@ -1,5 +1,6 @@
-var utils = require('../models/utilities.js');
-var DeviceManagementService = require('../services/device-management-service.js');
+var utils = require('../models/utilities.js'),
+    DeviceManagementService = require('../services/device-management-service.js')
+    DeviceReadingManagementService = require('../services/device-reading-management-service.js');
 
 /**
  * @api {get} /devices Get all available devices
@@ -108,7 +109,7 @@ exports.getDevice = function (req, res) {
 exports.getDeviceReadingsByDeviceUuid = function (req, res) {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceReadingsManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
+  DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
     if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
 
     if (!context) return res.status('400').send('No such device found in DB...');

@@ -13,34 +13,31 @@ var assert = require('chai').assert,
 
 suite('devices router integration tests - ', () => {
   test('get device readings for given device uuid', (done) => {
-    // first get device details for device1Client1Corp1
-    restler.get(url/*, { method: 'get', username: 'userClient1Corp1', password: 'password' }*/)
-    .on('complete', function(response) {
-      console.info('complete');
-      console.info('result: ' + JSON.stringify(result));
-      console.info('response: ' + JSON.stringify(response));
-    })
-    .on('success', (response) => {
-      console.info('success');
-      console.info('data: ' + JSON.stringify(data));
-      console.info('response: ' + JSON.stringify(response));
-    })
-    .on('fail', (response) => {
-      console.info('fail');
-      console.info('data: ' + JSON.stringify(data));
-      console.info('response: ' + JSON.stringify(response));
-    })
-    .on('error', (response) => {
-      console.info('error');
-      console.info('err: ' + JSON.stringify(err));
-      console.info('response: ' + JSON.stringify(response));
-    })
-    .on('200', (response) => {
-      console.info('200');
-      console.info('data: ' + JSON.stringify(data));
-      console.info('response: ' + JSON.stringify(response));
+    // first get a list of all available devices
+    console.info('url: ' + url);
+    restler.get(url)
+    .on('complete', (result, response) => {
+      // Validate that we got the list of device properly
+      assert(result !== null);
+      assert(result.devices !== null && result.devices.length > 0);
+      result.devices.forEach(device => {
+        // From this list, validate specifically the device readings of the device named 'device 1'
+        if (device.name === 'device 1') {
+          console.info('device: ' + JSON.stringify(device));
+          restler.get(url+'/'+device.uuid+'/deviceReadings')
+          .on('complete', (result, response) => {
+            assert(result !== null);
+            assert(result.deviceReadings !== null);
+            assert(result.deviceReadings.length > 0);
+            result.deviceReadings.forEach(dr => {
+              console.info('\nchecking device reading: ' + JSON.stringify(dr));
+              assert(dr.device === device.uuid);
+            });
+            done();
+          });
+        }
+      });
     });
-    done();
   });
 });
 

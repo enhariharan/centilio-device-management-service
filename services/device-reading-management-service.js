@@ -89,7 +89,7 @@ exports.addDeviceReading = function(deviceReading, callback) {
 }
 
 exports.getDeviceReadingsByDeviceUuid = function(deviceUuid, callback) {
-  DeviceReading.find({device: uuid}, function (err, deviceReadings) {
+  DeviceReading.find({device: deviceUuid}, function (err, deviceReadings) {
     if (err) {
       console.error('error while reading device readings from DB = ' + err);
       return callback(err, null);
