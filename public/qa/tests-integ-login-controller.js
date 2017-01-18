@@ -14,13 +14,6 @@ var assert = require('chai').assert,
     loginurl = baseurl + '/login';
 
 suite('login router integration tests - ', function() {
-  suiteSetup(
-    () => {
-      console.log('suiteSetup()');
-      require('./cleanup-db').cleanup();
-      // require('./setup-db').setup();
-    }
-  );
 
   test('addUser with proper credentials must add a new client', (done) => {
     var testUserName = 'newUser1',
@@ -37,7 +30,7 @@ suite('login router integration tests - ', function() {
       console.log('data: ' + JSON.stringify(data));
       assert(false);
       done();
-    })
+    });
   });
 
   test('addUser with existing username must return error code 400', (done) => {
@@ -66,7 +59,7 @@ suite('login router integration tests - ', function() {
   });
 
   test('getUser with proper credentials must return a client', (done) => {
-    restler.get(loginurl, { method: 'post', username: 'userClient1Corp1', password: 'password' })
+    restler.get(loginurl, { method: 'get', username: 'userClient1Corp1', password: 'password' })
     .on('success', client => {
       assert(client !== null);
       assert(client.corporateName === 'corporation 1');

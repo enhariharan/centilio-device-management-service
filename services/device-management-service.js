@@ -28,6 +28,7 @@ exports.getAllDevices = function(callback) {
         return dev;
       }),
     };
+    console.info('\ncontext: ' + JSON.stringify(context));
     return callback(0, context);
   });
 }

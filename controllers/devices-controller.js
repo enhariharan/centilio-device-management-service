@@ -1,5 +1,6 @@
-var utils = require('../models/utilities.js');
-var DeviceManagementService = require('../services/device-management-service.js');
+var utils = require('../models/utilities.js'),
+    DeviceManagementService = require('../services/device-management-service.js'),
+    DeviceReadingManagementService = require('../services/device-reading-management-service.js');
 
 /**
  * @api {get} /devices Get all available devices
@@ -38,11 +39,12 @@ var DeviceManagementService = require('../services/device-management-service.js'
   "use strict";
 
   DeviceManagementService.getAllDevices(function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading devices from DB');
+    if (err) return res.status(500).send('error encountered while reading devices from DB');
 
-    if (!context) return res.status('200').send('No devices found in DB...');
+    if (!context) return res.status(200).send('No devices found in DB...');
 
-    return res.status('200').send(context);
+    console.info('\ncontext: ' + JSON.stringify(context));
+    return res.status(200).send(context);
   });
 };
 
@@ -74,6 +76,55 @@ exports.getDevice = function (req, res) {
   var uuid = req.params.uuid;
   DeviceManagementService.getDevice(uuid, function (err, context) {
     if (err) return res.status('500').send('error encountered while reading device from DB');
+
+    if (!context) return res.status('400').send('No such device found in DB...');
+
+    return res.status('200').send(context);
+  });
+};
+
+/**
+ * @api {get} /devices/:uuid/deviceReadings Get device readings by given device uuid
+ * @apiName getDeviceReadingsByDeviceUuid
+ * @apiGroup Device
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Device} Device readings array as JSON.
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "deviceReadings": [{
+ *       "uuid": "f982cea9-d271-445d-a937-6a5dafef6d29",
+ *       "timestamp": "2017-01-18T07:14:34.472Z",
+ *       "device": "20e7edea-0db9-4595-844f-c42b1b6e3951",
+ *       "readings": [{
+ *           "type": "latitude",
+ *           "value": "100.01",
+ *           "_id": "587f15da8636f73e30eff809"
+ *         }, {
+ *           "type": "longitude",
+ *           "value": "100.001",
+ *           "_id": "587f15da8636f73e30eff808"
+ *         }, {
+ *           "type": "charging status",
+ *           "value": "charging",
+ *           "_id": "587f15da8636f73e30eff807"
+ *         }, {
+ *           "type": "current charge",
+ *           "value": "80",
+ *           "_id": "587f15da8636f73e30eff806"
+ *         }]
+ *     },
+ *     ...
+ *     ...
+ *  ]}
+ */
+exports.getDeviceReadingsByDeviceUuid = function (req, res) {
+  "use strict";
+  var uuid = req.params.uuid;
+  DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
+    if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
 
     if (!context) return res.status('400').send('No such device found in DB...');
 
