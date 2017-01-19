@@ -85,7 +85,7 @@ exports.getAllClients = function (req, res) {
       console.error('403 - Invalid role sent in credentials.');
       return res.sendStatus(403);
     }
-    return ClientManagementService.getClient(client, role.uuid, true);
+    return ClientManagementService.getClient(client);
   })
   .then(client => {
     console.log('\n logged in client: ' + JSON.stringify(client));
@@ -93,9 +93,7 @@ exports.getAllClients = function (req, res) {
   })
   .then(context => {
     if (!context) return res.status('200').send('No clients found in DB...');
-    ClientManagementService.getClient(context[0].uuid, context[0].role, true).then( client => {
-      console.log('\n ClientManagementService.getClient(context[0]): ' + JSON.stringify(client));
-    });
+    console.log('\n context: ' + JSON.stringify(context));
     return res.status('200').send(context);
   })
   .catch(err => {

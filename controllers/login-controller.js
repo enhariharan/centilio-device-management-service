@@ -98,9 +98,11 @@ exports.login = function (req, res) {
   // if match not found, send error code 400 or 500 as needed
   UserManagementService.getUser(credentials)
   .then(user => {
-    return ClientManagementService.getClient(user.client, user.role, true);
+      console.error('user: ' + JSON.stringify(user));
+    return ClientManagementService.getClient(user.client);
   })
   .then( client => {
+      console.error('client: ' + JSON.stringify(client));
     res.status(200).send(client);
   })
   .catch(err => {

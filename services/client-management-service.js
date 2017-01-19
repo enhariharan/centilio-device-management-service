@@ -60,7 +60,7 @@ exports.getAllClientsByCorporate = function(orgName) {
 exports.getClient = function(clientUuid) {
   return new Promise(
     (resolve, reject) => {
-      console.info('\ngetClient(' + clientUuid + ', ' + roleUuid + ', ' + deepQueryRequired + ')');
+      console.info('\ngetClient(' + clientUuid + ')');
       // initialize the query result that will be sent back
       var clientDTO = { uuid: '',
         timestamp: null,
@@ -89,10 +89,6 @@ exports.getClient = function(clientUuid) {
         client => {
           if (client === null) resolve(clientDTO);
           _fillDtoWithClientDetails(clientDTO, client);
-          if (!deepQueryRequired) {
-            console.log('Thin clientDTO: ' + JSON.stringify(clientDTO));
-            resolve(client);
-          }
           return findAllAddressesForClientQueryPromise;
         }
       ).then(
