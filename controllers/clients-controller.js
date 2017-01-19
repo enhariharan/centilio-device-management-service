@@ -69,9 +69,9 @@ exports.getAllClients = function (req, res) {
   var credentials = basicAuth(req);
   if (credentials === undefined || !credentials) return res.sendStatus(403);
   var client = null;
-  console.info('getAlLClients()');
+  console.info('\ngetAlLClients()');
   UserManagementService.getUser(credentials).then(user => {
-    console.info('user: ' + JSON.stringify(user));
+    console.info('\nuser: ' + JSON.stringify(user));
     if (!user || user === undefined || !user.role || user.role === undefined) {
       console.error('403 - Invalid login credentials');
       return res.sendStatus(403);
@@ -80,19 +80,22 @@ exports.getAllClients = function (req, res) {
     return RoleManagementService.getRole(user.role);
   })
   .then(role => {
-    console.info('in controller role: ' + JSON.stringify(role));
+    console.info('\nin controller role: ' + JSON.stringify(role));
     if (!role || role === undefined || role.name !== 'admin') {
       console.error('403 - Invalid role sent in credentials.');
       return res.sendStatus(403);
     }
-    return ClientManagementService.getClient(client, role.uuid, false);
+    return ClientManagementService.getClient(client, role.uuid, true);
   })
   .then(client => {
-    console.log('logged in client: ' + JSON.stringify(client));
+    console.log('\n logged in client: ' + JSON.stringify(client));
     return ClientManagementService.getAllClientsByCorporate(client.corporateName);
   })
   .then(context => {
     if (!context) return res.status('200').send('No clients found in DB...');
+    ClientManagementService.getClient(context[0].uuid, context[0].role, true).then( client => {
+      console.log('\n ClientManagementService.getClient(context[0]): ' + JSON.stringify(client));
+    });
     return res.status('200').send(context);
   })
   .catch(err => {

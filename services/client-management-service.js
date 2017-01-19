@@ -1,4 +1,5 @@
 var Client = require('../models/client-model').Client;
+var User = require('../models/user-model').User;
 var Address = require('../models/client-model').Address;
 var Email = require('../models/client-model').Email;
 var ContactNumber = require('../models/client-model').ContactNumber;
@@ -50,34 +51,16 @@ exports.getAllClientsByCorporate = function(orgName) {
           console.info('No clients found in DB...' + clients.length);
           resolve(0, null);
         }
-
-        var context = {
-          clients: clients.map( client => {
-            var clientDTO = {
-              uuid: client.uuid,
-              timestamp: client.timestamp,
-              corporateName: client.corporateName,
-              firstName: client.firstName,
-              lastName: client.lastName,
-              middleName: client.middleName,
-              type: client.type,
-              role: client.role,
-              addresses: client.addresses,
-              emails: client.emails,
-              contactNumbers: client.contactNumbers,
-              devices: client.devices,
-            };
-            return clientDTO;
-          }),
-        };
-        resolve(context);
+        console.info('\nclientsByCorporate ==> : ' + JSON.stringify(clients));
+        resolve(clients);
       });
   });
 }
 
-exports.getClient = function(clientUuid, roleUuid, deepQueryRequired) {
+exports.getClient = function(clientUuid) {
   return new Promise(
     (resolve, reject) => {
+      console.info('\ngetClient(' + clientUuid + ', ' + roleUuid + ', ' + deepQueryRequired + ')');
       // initialize the query result that will be sent back
       var clientDTO = { uuid: '',
         timestamp: null,
@@ -87,6 +70,7 @@ exports.getClient = function(clientUuid, roleUuid, deepQueryRequired) {
         middleName: '',
         type: '',
         role: '',
+        primaryEmail: '',
         addresses: [],
         emails: [],
         contactNumbers: [],
@@ -99,7 +83,6 @@ exports.getClient = function(clientUuid, roleUuid, deepQueryRequired) {
       var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
       var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
       var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
-      var findRoleQueryPromise = Role.find({uuid: roleUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
@@ -125,11 +108,6 @@ exports.getClient = function(clientUuid, roleUuid, deepQueryRequired) {
       ).then(
         contactNumbers => {
           _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
-          return findRoleQueryPromise;
-        }
-      ).then(
-        role => {
-          clientDTO.role = role[0].name;
           return findAllDevicesForClientQueryPromise;
         }
       ).then(
@@ -276,6 +254,7 @@ var _fillDtoWithClientDetails = function(clientDTO, client) {
   clientDTO.middleName = client.middleName;
   clientDTO.type = client.type;
   clientDTO.role = client.role;
+  clientDTO.primaryEmail = client.primaryEmail;
 }
 
 var _fillDtoWithClientAdressDetails = function(clientDTO, addresses) {

@@ -54,23 +54,23 @@ var deviceParamTemperature = new DeviceParam(
 var deviceParams = [deviceParamLatitude, deviceParamLongitude, deviceParamChargingStatus, deviceParamBrightness, deviceParamTemperature];
 
 var client1corp1 = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 1',   firstName: 'Ashok', lastName: 'Kumar', middleName: 'M', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 1',   firstName: 'Ashok', lastName: 'Kumar', middleName: 'M', type: 'corporate', role: roleUser.uuid, primaryEmail: 'client1corp1@snigdha.co.in'});
 var client2corp1 = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 1',   firstName: 'Mathew', lastName: 'Picard', middleName: 'J', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 1',   firstName: 'Mathew', lastName: 'Picard', middleName: 'J', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'client2corp1@snigdha.co.in'});
 var client1corp2 = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 2',   firstName: 'John', lastName: 'Doe', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 2',   firstName: 'John', lastName: 'Doe', type: 'corporate', role: roleUser.uuid, primaryEmail: 'client1corp2@snigdha.co.in'});
 var client2corp2 = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 2',   firstName: 'Jane', lastName: 'Doe', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'corporation 2',   firstName: 'Jane', lastName: 'Doe', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'client2corp2@snigdha.co.in'});
 var client1retail = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Ashok Kumar',   firstName: 'Ashok', lastName: 'Kumar', type: 'retail'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Ashok Kumar',   firstName: 'Ashok', lastName: 'Kumar', type: 'retail', role: roleUser.uuid, primaryEmail: 'client1retail@snigdha.co.in'});
 var client2retail = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Kishore Subramanian',   firstName: 'Kishore', lastName: 'Subramanian', type: 'retail'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Kishore Subramanian',   firstName: 'Kishore', lastName: 'Subramanian', type: 'retail', role: roleUser.uuid, primaryEmail: 'client2retail@snigdha.co.in'});
 var clientSurya = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Snigdha',   firstName: 'Surya', lastName: 'Vempati', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Snigdha',   firstName: 'Surya', lastName: 'Vempati', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'info@snigdha.co.in'});
 var clientLydor = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Lydor',   firstName: 'Srinivasa', lastName: 'Reddy', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Lydor',   firstName: 'Srinivasa', lastName: 'Reddy', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'srinivasa.reddy@lydor.in'});
 var clientSaiRajesh = new Client(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'SaiRajesh',   firstName: 'Sai Krishna', lastName: 'Rajesh Narayanan', type: 'corporate'});
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'SaiRajesh',   firstName: 'Sai Krishna', lastName: 'Rajesh Narayanan', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'skotha@gmail.com'});
 var clients = [client1corp1, client2corp1, client1corp2, client2corp2, client1retail, client2retail, clientSurya, clientLydor, clientSaiRajesh];
 
 var device1 = new Device(
@@ -139,20 +139,22 @@ var addresses = [address1Client1Corp1, address1Client2Corp1,
   address1Client1retail, address2Client1retail, address1Client2retail,
   address2Client2retail, address3Client2retail, addressSurya];
 
-var email1Client1Corp1 = new Email({client:client1corp1.uuid, email: 'client1@corp1.com', type: 'work'});
+var email1Client1Corp1 = new Email({client:client1corp1.uuid, email: 'client1corp1@snigdha.co.in', type: 'primary'});
 var email2Client1Corp1 = new Email({client:client1corp1.uuid, email: 'client.1@corp1.com', type: 'work'});
 var email3Client1Corp1 = new Email({client:client1corp1.uuid, email: 'client.1@gmail.com', type: 'personal'});
-var email1Client2Corp1 = new Email({client:client2corp1.uuid, email: 'client2@corp1.com', type: 'work'});
-var email1Client1Corp2 = new Email({client:client1corp2.uuid, email: 'client.1@corp.2.com', type: 'work'});
-var email1Client2Corp2 = new Email({client:client2corp2.uuid, email: 'client.2@corp.2.com', type: 'work'});
-var email1Client1retail = new Email({client:client1retail.uuid, email: 'client.1@mail.me', type: 'work'});
+var email1Client2Corp1 = new Email({client:client2corp1.uuid, email: 'client2corp1@snigdha.co.in', type: 'primary'});
+var email1Client1Corp2 = new Email({client:client1corp2.uuid, email: 'client1corp2@snigdha.co.in', type: 'primary'});
+var email1Client2Corp2 = new Email({client:client2corp2.uuid, email: 'client2corp2@snigdha.co.in', type: 'primary'});
+var email1Client1retail = new Email({client:client1retail.uuid, email: 'client1retail@snigdha.co.in', type: 'primary'});
 var email2Client1retail = new Email({client:client1retail.uuid, email: 'client.1@gmail.com', type: 'personal'});
-var email1Client2retail = new Email({client:client2retail.uuid, email: 'client.2@retail.com', type: 'work'});
+var email1Client2retail = new Email({client:client2retail.uuid, email: 'client2retail@snigdha.co.in', type: 'primary'});
 var email2Client2retail = new Email({client:client2retail.uuid, email: 'abc.def@rediffmail.com', type: 'personal'});
-var email1Surya = new Email({client:clientSurya.uuid, email: 'info@snigdha.co.in', type: 'work'});
+var email1Surya = new Email({client:clientSurya.uuid, email: 'info@snigdha.co.in', type: 'primary'});
+var email1Lydor = new Email({client:clientSurya.uuid, email: 'srinivasa.reddy@lydor.in', type: 'primary'});
+var email1SaiRajesh = new Email({client:clientSurya.uuid, email: 'skotha@gmail.com', type: 'primary'});
 var emails = [email1Client1Corp1, email2Client1Corp1, email3Client1Corp1,
   email1Client2Corp1, email1Client1Corp2, email1Client2Corp2, email1Client1retail,
-  email2Client1retail, email1Client2retail, email2Client2retail, email1Surya];
+  email2Client1retail, email1Client2retail, email2Client2retail, email1Surya, email1Lydor, email1SaiRajesh];
 
 var cn1Client1Corp1 = new ContactNumber({client:client1corp1.uuid, number: '+911234567890', type: 'work'});
 var cn1Client2Corp1 = new ContactNumber({client:client2corp1.uuid, number: '+913456789012', type: 'work'});
