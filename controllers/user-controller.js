@@ -14,9 +14,11 @@ var basicAuth = require('basic-auth'),
  *                         stateless JWT based token based authentication.
  *                  {json} Request-body should send the new user name, passsword, role type in the following format.
  * {
- *   username: "newUserName",
- *   password: "password", // TODO: This should be changed to stateless JWT based token based authentication.
- *   role: "83356361-e0a4-4942-98b8-1a1c8ad4c943"
+ *   "firstName": "John",
+ *   "lastName": "Woo",
+ *   "email": "john.woo@centil.io",
+ *   "password": "password", // TODO: This should be changed to stateless JWT based token based authentication.
+ *   "role": "83356361-e0a4-4942-98b8-1a1c8ad4c943"
  * }
  *
  * @apiSuccess (201) {User} user Created user is returned as JSON.
