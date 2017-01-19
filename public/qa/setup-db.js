@@ -90,20 +90,6 @@ var deviceSurya = new Device(
     name: 'Surya mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientSurya.uuid});
 var devices = [device1, device2, device3, device4, deviceSurya];
 
-var device1 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-    name: 'device 1', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
-var device2 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-    name: 'device 2', status: 'online', deviceType: deviceTypeMobile.uuid, client: client1corp1.uuid});
-var device3 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-    name: 'device 3', status: 'online', deviceType: deviceTypeHomeAppliance.uuid, client: client2corp1.uuid});
-var device4 = new Device(
-  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
-    name: 'device 4', status: 'online', deviceType: deviceTypeLight.uuid, client: client1retail.uuid});
-var devices = [device1, device2, device3, device4];
-
 var address1Client1Corp1 = new Address({client:client1corp1.uuid,
   line1:'123, HiTec City', line2: '', city: 'Hyderabad', state: 'Telangana',
   countryCode: 'IN', zipCode: '500081', latitude: '17.447162', longitude: '78.376808',

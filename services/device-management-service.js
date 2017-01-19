@@ -1,6 +1,26 @@
 var Device = require('../models/device-model.js').Device,
     DeviceTypeManagementService = require('./device-type-management-service.js');
 
+var _parseAndSendDevices = (devices, callback) => {
+  var context = {
+    devices: devices.map( d => {
+      var device = {
+        uuid: d.uuid,
+        timestamp: d.timestamp,
+        serverTimestamp: d.serverTimestamp,
+        name: d.name,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        status: d.status,
+        deviceType: d.deviceType,
+        deviceId: d.deviceId,
+      };
+      return device;
+    }),
+  };
+  return callback(0, context);
+};
+
 exports.getAllDevices = function(callback) {
   Device.find(function (err, devices) {
     if (err) {
@@ -35,34 +55,17 @@ exports.getAllDevices = function(callback) {
 }
 
 exports.getDevice = function(uuid, callback) {
-  Device.find({uuid: uuid}, function (err, devices) {
-    if (err) {
-      console.error('error while reading devices from DB = ' + err);
-      return callback(err, null);
-    }
+  var devices = null;
 
-    if (!devices.length) {
-      console.error('No devices found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      devices: devices.map(function(device) {
-        var dev = {
-          uuid: device.uuid,
-          timestamp: device.timestamp,
-          serverTimestamp: device.serverTimestamp,
-          name: device.name,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          status: device.status,
-          deviceType: device.deviceType,
-          deviceId: device.deviceId,
-        };
-        return dev;
-      }),
-    };
-    return callback(0, context);
+  Device.find({uuid: uuid}).exec().then(
+    devices => {
+      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
+      else return Device.find({deviceId: uuid}).exec();
+  })
+  .then(
+    devices => {
+      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
+      else return callback(0, null);
   });
 }
 
