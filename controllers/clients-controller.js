@@ -5,9 +5,7 @@ var utils = require('../models/utilities.js'),
     basicAuth = require('basic-auth');
 
 /**
- * @api {get} /clients Get all available clients according to these rules:
- *                     - If logged in user is admin, then all users belonging to his/her company are returned.
- *                     - If logged in user is not admin, then error code 403 is returned.
+ * @api {get} /clients Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.
  * @apiName getAllClients
  * @apiGroup Client
  *

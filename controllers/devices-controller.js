@@ -62,13 +62,13 @@ var utils = require('../models/utilities.js'),
 };
 
 /**
- * @api {get} /devices/:uuid Get device by given uuid
+ * @api {get} /devices/:id Get device by given uuid or deviceId
  * @apiName getDevice
  * @apiGroup Device
  *
- * @apiParam None
+ * @apiParam {json} Request-header must contain the credentials of logged in user
  *
- * @apiSuccess (200) {Device} Device JSON having given uuid.
+ * @apiSuccess (200) {Device} Device JSON having given uuid or deviceId.
  * @apiSuccessExample {json} Success-Response:
  *   HTTP/1.1 200 OK
  *   {
