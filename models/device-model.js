@@ -8,6 +8,9 @@ var deviceSchema = Schema({
   uuid: {type: String, required: true},
   timestamp: {type: Date, required: true},
 
+  //device identifier given from the device (ex., mobile IMEI)
+  deviceId: String,
+
   // name of the device
   name: String,
 

@@ -71,6 +71,7 @@ var basicAuth = require('basic-auth'),
  *         "name":"device 1",
  *         "status":"online",
  *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "deviceId":"01234567890123456789",
  *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
  *       },
  *       {
@@ -80,6 +81,7 @@ var basicAuth = require('basic-auth'),
  *         "name":"device 2",
  *         "status":"online",
  *         "deviceType":"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d",
+ *         "deviceId":"01234567890123456789",
  *         "client":"1af2e69c-dc0b-479b-ab83-088e54977920","__v":0
  *       }
  *     ]
@@ -96,7 +98,7 @@ exports.login = function (req, res) {
   // if match not found, send error code 400 or 500 as needed
   UserManagementService.getUser(credentials)
   .then(user => {
-    return ClientManagementService.getClient(user.client, user.role);
+    return ClientManagementService.getClient(user.client, user.role, true);
   })
   .then( client => {
     res.status(200).send(client);

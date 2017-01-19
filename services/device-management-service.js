@@ -1,6 +1,26 @@
 var Device = require('../models/device-model.js').Device,
     DeviceTypeManagementService = require('./device-type-management-service.js');
 
+var _parseAndSendDevices = (devices, callback) => {
+  var context = {
+    devices: devices.map( d => {
+      var device = {
+        uuid: d.uuid,
+        timestamp: d.timestamp,
+        serverTimestamp: d.serverTimestamp,
+        name: d.name,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        status: d.status,
+        deviceType: d.deviceType,
+        deviceId: d.deviceId,
+      };
+      return device;
+    }),
+  };
+  return callback(0, context);
+};
+
 exports.getAllDevices = function(callback) {
   Device.find(function (err, devices) {
     if (err) {
@@ -24,6 +44,7 @@ exports.getAllDevices = function(callback) {
           longitude: device.longitude,
           status: device.status,
           deviceType: device.deviceType,
+          deviceId: device.deviceId
         };
         return dev;
       }),
@@ -34,8 +55,22 @@ exports.getAllDevices = function(callback) {
 }
 
 exports.getDevice = function(uuid, callback) {
+  var devices = null;
 
-  Device.find({uuid: uuid}, function (err, devices) {
+  Device.find({uuid: uuid}).exec().then(
+    devices => {
+      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
+      else return Device.find({deviceId: uuid}).exec();
+  })
+  .then(
+    devices => {
+      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
+      else return callback(0, null);
+  });
+}
+
+exports.getDevicesByClient = function(clientUuid, callback) {
+  Device.find({client: clientUuid}, function (err, devices) {
     if (err) {
       console.error('error while reading devices from DB = ' + err);
       return callback(err, null);
@@ -57,6 +92,7 @@ exports.getDevice = function(uuid, callback) {
           longitude: device.longitude,
           status: device.status,
           deviceType: device.deviceType,
+          deviceId: device.deviceId,
         };
         return dev;
       }),

@@ -42,7 +42,40 @@ exports.getAllClients = function(callback) {
   });
 }
 
-exports.getClient = function(clientUuid, roleUuid) {
+exports.getAllClientsByCorporate = function(orgName) {
+  return new Promise(
+    (resolve, reject) => {
+      Client.find({'corporateName': orgName}).exec().then( clients => {
+        if (!clients.length) {
+          console.info('No clients found in DB...' + clients.length);
+          resolve(0, null);
+        }
+
+        var context = {
+          clients: clients.map( client => {
+            var clientDTO = {
+              uuid: client.uuid,
+              timestamp: client.timestamp,
+              corporateName: client.corporateName,
+              firstName: client.firstName,
+              lastName: client.lastName,
+              middleName: client.middleName,
+              type: client.type,
+              role: client.role,
+              addresses: client.addresses,
+              emails: client.emails,
+              contactNumbers: client.contactNumbers,
+              devices: client.devices,
+            };
+            return clientDTO;
+          }),
+        };
+        resolve(context);
+      });
+  });
+}
+
+exports.getClient = function(clientUuid, roleUuid, deepQueryRequired) {
   return new Promise(
     (resolve, reject) => {
       // initialize the query result that will be sent back
@@ -73,6 +106,10 @@ exports.getClient = function(clientUuid, roleUuid) {
         client => {
           if (client === null) resolve(clientDTO);
           _fillDtoWithClientDetails(clientDTO, client);
+          if (!deepQueryRequired) {
+            console.log('Thin clientDTO: ' + JSON.stringify(clientDTO));
+            resolve(client);
+          }
           return findAllAddressesForClientQueryPromise;
         }
       ).then(
