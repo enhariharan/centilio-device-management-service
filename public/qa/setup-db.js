@@ -2,8 +2,8 @@
  * This script is intended to be used by testers or for demo purposes.
  * This script sets up a sample database.
  */
-var mongoose = require('mongoose'),
-    utilities = require('../../models/utilities');
+var mongoose = require('mongoose');
+var utilities = require('../../models/utilities');
 var credentials = require('../../credentials');
 var Role = require('../../models/role-model').Role;
 var User = require('../../models/user-model').User;
@@ -71,7 +71,9 @@ var clientLydor = new Client(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Lydor',   firstName: 'Srinivasa', lastName: 'Reddy', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'srinivasa.reddy@lydor.in'});
 var clientSaiRajesh = new Client(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'SaiRajesh',   firstName: 'Sai Krishna', lastName: 'Rajesh Narayanan', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'skotha@gmail.com'});
-var clients = [client1corp1, client2corp1, client1corp2, client2corp2, client1retail, client2retail, clientSurya, clientLydor, clientSaiRajesh];
+var clientBabu = new Client(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), corporateName: 'Singdha',   firstName: 'Babu', lastName: 'Choudhary', type: 'corporate', role: roleAdmin.uuid, primaryEmail: 'bnbudiya785@gmail.com'});
+var clients = [client1corp1, client2corp1, client1corp2, client2corp2, client1retail, client2retail, clientSurya, clientLydor, clientSaiRajesh, clientBabu];
 
 var device1 = new Device(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '123456789012345',
@@ -88,7 +90,10 @@ var device4 = new Device(
 var deviceSurya = new Device(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '865980021035123',
     name: 'Surya mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientSurya.uuid});
-var devices = [device1, device2, device3, device4, deviceSurya];
+var deviceBabu = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '911506601398526',
+    name: 'Babu mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientBabu.uuid});
+var devices = [device1, device2, device3, device4, deviceSurya, deviceBabu];
 
 var address1Client1Corp1 = new Address({client:client1corp1.uuid,
   line1:'123, HiTec City', line2: '', city: 'Hyderabad', state: 'Telangana',
@@ -152,9 +157,10 @@ var email2Client2retail = new Email({client:client2retail.uuid, email: 'abc.def@
 var email1Surya = new Email({client:clientSurya.uuid, email: 'info@snigdha.co.in', type: 'primary'});
 var email1Lydor = new Email({client:clientSurya.uuid, email: 'srinivasa.reddy@lydor.in', type: 'primary'});
 var email1SaiRajesh = new Email({client:clientSurya.uuid, email: 'skotha@gmail.com', type: 'primary'});
+var email1Babu = new Email({client:clientBabu.uuid, email: 'bnbudiya785@gmail.com', type: 'primary'});
 var emails = [email1Client1Corp1, email2Client1Corp1, email3Client1Corp1,
   email1Client2Corp1, email1Client1Corp2, email1Client2Corp2, email1Client1retail,
-  email2Client1retail, email1Client2retail, email2Client2retail, email1Surya, email1Lydor, email1SaiRajesh];
+  email2Client1retail, email1Client2retail, email2Client2retail, email1Surya, email1Lydor, email1SaiRajesh, email1Babu];
 
 var cn1Client1Corp1 = new ContactNumber({client:client1corp1.uuid, number: '+911234567890', type: 'work'});
 var cn1Client2Corp1 = new ContactNumber({client:client2corp1.uuid, number: '+913456789012', type: 'work'});
@@ -166,6 +172,7 @@ var cn1Client1retail = new ContactNumber({client:client1retail.uuid, number: '+9
 var cn1Client2retail = new ContactNumber({client:client2retail.uuid, number: '+911234567890', type: 'work'});
 var cn2Client2retail = new ContactNumber({client:client2retail.uuid, number: '+912134567890', type: 'airtel'});
 var cnSurya = new ContactNumber({client:clientSurya.uuid, number: '+919885608076', type: 'work'});
+var clientBabu = new ContactNumber({client:clientBabu.uuid, number: '+919494116895', type: 'work'});
 var contactNumbers = [cn1Client1Corp1, cn1Client2Corp1, cn1Client1Corp2,
   cn1Client2Corp2, cn1Client1retail, cn1Client1retail, cn1Client1retail,
   cn1Client2retail, cn2Client2retail, cnSurya];
@@ -206,8 +213,12 @@ var sairajesh = new User({uuid: utilities.getUuid(), timestamp: utilities.getTim
   username: 'sairajesh', password: 'password',
   status: 'activated', gender: 'male', profilePicPath: '//some/example/path',
   client: clientSaiRajesh.uuid, role: roleAdmin.uuid});
+var babu = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
+  username: 'bnbudiya785@gmail.com', password: 'password',
+  status: 'activated', gender: 'male', profilePicPath: '//some/example/path',
+  client: clientBabu.uuid, role: roleAdmin.uuid});
 var users = [userClient1corp1, userClient2corp1, userClient1corp2, userClient2corp2,
-  userClient1retail, userClient2retail, surya, lydor, sairajesh];
+  userClient1retail, userClient2retail, surya, lydor, sairajesh, babu];
 
 var device1Reading1 = new DeviceReading({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
   serverTimestamp: utilities.getTimestamp(), device: device1.uuid,
