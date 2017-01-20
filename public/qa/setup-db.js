@@ -172,10 +172,10 @@ var cn1Client1retail = new ContactNumber({client:client1retail.uuid, number: '+9
 var cn1Client2retail = new ContactNumber({client:client2retail.uuid, number: '+911234567890', type: 'work'});
 var cn2Client2retail = new ContactNumber({client:client2retail.uuid, number: '+912134567890', type: 'airtel'});
 var cnSurya = new ContactNumber({client:clientSurya.uuid, number: '+919885608076', type: 'work'});
-var clientBabu = new ContactNumber({client:clientBabu.uuid, number: '+919494116895', type: 'work'});
+var cnBabu = new ContactNumber({client:clientBabu.uuid, number: '+919494116895', type: 'work'});
 var contactNumbers = [cn1Client1Corp1, cn1Client2Corp1, cn1Client1Corp2,
   cn1Client2Corp2, cn1Client1retail, cn1Client1retail, cn1Client1retail,
-  cn1Client2retail, cn2Client2retail, cnSurya];
+  cn1Client2retail, cn2Client2retail, cnSurya, cnBabu];
 
 var userClient1corp1 = new User({uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(),
   username: 'userClient1Corp1', password: 'password',
