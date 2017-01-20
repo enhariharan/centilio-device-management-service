@@ -22,6 +22,12 @@ var clientSchema = Schema({
 
   // Client type. "corporate", "retail", etc.,
   type: {type: String, required: [true, 'client type is required']},
+
+  // Client role. 'admin', 'user', etc.,
+  role: {type: String, ref: 'Role'},
+
+  // Primary email.  This is used for login. All other emails, along with this one, are aggregated separately in a emails collection.
+  primaryEmail: {type: String, required: [true, 'primary email is required for login.']},
 });
 
 // TODO: This validator should be brought back when we know how to do this better.

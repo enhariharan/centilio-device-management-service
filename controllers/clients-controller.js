@@ -1,8 +1,11 @@
-var utils = require('../models/utilities.js');
-var ClientManagementService = require('../services/client-management-service.js');
+var utils = require('../models/utilities.js'),
+    ClientManagementService = require('../services/client-management-service.js'),
+    UserManagementService = require('../services/user-management-service.js'),
+    RoleManagementService = require('../services/role-management-service.js'),
+    basicAuth = require('basic-auth');
 
 /**
- * @api {get} /clients Get all available clients
+ * @api {get} /clients Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.
  * @apiName getAllClients
  * @apiGroup Client
  *
@@ -10,7 +13,7 @@ var ClientManagementService = require('../services/client-management-service.js'
  *
  * @apiSuccess (200) {Client[]} clients Array of clients.
  * @apiSuccessExample {json} Success-Response:
- *     HTTP/1.1 200 OK
+ *    HTTP/1.1 200 OK
  *    {
  *      "clients": [
  *        {
@@ -63,12 +66,38 @@ var ClientManagementService = require('../services/client-management-service.js'
  */
 exports.getAllClients = function (req, res) {
   "use strict";
-  ClientManagementService.getAllClients(function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading clients from DB');
-
+  var credentials = basicAuth(req);
+  if (credentials === undefined || !credentials) return res.sendStatus(403);
+  var client = null;
+  console.info('\ngetAlLClients()');
+  UserManagementService.getUser(credentials).then(user => {
+    console.info('\nuser: ' + JSON.stringify(user));
+    if (!user || user === undefined || !user.role || user.role === undefined) {
+      console.error('403 - Invalid login credentials');
+      return res.sendStatus(403);
+    }
+    client = user.client;
+    return RoleManagementService.getRole(user.role);
+  })
+  .then(role => {
+    console.info('\nin controller role: ' + JSON.stringify(role));
+    if (!role || role === undefined || role.name !== 'admin') {
+      console.error('403 - Invalid role sent in credentials.');
+      return res.sendStatus(403);
+    }
+    return ClientManagementService.getClient(client);
+  })
+  .then(client => {
+    console.log('\n logged in client: ' + JSON.stringify(client));
+    return ClientManagementService.getAllClientsByCorporate(client.corporateName);
+  })
+  .then(context => {
     if (!context) return res.status('200').send('No clients found in DB...');
-
+    console.log('\n context: ' + JSON.stringify(context));
     return res.status('200').send(context);
+  })
+  .catch(err => {
+    console.error('error: ' + err.stack);
   });
 };
 
@@ -210,21 +239,17 @@ exports.addClient = function (req, res) {
     contactNumbers: [],
   };
 
-  req.body.addresses.forEach(function(address) {
-    var a = address;
-    clientDTO.addresses.push(address);
-  });
+  if (req.body.addresses && req.body.addresses != undefined) req.body.addresses.forEach(
+    a => { clientDTO.addresses.push(a);});
 
-  req.body.emails.forEach(function(email) {
-    clientDTO.emails.push(email);
-  });
+  if (req.body.emails && req.body.emails != undefined) req.body.emails.forEach(
+    e => { clientDTO.emails.push(e);});
 
-  req.body.contactNumbers.forEach(function(contactNumber) {
-    clientDTO.contactNumbers.push(contactNumber);
-  });
+  if (req.body.contactNumbers && req.body.contactNumbers != undefined) req.body.contactNumbers.forEach(
+    cn => { clientDTO.contactNumbers.push(cn);});
 
   // Pass the DTO to client management service to save
-  ClientManagementService.addClient(clientDTO, function (err) {
+  ClientManagementService.addClient(clientDTO, err => {
     if (err === 500) {
       return res.status('500').send('error encountered while adding client to DB. Intrenal server error.');
     } else if (err === 400) {

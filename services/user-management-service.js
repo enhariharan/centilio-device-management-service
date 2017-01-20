@@ -1,4 +1,6 @@
 var User = require('../models/user-model.js').User,
+    Client = require('../models/client-model.js').Client,
+    Email = require('../models/client-model.js').Email,
     Utilities = require('../models/utilities.js');
 
 exports.getUser = function(credentials) {
@@ -24,34 +26,62 @@ exports.getUser = function(credentials) {
   );
 };
 
-exports.addUser = function(credentials, roleUuid) {
+exports.addUser = function(credentials, newUserDetails) {
   return new Promise(
-    function(resolve, reject) {
-      var userToSave = new User({
-        uuid: Utilities.getUuid(),
-        timestamp: Utilities.getTimestamp(),
-        username: credentials.name,
-        password: credentials.pass,
-        role: roleUuid,
-        status: 'registered',
-      });
+    (resolve, reject) => {
+      var clientToSave = null;
+      var userToSave = null;
+      var emailToSave = null;
 
       User.find({username: credentials.name}).exec()
       .then(
-        user => {
-          if (user === undefined || user === null || user.length === 0) return userToSave.save();
-          else {
-            console.info('\nuser ' + user +  ' already exists');
+        users => {
+          if (users === undefined || users === null || users.length === 0) {
             reject(400);
           }
-        })
-        .then(user => {
-          console.info('\nuser saved: ' + user);
-          resolve(user);
-        })
-        .catch(err => {
-          console.info('\nerror: ' + JSON.stringify(err) + err.stack);
+          return Client.find({uuid: users[0].client}).exec();
+      })
+      .then(
+        adminClients => {
+          var clientToSave = new Client({
+            uuid: Utilities.getUuid(),
+            timestamp: Utilities.getTimestamp(),
+            firstName: newUserDetails.firstName,
+            lastName: newUserDetails.lastName,
+            middleName: '',
+            corporateName: adminClients[0].corporateName,
+            type: 'corporate',
+            role: newUserDetails.role,
+            primaryEmail: newUserDetails.email,
+          });
+          return clientToSave.save();
+      })
+      .then(client => {
+        var userToSave = new User({
+          uuid: Utilities.getUuid(),
+          timestamp: Utilities.getTimestamp(),
+          username: newUserDetails.email,
+          password: newUserDetails.password,
+          role: newUserDetails.role,
+          status: 'new user',
+          profilePicPath: '',
+          client: client.uuid
         });
-      }
-    );
-  };
+        return userToSave.save();
+      })
+      .then(user => {
+        var emailToSave = new Email({
+          email: newUserDetails.email,
+          type: 'primary',
+          client: user.uuid
+        });
+        return emailToSave.save();
+      })
+      .then(email => {
+        resolve(newUserDetails);
+      })
+      .catch(err => {
+        console.info('\nerror: ' + JSON.stringify(err) + err.stack);
+      });
+  });
+};

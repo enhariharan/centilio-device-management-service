@@ -1,6 +1,6 @@
 var Role = require('../models/role-model.js').Role;
 
-exports.getAllRoles = function(callback) {
+exports.getAllRoles = (callback) => {
   Role.find(function (err, roles) {
     if (err) {
       console.error('error while reading roles from DB = ' + err);
@@ -27,7 +27,18 @@ exports.getAllRoles = function(callback) {
   });
 }
 
-exports.addRole = function(role, callback) {
+exports.getRole = (roleUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      Role.find({'uuid': roleUuid}).exec().then((roles) => {
+        console.info('roles: ' + JSON.stringify(roles));
+        if (roles === undefined || !roles) reject(err || 400);
+        resolve(roles[0]);
+      })
+  });
+}
+
+exports.addRole = (role, callback) => {
   var roleToSave = new Role(role);
   console.log('roleToSave: ' + JSON.stringify(roleToSave));
   roleToSave.save(function(err) {

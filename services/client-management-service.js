@@ -1,4 +1,5 @@
 var Client = require('../models/client-model').Client;
+var User = require('../models/user-model').User;
 var Address = require('../models/client-model').Address;
 var Email = require('../models/client-model').Email;
 var ContactNumber = require('../models/client-model').ContactNumber;
@@ -42,9 +43,24 @@ exports.getAllClients = function(callback) {
   });
 }
 
-exports.getClient = function(clientUuid, roleUuid) {
+exports.getAllClientsByCorporate = function(orgName) {
   return new Promise(
     (resolve, reject) => {
+      Client.find({'corporateName': orgName}).exec().then( clients => {
+        if (!clients.length) {
+          console.info('No clients found in DB...' + clients.length);
+          resolve(0, null);
+        }
+        console.info('\nclientsByCorporate ==> : ' + JSON.stringify(clients));
+        resolve(clients);
+      });
+  });
+}
+
+exports.getClient = function(clientUuid) {
+  return new Promise(
+    (resolve, reject) => {
+      console.info('\ngetClient(' + clientUuid + ')');
       // initialize the query result that will be sent back
       var clientDTO = { uuid: '',
         timestamp: null,
@@ -54,6 +70,7 @@ exports.getClient = function(clientUuid, roleUuid) {
         middleName: '',
         type: '',
         role: '',
+        primaryEmail: '',
         addresses: [],
         emails: [],
         contactNumbers: [],
@@ -66,13 +83,17 @@ exports.getClient = function(clientUuid, roleUuid) {
       var findAllEmailsForClientQueryPromise = Email.find({client: clientUuid}).exec();
       var findAllContactNumbersForClientQueryPromise = ContactNumber.find({client: clientUuid}).exec();
       var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
-      var findRoleQueryPromise = Role.find({uuid: roleUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise.then(
         client => {
           if (client === null) resolve(clientDTO);
           _fillDtoWithClientDetails(clientDTO, client);
+          return Role.find({uuid: client.role}).exec();
+        }
+      ).then(
+        role => {
+          clientDTO.role = role[0].name;
           return findAllAddressesForClientQueryPromise;
         }
       ).then(
@@ -88,11 +109,6 @@ exports.getClient = function(clientUuid, roleUuid) {
       ).then(
         contactNumbers => {
           _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
-          return findRoleQueryPromise;
-        }
-      ).then(
-        role => {
-          clientDTO.role = role[0].name;
           return findAllDevicesForClientQueryPromise;
         }
       ).then(
@@ -127,7 +143,7 @@ exports.addClient = function(clientDTO, callback) {
 
   // validate role.  Cannot be empty and the role must be present in collection "roles"
   if (clientDTO.role === undefined || clientDTO.role === null) {
-    console.error("'addresses' cannot be empty.  Please provide at least one address.");
+    console.error("'role' cannot be empty.");
     return callback(400);
   }
 
@@ -239,6 +255,7 @@ var _fillDtoWithClientDetails = function(clientDTO, client) {
   clientDTO.middleName = client.middleName;
   clientDTO.type = client.type;
   clientDTO.role = client.role;
+  clientDTO.primaryEmail = client.primaryEmail;
 }
 
 var _fillDtoWithClientAdressDetails = function(clientDTO, addresses) {

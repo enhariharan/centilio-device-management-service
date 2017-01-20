@@ -79,7 +79,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/clients",
-    "title": "Get all available clients",
+    "title": "Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.",
     "name": "getAllClients",
     "group": "Client",
     "parameter": {
@@ -109,7 +109,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
           "type": "json"
         }
       ]
@@ -704,7 +704,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
+          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
           "type": "json"
         }
       ]
@@ -724,7 +724,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
           "type": "json"
         }
       ]
@@ -763,7 +763,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/devices",
-    "title": "Get all available devices",
+    "title": "Get all available devices belonging to logged in user",
     "name": "getAllDevices",
     "group": "Device",
     "parameter": {
@@ -771,9 +771,10 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "json",
             "optional": false,
-            "field": "None",
-            "description": ""
+            "field": "Request-header",
+            "description": "<p>must contain the credentials of logged in user</p>"
           }
         ]
       }
@@ -793,7 +794,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  },\n  {\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890124\",\n    \"timestamp\":\"2016-12-28T11:52:28.637Z\",\n    \"name\":\"Device 02\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  }]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\":\"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  },\n  {\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890124\",\n    \"timestamp\":\"2016-12-28T11:52:28.637Z\",\n    \"name\":\"Device 02\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\":\"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\":\"new\"\n  }]\n}",
           "type": "json"
         }
       ]
@@ -809,8 +810,8 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/devices/:uuid",
-    "title": "Get device by given uuid",
+    "url": "/devices/:id",
+    "title": "Get device by given uuid or deviceId",
     "name": "getDevice",
     "group": "Device",
     "parameter": {
@@ -818,9 +819,10 @@ define({ "api": [
         "Parameter": [
           {
             "group": "Parameter",
+            "type": "json",
             "optional": false,
-            "field": "None",
-            "description": ""
+            "field": "Request-header",
+            "description": "<p>must contain the credentials of logged in user</p>"
           }
         ]
       }
@@ -833,14 +835,14 @@ define({ "api": [
             "type": "Device",
             "optional": false,
             "field": "Device",
-            "description": "<p>JSON having given uuid.</p>"
+            "description": "<p>JSON having given uuid or deviceId.</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\"\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  }]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"devices\": [{\n    \"uuid\":\"0123456789012345678901234567890123456789012345678901234567890123\",\n    \"timestamp\":\"2016-12-30T11:52:28.637Z\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\"\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  }]\n}",
           "type": "json"
         }
       ]
@@ -850,7 +852,7 @@ define({ "api": [
     "groupTitle": "Device",
     "sampleRequest": [
       {
-        "url": "http://api.centilio.com/v1//devices/:uuid"
+        "url": "http://api.centilio.com/v1//devices/:id"
       }
     ]
   },
@@ -1027,7 +1029,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/login",
+    "url": "/users",
     "title": "Add a new user",
     "name": "addUser",
     "group": "User",
@@ -1039,14 +1041,14 @@ define({ "api": [
             "type": "Credentials",
             "optional": false,
             "field": "credentials",
-            "description": "<p>Credentials sent as authentication headera</p>"
+            "description": "<p>Credentials of the logged in user</p>"
           }
         ]
       },
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.",
-          "content": "                 {json} Request-header Basic Authentication details must ne set. This should be changed to\n                        stateless JWT based token based authentication.\n                 {json} Request-body should send the role type in the following format.\n{\n  role: \"83356361-e0a4-4942-98b8-1a1c8ad4c943\"\n}",
+          "content": "                 {json} Request-header Basic Authentication details must ne set. This should be changed to\n                        stateless JWT based token based authentication.\n                 {json} Request-body should send the new user name, passsword, role type in the following format.\n{\n  username: \"newUserName\",\n  password: \"password\", // TODO: This should be changed to stateless JWT based token based authentication.\n  role: \"83356361-e0a4-4942-98b8-1a1c8ad4c943\"\n}",
           "type": "json"
         }
       ]
@@ -1094,11 +1096,11 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/login-controller.js",
+    "filename": "./controllers/user-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://api.centilio.com/v1//login"
+        "url": "http://api.centilio.com/v1//users"
       }
     ]
   },
@@ -1136,7 +1138,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"uuid\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n  \"timestamp\":\"2017-01-11T03:13:20.880Z\",\n  \"corporateName\":\"corporation 1\",\n  \"firstName\":\"Ashok\",\n  \"lastName\":\"Kumar\",\n  \"middleName\":\"M\",\n  \"type\":\"corporate\",\n  \"addresses\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d0012600\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"line1\":\"123, HiTec City\",\n      \"line2\":\"\",\n      \"city\":\"Hyderabad\",\n      \"state\":\"Telangana\",\n      \"countryCode\":\"IN\",\n      \"zipCode\":\"500081\",\n      \"latitude\":\"17.447162\",\n      \"longitude\":\"78.376808\",\n      \"type\":\"work\",\n      \"status\":\"active\",\"__v\":0\n    }\n  ],\n  \"emails\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260a\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client1@corp1.com\",\n      \"type\":\"work\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260b\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client.1@corp1.com\",\n      \"type\":\"work\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260c\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client.1@gmail.com\",\n      \"type\":\"personal\",\"__v\":0\n    }\n  ],\n  \"contactNumbers\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d0012614\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"number\":\"+911234567890\",\"type\":\"work\",\"__v\":0\n    }\n  ],\n  \"devices\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d00125fc\",\n      \"uuid\":\"aeaadfde-e668-4c2c-94e5-249cb8523334\",\n      \"timestamp\":\"2017-01-11T03:13:20.882Z\",\n      \"name\":\"device 1\",\n      \"status\":\"online\",\n      \"deviceType\":\"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d00125fd\",\n      \"uuid\":\"25efe540-a3ba-4156-bfbc-7b252341dca3\",\n      \"timestamp\":\"2017-01-11T03:13:20.883Z\",\n      \"name\":\"device 2\",\n      \"status\":\"online\",\n      \"deviceType\":\"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\"__v\":0\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"uuid\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n  \"timestamp\":\"2017-01-11T03:13:20.880Z\",\n  \"corporateName\":\"corporation 1\",\n  \"firstName\":\"Ashok\",\n  \"lastName\":\"Kumar\",\n  \"middleName\":\"M\",\n  \"type\":\"corporate\",\n  \"addresses\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d0012600\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"line1\":\"123, HiTec City\",\n      \"line2\":\"\",\n      \"city\":\"Hyderabad\",\n      \"state\":\"Telangana\",\n      \"countryCode\":\"IN\",\n      \"zipCode\":\"500081\",\n      \"latitude\":\"17.447162\",\n      \"longitude\":\"78.376808\",\n      \"type\":\"work\",\n      \"status\":\"active\",\"__v\":0\n    }\n  ],\n  \"emails\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260a\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client1@corp1.com\",\n      \"type\":\"work\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260b\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client.1@corp1.com\",\n      \"type\":\"work\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d001260c\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"email\":\"client.1@gmail.com\",\n      \"type\":\"personal\",\"__v\":0\n    }\n  ],\n  \"contactNumbers\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d0012614\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\n      \"number\":\"+911234567890\",\"type\":\"work\",\"__v\":0\n    }\n  ],\n  \"devices\":[\n    {\n      \"_id\":\"5875a2d0c9dcff18d00125fc\",\n      \"uuid\":\"aeaadfde-e668-4c2c-94e5-249cb8523334\",\n      \"timestamp\":\"2017-01-11T03:13:20.882Z\",\n      \"name\":\"device 1\",\n      \"status\":\"online\",\n      \"deviceType\":\"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d\",\n      \"deviceId\":\"01234567890123456789\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\"__v\":0\n    },\n    {\n      \"_id\":\"5875a2d0c9dcff18d00125fd\",\n      \"uuid\":\"25efe540-a3ba-4156-bfbc-7b252341dca3\",\n      \"timestamp\":\"2017-01-11T03:13:20.883Z\",\n      \"name\":\"device 2\",\n      \"status\":\"online\",\n      \"deviceType\":\"9ebc5c0e-1a29-453f-8acd-d0ec42f0c21d\",\n      \"deviceId\":\"01234567890123456789\",\n      \"client\":\"1af2e69c-dc0b-479b-ab83-088e54977920\",\"__v\":0\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -1152,7 +1154,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/login",
+    "url": "/users",
     "title": "Add a new user",
     "name": "updateUser",
     "group": "User",
@@ -1219,11 +1221,11 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/login-controller.js",
+    "filename": "./controllers/user-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://api.centilio.com/v1//login"
+        "url": "http://api.centilio.com/v1//users"
       }
     ]
   },
