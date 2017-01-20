@@ -89,6 +89,11 @@ exports.getClient = function(clientUuid) {
         client => {
           if (client === null) resolve(clientDTO);
           _fillDtoWithClientDetails(clientDTO, client);
+          return Role.find({uuid: client.role}).exec();
+        }
+      ).then(
+        role => {
+          clientDTO.role = role[0].name;
           return findAllAddressesForClientQueryPromise;
         }
       ).then(
