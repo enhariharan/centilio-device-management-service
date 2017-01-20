@@ -2,8 +2,8 @@ var DeviceReading = require('../models/device-reading-model.js').DeviceReading,
     Device = require('../models/device-model.js').Device,
     DeviceReadingManagementService = require('./device-reading-management-service.js');
 
-exports.getAllDeviceReadings = function(callback) {
-  DeviceReading.find(function (err, deviceReadings) {
+exports.getAllDeviceReadings = (callback) => {
+  DeviceReading.find({}).sort('-timestamp').exec((err, deviceReadings) => {
     if (err) {
       console.error('error while reading device readings from DB = ' + err);
       return callback(err, null);
@@ -15,16 +15,14 @@ exports.getAllDeviceReadings = function(callback) {
     }
 
     var context = {
-      deviceReadings: deviceReadings.map(function(deviceReading) {
+      deviceReadings: deviceReadings.map(dr => {
         var devReading = {
-          uuid: deviceReading.uuid,
-          timestamp: deviceReading.timestamp,
-          device: deviceReading.device,
+          uuid: dr.uuid,
+          timestamp: dr.timestamp,
+          device: dr.device,
           readings: [],
         };
-        deviceReading.readings.forEach(function(reading) {
-          devReading.readings.push(reading);
-        });
+        dr.readings.forEach(r => {devReading.readings.push(r);});
         return devReading;
       }),
     };
