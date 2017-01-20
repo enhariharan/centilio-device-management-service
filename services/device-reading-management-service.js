@@ -30,8 +30,8 @@ exports.getAllDeviceReadings = (callback) => {
   });
 }
 
-exports.getDeviceReading = function(uuid, callback) {
-  DeviceReading.find({uuid: uuid}, function (err, deviceReadings) {
+exports.getDeviceReading = (uuid, callback) => {
+  DeviceReading.find({uuid: uuid}).exec((err, deviceReadings) => {
     if (err) {
       console.error('error while reading device readings from DB = ' + err);
       return callback(err, null);
@@ -43,16 +43,14 @@ exports.getDeviceReading = function(uuid, callback) {
     }
 
     var context = {
-      deviceReadings: deviceReadings.map(function(deviceReading) {
+      deviceReadings: deviceReadings.map(dr => {
         var devReading = {
-          uuid: deviceReading.uuid,
-          timestamp: deviceReading.timestamp,
-          device: deviceReading.device,
+          uuid: dr.uuid,
+          timestamp: dr.timestamp,
+          device: dr.device,
           readings: [],
         };
-        deviceReading.readings.forEach(function(reading) {
-          devReading.readings.push(reading);
-        });
+        dr.readings.forEach(r => {devReading.readings.push(r);});
         return devReading;
       }),
     };
@@ -60,7 +58,7 @@ exports.getDeviceReading = function(uuid, callback) {
   });
 }
 
-exports.addDeviceReading = function(deviceReading, callback) {
+exports.addDeviceReading = (deviceReading, callback) => {
   var deviceReadingToSave = new DeviceReading(deviceReading);
 
   // Validate that the device mentioned in the POST is present in the DB
@@ -68,7 +66,7 @@ exports.addDeviceReading = function(deviceReading, callback) {
     console.error('Device uuid not provided in the device reading.');
     return callback(400);
   }
-  Device.find({uuid: deviceReading.device}, function(err){
+  Device.find({uuid: deviceReading.device}, (err) => {
     if (err) {
       console.error('Device uuid was incorrect in the device reading.');
       return callback(400);
@@ -77,17 +75,15 @@ exports.addDeviceReading = function(deviceReading, callback) {
   deviceReadingToSave.device = deviceReading.device;
 
   // Now save new device reading into collection "devicereadings"
-  console.error('deviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
-  deviceReadingToSave.save(function(err) {
-    if (err) {
-      console.log('Error while saving device reading to database.' + err.stack);
-    }
+  console.error('\ndeviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
+  deviceReadingToSave.save((err) => {
+    if (err) console.log('Error while saving device reading to database.' + err.stack);
     return callback(err);
   });
 }
 
-exports.getDeviceReadingsByDeviceUuid = function(deviceUuid, callback) {
-  DeviceReading.find({device: deviceUuid}, function (err, deviceReadings) {
+exports.getDeviceReadingsByDeviceUuid = (deviceUuid, callback) => {
+  DeviceReading.find({device: deviceUuid}).sort('-timestamp').exec((err, deviceReadings) => {
     if (err) {
       console.error('error while reading device readings from DB = ' + err);
       return callback(err, null);
@@ -106,9 +102,7 @@ exports.getDeviceReadingsByDeviceUuid = function(deviceUuid, callback) {
           device: dr.device,
           readings: [],
         };
-        dr.readings.forEach( (r) => {
-          devReading.readings.push(r);
-        });
+        dr.readings.forEach( (r) => {devReading.readings.push(r);});
         return devReading;
       }),
     };
