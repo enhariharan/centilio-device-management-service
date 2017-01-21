@@ -188,16 +188,17 @@ exports.addClient = function(clientDTO, callback) {
     firstName: clientDTO.firstName,
     lastName: clientDTO.lastName,
     middleName: clientDTO.middleName,
+    primaryEmail: clientDTO.primaryEmail,
     type: clientDTO.type,
     role: clientDTO.role,
   });
 
   // Save addresses in collection "addresses".
   // TODO: if saving client fails, then every save in addresses must be rolled back also.
-  clientDTO.addresses.forEach(function(address) {
+  clientDTO.addresses.forEach((address) => {
     var addressToSave = new Address(address);
     addressToSave.client = clientDTO.uuid;
-    addressToSave.save(function(err, address, numAffected) {
+    addressToSave.save((err, address, numAffected) => {
       if (err) {
         console.error('Error while saving address to database.');
         return callback(err);
@@ -207,10 +208,10 @@ exports.addClient = function(clientDTO, callback) {
 
   // Save emails in collection "emails".
   // TODO: if saving client fails, then every save in emails must be rolled back also.
-  clientDTO.emails.forEach(function(email) {
+  clientDTO.emails.forEach((email) => {
     var emailToSave = new Email(email);
     emailToSave.client = clientDTO.uuid;
-    emailToSave.save(function(err) {
+    emailToSave.save((err) => {
       if (err) {
         console.error('Error while saving email to database.');
         return callback(err);
@@ -220,10 +221,10 @@ exports.addClient = function(clientDTO, callback) {
 
   // Save contact numbers in collection "contactNumbers".
   // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
-  clientDTO.contactNumbers.forEach(function(contactNumber) {
+  clientDTO.contactNumbers.forEach((contactNumber) => {
     var contactNumberToSave = new ContactNumber(contactNumber);
     contactNumberToSave.client = clientDTO.uuid;
-    contactNumberToSave.save(function(err) {
+    contactNumberToSave.save((err) => {
       if (err) {
         console.error('Error while saving contact number to database.');
         return callback(err);
@@ -232,8 +233,7 @@ exports.addClient = function(clientDTO, callback) {
   });
 
   // Finally save client into collection "emails".
-  console.info('clientToSave: ' + clientToSave);
-  clientToSave.save(function(err) {
+  clientToSave.save((err) => {
     if (err) {
       console.log('Error while saving client to database.');
       // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
@@ -246,7 +246,7 @@ exports.addClient = function(clientDTO, callback) {
   });
 }
 
-var _fillDtoWithClientDetails = function(clientDTO, client) {
+var _fillDtoWithClientDetails = (clientDTO, client) => {
   clientDTO.uuid = client.uuid;
   clientDTO.timestamp = client.timestamp;
   clientDTO.corporateName = client.corporateName;
@@ -258,26 +258,18 @@ var _fillDtoWithClientDetails = function(clientDTO, client) {
   clientDTO.primaryEmail = client.primaryEmail;
 }
 
-var _fillDtoWithClientAdressDetails = function(clientDTO, addresses) {
-  if (addresses.length != 0) {
-    addresses: addresses.map(a => { clientDTO.addresses.push(a); });
-  }
+var _fillDtoWithClientAdressDetails = (clientDTO, addresses) => {
+  if (addresses.length != 0) addresses: addresses.map(a => {clientDTO.addresses.push(a);});
 }
 
-var _fillDtoWithClientEmailDetails = function(clientDTO, emails) {
-  if (emails.length != 0) {
-    emails: emails.map(e => { clientDTO.emails.push(e); });
-  }
+var _fillDtoWithClientEmailDetails = (clientDTO, emails) => {
+  if (emails.length != 0) emails: emails.map(e => {clientDTO.emails.push(e);});
 }
 
-var _fillDtoWithClientContactNumberDetails = function(clientDTO, contactNumbers) {
-  if (contactNumbers.length != 0) {
-    contactNumbers: contactNumbers.map(c => { clientDTO.contactNumbers.push(c); });
-  }
+var _fillDtoWithClientContactNumberDetails = (clientDTO, contactNumbers) => {
+  if (contactNumbers.length != 0) contactNumbers: contactNumbers.map(c => {clientDTO.contactNumbers.push(c);});
 }
 
-var _fillDtoWithDeviceDetails = function(clientDTO, devices) {
-  if (devices.length != 0) {
-    devices: devices.map(d => { clientDTO.devices.push(d); });
-  }
+var _fillDtoWithDeviceDetails = (clientDTO, devices) => {
+  if (devices.length != 0) devices: devices.map(d => {clientDTO.devices.push(d);});
 }

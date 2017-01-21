@@ -1,4 +1,4 @@
-var basicAuth = require('basic-auth'),
+var BasicAuth = require('basic-auth'),
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service');
 
@@ -91,7 +91,7 @@ exports.login = function (req, res) {
   "use strict";
 
   // Get the credentials
-  var credentials = basicAuth(req);
+  var credentials = BasicAuth(req);
 
   // validate if the user is present and passwords match
   // if match found, send back client details

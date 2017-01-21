@@ -21,8 +21,8 @@ var _parseAndSendDevices = (devices, callback) => {
   return callback(0, context);
 };
 
-exports.getAllDevices = function(callback) {
-  Device.find(function (err, devices) {
+exports.getAllDevices = (callback) => {
+  Device.find((err, devices) => {
     if (err) {
       console.error('error while reading devices from DB = ' + err);
       return callback(err, null);
@@ -34,17 +34,17 @@ exports.getAllDevices = function(callback) {
     }
 
     var context = {
-      devices: devices.map(function(device) {
+      devices: devices.map(d => {
         var dev = {
-          uuid: device.uuid,
-          timestamp: device.timestamp,
-          serverTimestamp: device.serverTimestamp,
-          name: device.name,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          status: device.status,
-          deviceType: device.deviceType,
-          deviceId: device.deviceId
+          uuid: d.uuid,
+          timestamp: d.timestamp,
+          serverTimestamp: d.serverTimestamp,
+          name: d.name,
+          latitude: d.latitude,
+          longitude: d.longitude,
+          status: d.status,
+          deviceType: d.deviceType,
+          deviceId: d.deviceId
         };
         return dev;
       }),
@@ -54,66 +54,62 @@ exports.getAllDevices = function(callback) {
   });
 }
 
-exports.getDevice = function(uuid, callback) {
-  var devices = null;
-
-  Device.find({uuid: uuid}).exec().then(
-    devices => {
-      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
-      else return Device.find({deviceId: uuid}).exec();
+exports.getDevice = (id, callback) => {
+  Device.find({uuid: id}).exec().then(devices => {
+    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+    else return Device.find({deviceId: id}).exec();
   })
-  .then(
-    devices => {
-      if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback)
-      else return callback(0, null);
+  .then(devices => {
+    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+    else return callback(0, null);
   });
 }
 
-exports.getDevicesByClient = function(clientUuid, callback) {
-  Device.find({client: clientUuid}, function (err, devices) {
-    if (err) {
-      console.error('error while reading devices from DB = ' + err);
-      return callback(err, null);
-    }
+exports.getDevicesByClient = (clientUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      Device.find({client: clientUuid}, (err, devices) => {
+        if (err) {
+          console.error('error while reading devices from DB = ' + err);
+          reject(err);
+        }
 
-    if (!devices.length) {
-      console.error('No devices found in DB...');
-      return callback(0, null);
-    }
+        if (!devices.length) {
+          console.error('No devices found in DB...');
+          resolve(null);
+        }
 
-    var context = {
-      devices: devices.map(function(device) {
-        var dev = {
-          uuid: device.uuid,
-          timestamp: device.timestamp,
-          serverTimestamp: device.serverTimestamp,
-          name: device.name,
-          latitude: device.latitude,
-          longitude: device.longitude,
-          status: device.status,
-          deviceType: device.deviceType,
-          deviceId: device.deviceId,
+        var context = {
+          devices: devices.map(d => {
+            var dev = {
+              uuid: d.uuid,
+              timestamp: d.timestamp,
+              serverTimestamp: d.serverTimestamp,
+              name: d.name,
+              latitude: d.latitude,
+              longitude: d.longitude,
+              status: d.status,
+              deviceType: d.deviceType,
+              deviceId: d.deviceId,
+            };
+            return dev;
+          }),
         };
-        return dev;
-      }),
-    };
-    return callback(0, context);
+        resolve(context);
+      });
   });
 }
 
-exports.addDevice = function(device, callback) {
-  console.info('device: ' + JSON.stringify(device));
+exports.addDevice = (device, callback) => {
   var deviceToSave = new Device(device);
   deviceToSave.deviceType = device.deviceType;
-  console.info('deviceToSave: ' + JSON.stringify(deviceToSave));
 
   // validate that the deviceType already exists in the devicetypes collection.
-  if (deviceToSave.deviceType == undefined || deviceToSave.deviceType == null) {
+  if (deviceToSave.deviceType == undefined || !deviceToSave.deviceType) {
         console.log('device does not have a valid device type.');
         return callback(400);
   }
-  console.info('deviceToSave.deviceType: ' + deviceToSave.deviceType);
-  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType, function(err) {
+  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType, err => {
     if (err) {
       console.log('device does not have a valid device type.');
       return callback(400);
@@ -121,10 +117,8 @@ exports.addDevice = function(device, callback) {
   });
 
   // Now save new device into collection "device"
-  deviceToSave.save(function(err) {
-    if (err) {
-      console.log('Error while saving device to database.');
-    }
+  deviceToSave.save(err => {
+    if (err) console.log('Error while saving device to database.');
     return callback(err);
   });
 }

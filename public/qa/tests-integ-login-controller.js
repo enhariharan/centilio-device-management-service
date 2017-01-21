@@ -13,15 +13,15 @@ var assert = require('chai').assert,
     baseurl = 'http://localhost:' + credentials.server.port,
     loginurl = baseurl + '/login';
 
-suite('login router integration tests - ', function() {
+suite('login router integration tests - ', () => {
 
   test('addUser with proper credentials must add a new client', (done) => {
-    var testUserName = 'newUser1',
-        testPassword = 'password12';
+    var adminUserName = 'userClient2Corp1',
+        adminPassword = 'password12',
+        newUser = {"firstName": "John", "lastName": "Woo", "email": "john.woo@centil.io", "password": "password", "role": "83356361-e0a4-4942-98b8-1a1c8ad4c943"};
 
-    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    restler.postJson(baseurl+'/users', newUser, { method: 'post', username: adminUserName, password:  adminPassword })
     .on('complete', (result, res) => {
-      console.log('result is ' + JSON.stringify(result));
       assert(result !== null && result !== '' && result !== undefined);
       assert(result === 'Created');
       done();
@@ -38,14 +38,14 @@ suite('login router integration tests - ', function() {
     var testPassword = 'password12';
 
     // create a new user with username as in testUserNameand verify that it was created properly
-    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    restler.postJson(loginurl, { method: 'post', username: testUserName, password:  testPassword })
     .on('success', responseStatus => {
       assert(responseStatus !== null && responseStatus !== '' && responseStatus !== undefined);
       assert(responseStatus === 'Created');
     });
 
     // now try to create a new user with the same user name
-    restler.post(loginurl, { method: 'post', username: testUserName, password:  testPassword })
+    restler.postJson(loginurl, { method: 'post', username: testUserName, password:  testPassword })
     .on('success', responseStatus => {
       console.log('responseStatus on success: ' + responseStatus);
       assert(false);
@@ -79,8 +79,8 @@ suite('login router integration tests - ', function() {
       assert(client.addresses[0].type === 'work');
       assert(client.addresses[0].status === 'active');
       assert(client.emails[0].client === client.uuid);
-      assert(client.emails[0].email === 'client1@corp1.com');
-      assert(client.emails[0].type === 'work');
+      assert(client.emails[0].email === 'client1corp1@snigdha.co.in');
+      assert(client.emails[0].type === 'primary');
       assert(client.emails[1].client === client.uuid);
       assert(client.emails[1].email === 'client.1@corp1.com');
       assert(client.emails[1].type === 'work');

@@ -2,7 +2,7 @@ var utils = require('../models/utilities.js'),
     ClientManagementService = require('../services/client-management-service.js'),
     UserManagementService = require('../services/user-management-service.js'),
     RoleManagementService = require('../services/role-management-service.js'),
-    basicAuth = require('basic-auth');
+    BasicAuth = require('basic-auth');
 
 /**
  * @api {get} /clients Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.
@@ -66,10 +66,9 @@ var utils = require('../models/utilities.js'),
  */
 exports.getAllClients = function (req, res) {
   "use strict";
-  var credentials = basicAuth(req);
+  var credentials = BasicAuth(req);
   if (credentials === undefined || !credentials) return res.sendStatus(403);
   var client = null;
-  console.info('\ngetAlLClients()');
   UserManagementService.getUser(credentials).then(user => {
     console.info('\nuser: ' + JSON.stringify(user));
     if (!user || user === undefined || !user.role || user.role === undefined) {
@@ -239,13 +238,13 @@ exports.addClient = function (req, res) {
     contactNumbers: [],
   };
 
-  if (req.body.addresses && req.body.addresses != undefined) req.body.addresses.forEach(
+  if (req.body.addresses && req.body.addresses !== undefined) req.body.addresses.forEach(
     a => { clientDTO.addresses.push(a);});
 
-  if (req.body.emails && req.body.emails != undefined) req.body.emails.forEach(
+  if (req.body.emails && req.body.emails !== undefined) req.body.emails.forEach(
     e => { clientDTO.emails.push(e);});
 
-  if (req.body.contactNumbers && req.body.contactNumbers != undefined) req.body.contactNumbers.forEach(
+  if (req.body.contactNumbers && req.body.contactNumbers !== undefined) req.body.contactNumbers.forEach(
     cn => { clientDTO.contactNumbers.push(cn);});
 
   // Pass the DTO to client management service to save
