@@ -14,8 +14,7 @@ var assert = require('chai').assert,
 suite('devices router integration tests - ', () => {
   test('get device readings for given device uuid', (done) => {
     // first get a list of all available devices
-    console.info('url: ' + url);
-    restler.get(url)
+    restler.get(url, {method: 'get', username: 'userClient1Corp1', password: 'password'})
     .on('complete', (result, response) => {
       // Validate that we got the list of device properly
       assert(result !== null);

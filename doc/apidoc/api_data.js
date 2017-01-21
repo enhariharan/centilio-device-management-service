@@ -421,7 +421,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/deviceReadings",
-    "title": "Get all available device readings",
+    "title": "Get all available device readings of all devices belonging to the logged in user.",
     "name": "getAllDeviceReadings",
     "group": "Device_Readings",
     "parameter": {
@@ -1048,7 +1048,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.",
-          "content": "                 {json} Request-header Basic Authentication details must ne set. This should be changed to\n                        stateless JWT based token based authentication.\n                 {json} Request-body should send the new user name, passsword, role type in the following format.\n{\n  username: \"newUserName\",\n  password: \"password\", // TODO: This should be changed to stateless JWT based token based authentication.\n  role: \"83356361-e0a4-4942-98b8-1a1c8ad4c943\"\n}",
+          "content": "                 {json} Request-header Basic Authentication details must ne set. This should be changed to\n                        stateless JWT based token based authentication.\n                 {json} Request-body should send the new user name, passsword, role type in the following format.\n{\n  \"firstName\": \"John\",\n  \"lastName\": \"Woo\",\n  \"email\": \"john.woo@centil.io\",\n  \"password\": \"password\", // TODO: This should be changed to stateless JWT based token based authentication.\n  \"role\": \"83356361-e0a4-4942-98b8-1a1c8ad4c943\"\n}",
           "type": "json"
         }
       ]

@@ -44,8 +44,6 @@ module.exports = function(app) {
   app.post('/roles', jsonParser, roles.addRole);
 
   app.get('/login', login.login);
-  // app.post('/login', login.addUser);
-  // app.put('/login', login.updateUser);
 
   app.post('/users', user.addUser);
   app.put('/users', user.updateUser);

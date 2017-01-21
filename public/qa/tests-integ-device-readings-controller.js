@@ -28,7 +28,6 @@ suite('device readings router integration tests - ', function() {
 
     restler.postJson(url, deviceReading, { method: 'post', username: testUserName, password:  testPassword })
     .on('complete', (result, res) => {
-      console.log('result is ' + JSON.stringify(result));
       assert(result !== null && result !== '' && result !== undefined);
       assert(result.uuid !== null);
       assert(result.timestamp !== null);

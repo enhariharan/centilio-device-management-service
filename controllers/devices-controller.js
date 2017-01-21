@@ -1,8 +1,8 @@
-var utils = require('../models/utilities.js'),
-    basicAuth = require('basic-auth'),
-    DeviceManagementService = require('../services/device-management-service.js'),
-    UserManagementService = require('../services/user-management-service.js'),
-    DeviceReadingManagementService = require('../services/device-reading-management-service.js');
+var utils = require('../models/utilities'),
+    BasicAuth = require('basic-auth'),
+    DeviceManagementService = require('../services/device-management-service'),
+    UserManagementService = require('../services/user-management-service'),
+    DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
  * @api {get} /devices Get all available devices belonging to logged in user
@@ -39,26 +39,17 @@ var utils = require('../models/utilities.js'),
  *     }]
  *   }
  */
- exports.getAllDevices = function (req, res) {
+ exports.getAllDevices = (req, res) => {
   "use strict";
 
   // validate credentials
-  var credentials = basicAuth(req);
-  UserManagementService.getUser(credentials).then(
-    user => {
-      if (!user || user === undefined) {
-        console.error('403 - Invalid login credentials');
-        return res.sendStatus(403);
-      } else {
-        DeviceManagementService.getDevicesByClient(user.client, (err, context) => {
-          if (err) return res.status(500).send('error encountered while reading devices from DB');
-          if (!context) return res.status(200).send('No devices found in DB...');
-          console.info('\ndevices: ' + JSON.stringify(context));
-          return res.status(200).send(context);
-        });
-      }
+  var credentials = BasicAuth(req);
+  UserManagementService.getUser(credentials).then(user => {
+    if (!user || user === undefined) return res.sendStatus(403);
+    else {
+      DeviceManagementService.getDevicesByClient(user.client).then(devices => {return res.status(200).send(devices);});
     }
-  );
+  });
 };
 
 /**
@@ -88,7 +79,7 @@ var utils = require('../models/utilities.js'),
 exports.getDevice = function (req, res) {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceManagementService.getDevice(uuid, function (err, context) {
+  DeviceManagementService.getDevice(uuid, (err, context) => {
     if (err) return res.status('500').send('error encountered while reading device from DB');
     if (!context) return res.status('400').send('No such device found in DB...');
     return res.status('200').send(context);
@@ -132,10 +123,10 @@ exports.getDevice = function (req, res) {
  *     ...
  *  ]}
  */
-exports.getDeviceReadingsByDeviceUuid = function (req, res) {
+exports.getDeviceReadingsByDeviceUuid = (req, res) => {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, function (err, context) {
+  DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, (err, context) => {
     if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
     if (!context) return res.status('400').send('No such device found in DB...');
     return res.status('200').send(context);
@@ -178,11 +169,8 @@ exports.getDeviceReadingsByDeviceUuid = function (req, res) {
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
 exports.addDevice = function (req, res) {
-  console.info('req.body: ' + JSON.stringify(req.body));
-  if (!req || !req.body) {
-    console.error('invalid request object');
-    return res.status(400).send('Bad Request');
-  }
+  "use strict";
+  if (!req || !req.body) return res.sendStatus(400);
 
   var device = {
     uuid: utils.getUuid(),
@@ -195,11 +183,10 @@ exports.addDevice = function (req, res) {
     deviceType: req.body.deviceType,
     client: req.body.client
   };
-  console.info('device: ' + JSON.stringify(device));
 
-  DeviceManagementService.addDevice(device, function (err) {
+  DeviceManagementService.addDevice(device, err => {
     if (err === 400) return res.status('400').send('error encountered while adding device to DB.  Please check your JSON.');
-    if (err)  return res.status('500').send('error encountered while adding device to DB.');
+    if (err) return res.status('500').send('error encountered while adding device to DB.');
 
     return res.status('201').send(device);
   });

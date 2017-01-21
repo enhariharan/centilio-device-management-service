@@ -1,4 +1,4 @@
-var basicAuth = require('basic-auth'),
+var BasicAuth = require('basic-auth'),
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service'),
     utilities = require('../models/utilities');
@@ -34,7 +34,7 @@ exports.addUser = function (req, res) {
   var UserAlreadyPresentException = {};
 
   // Get the credentials
-  var credentials = basicAuth(req);  // TODO: Change this to JWT based stateless token based authentication
+  var credentials = BasicAuth(req);  // TODO: Change this to JWT based stateless token based authentication
 
   UserManagementService.addUser(credentials, req.body)
   .then(user => {
