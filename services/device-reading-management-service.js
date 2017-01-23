@@ -111,12 +111,14 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, callback) => {
   });
 }
 
-exports.getAllDeviceReadingsByDevices = (devices) => {
+exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly) => {
   return new Promise(
     (resolve, reject) => {
       var deviceReadingsPromises = [];
       devices.forEach( d => {
-        deviceReadingsPromises.push(DeviceReading.find({device: d.uuid}).sort('-timestamp').exec());
+        showLatestOnly
+        ? deviceReadingsPromises.push(DeviceReading.findOne({device: d.uuid}).sort('-timestamp').exec())
+        : deviceReadingsPromises.push(DeviceReading.find({device: d.uuid}).sort('-timestamp').exec());
       });
       Promise.all(deviceReadingsPromises).then(readings => {resolve(readings);});
   });
