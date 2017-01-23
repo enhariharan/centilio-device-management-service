@@ -1,15 +1,17 @@
 var utils = require('../models/utilities'),
     DeviceReadingManagementService = require('../services/device-reading-management-service'),
     DeviceManagementService = require('../services/device-management-service'),
+    User = require('../models/user-model').User,
     UserManagementService = require('../services/user-management-service'),
     BasicAuth = require('basic-auth');
 
 /**
- * @api {get} /deviceReadings Get all available device readings of all devices belonging to the logged in user.
+ * @api {get} /deviceReadings Get device readings of all devices belonging to the logged in user.
  * @apiName getAllDeviceReadings
  * @apiGroup Device Readings
  *
- * @apiParam None
+ * @apiParam latestOnly - If this param is set to true (/devicereadings?latestOnly=true) then only the latest
+ * reading per device is returned.  Else all device readings of all devices of the user are returned.
  *
  * @apiSuccess (200) {DeviceReadings[]} deviceReadings Array of device readings.
  * @apiSuccessExample {json} Success-Response:
@@ -42,12 +44,15 @@ var utils = require('../models/utilities'),
    var credentials = BasicAuth(req); // TODO: Change this to JWT based stateless token based authentication
    if (credentials === undefined || !credentials) return res.sendStatus(403);
 
-   UserManagementService.getUser(credentials).then(user => {
-     if (!user || user === undefined || user.username !== credentials.name) return res.sendStatus(403);
-     return DeviceManagementService.getDevicesByClient(user.client);
+   User.find({username: credentials.name}).exec().then(user => {
+     if (!user || user === undefined || credentials.name.toLowerCase().localeCompare(user[0].username.toLowerCase()) || credentials.pass.localeCompare(user[0].password)) return res.sendStatus(403);
+     return DeviceManagementService.getDevicesByClient(user[0].client);
    })
-   .then(devices => {return DeviceReadingManagementService.getAllDeviceReadingsByDevices(devices.devices);})
-   .then(deviceReadings => {return res.status('200').send(deviceReadings);});
+   .then(devices => {
+     return DeviceReadingManagementService.getAllDeviceReadingsByDevices(devices.devices, req.query.latestOnly === 'true');
+   })
+   .then(deviceReadings => {return res.status('200').send(deviceReadings);})
+   .catch(err => {console.log('err: ' + err);});
 };
 
 /**

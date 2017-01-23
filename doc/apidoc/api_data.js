@@ -421,7 +421,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/deviceReadings",
-    "title": "Get all available device readings of all devices belonging to the logged in user.",
+    "title": "Get device readings of all devices belonging to the logged in user.",
     "name": "getAllDeviceReadings",
     "group": "Device_Readings",
     "parameter": {
@@ -430,8 +430,8 @@ define({ "api": [
           {
             "group": "Parameter",
             "optional": false,
-            "field": "None",
-            "description": ""
+            "field": "latestOnly",
+            "description": "<ul> <li>If this param is set to true (/devicereadings?latestOnly=true) then only the latest reading per device is returned.  Else all device readings of all devices of the user are returned.</li> </ul>"
           }
         ]
       }
