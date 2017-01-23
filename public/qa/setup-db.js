@@ -333,17 +333,11 @@ var setupDeviceReadings = function() {
   });
 };
 
-setupRoles()
-.then((message) => {console.log(message); return setupDeviceTypes();})
-.then((message) => {console.log(message); return setupClients();})
-.then((message) => {console.log(message); return setupUsers();})
-.then((message) => {console.log(message); return setupClientAddresses();})
-.then((message) => {console.log(message); return setupClientEmails();})
-.then((message) => {console.log(message); return setupClientContactNumbers();})
-.then((message) => {console.log(message); return setupDevices();})
-.then((message) => {console.log(message); return setupDeviceParams();})
-.then((message) => {console.log(message); return setupDeviceReadings();})
-.then((message) => {console.log(message);})
+Promise.all([
+  setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
+  setupClientContactNumbers(), setupDevices(), setupDeviceParams(), setupDeviceReadings(),
+])
+.then(messages => {messages.forEach(m => {console.log(m);});})
 .catch(err => {console.error(err.stack);});
 
 mongoose.connection.close();
