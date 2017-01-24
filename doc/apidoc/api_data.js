@@ -432,6 +432,18 @@ define({ "api": [
             "optional": false,
             "field": "latestOnly",
             "description": "<ul> <li>If this param is set to true (/devicereadings?latestOnly=true) then only the latest reading per device is returned.  Else all device readings of all devices of the user are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "from",
+            "description": "<ul> <li>If this param is set to true (/devicereadings?from=timestamp) then all readings from the given timestamp till the prent moment are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "to",
+            "description": "<ul> <li>If this param is set to true (/devicereadings?to=timestamp) then all readings from the beginning to the given timestamp are returned.</li> </ul>"
           }
         ]
       }

@@ -12,6 +12,10 @@ var utils = require('../models/utilities'),
  *
  * @apiParam latestOnly - If this param is set to true (/devicereadings?latestOnly=true) then only the latest
  * reading per device is returned.  Else all device readings of all devices of the user are returned.
+ * @apiParam from - If this param is set to true (/devicereadings?from=timestamp) then all readings from the
+ * given timestamp till the prent moment are returned.
+ * @apiParam to - If this param is set to true (/devicereadings?to=timestamp) then all readings from the
+ * beginning to the given timestamp are returned.
  *
  * @apiSuccess (200) {DeviceReadings[]} deviceReadings Array of device readings.
  * @apiSuccessExample {json} Success-Response:
@@ -49,7 +53,7 @@ var utils = require('../models/utilities'),
      return DeviceManagementService.getDevicesByClient(user[0].client);
    })
    .then(devices => {
-     return DeviceReadingManagementService.getAllDeviceReadingsByDevices(devices.devices, req.query.latestOnly === 'true');
+     return DeviceReadingManagementService.getAllDeviceReadingsByDevices(devices.devices, req.query.latestOnly === 'true', req.query.from, req.query.to);
    })
    .then(deviceReadings => {return res.status('200').send(deviceReadings);})
    .catch(err => {console.log('err: ' + err);});
