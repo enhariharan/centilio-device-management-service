@@ -111,14 +111,19 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, callback) => {
   });
 }
 
-exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly) => {
+exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly, fromTimeStamp, toTimeStamp) => {
   return new Promise(
     (resolve, reject) => {
       var deviceReadingsPromises = [];
+      var fromTime = new Date('2017-01-01T00:00:00');
+      var toTime = new Date();
       devices.forEach( d => {
-        showLatestOnly
-        ? deviceReadingsPromises.push(DeviceReading.findOne({device: d.uuid}).sort('-timestamp').exec())
-        : deviceReadingsPromises.push(DeviceReading.find({device: d.uuid}).sort('-timestamp').exec());
+        if (showLatestOnly) deviceReadingsPromises.push(DeviceReading.findOne({device: d.uuid}).sort('-timestamp').exec());
+        else {
+          if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
+          if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
+          deviceReadingsPromises.push(DeviceReading.find({device: d.uuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec());
+        }
       });
       Promise.all(deviceReadingsPromises).then(readings => {resolve(readings);});
   });
