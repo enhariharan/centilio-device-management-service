@@ -93,7 +93,16 @@ var deviceSurya = new Device(
 var deviceBabu = new Device(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '911506601398526',
     name: 'Babu mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientBabu.uuid});
-var devices = [device1, device2, device3, device4, deviceSurya, deviceBabu];
+var deviceLydor = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '911506601398527',
+    name: 'Lydor mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientLydor.uuid});
+var deviceSaiRajesh = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '911506601398530',
+    name: 'SaiRajesh mobile', status: 'online', deviceType: deviceTypeMobile.uuid, client: clientSaiRajesh.uuid});
+var deviceSnigdhaUnassigned = new Device(
+  {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), deviceId: '911506601398531',
+    name: 'Unnassigned mobile belonging to company Snigdha', status: 'online', deviceType: deviceTypeMobile.uuid});
+var devices = [device1, device2, device3, device4, deviceSurya, deviceBabu, deviceLydor, deviceSaiRajesh, deviceSnigdhaUnassigned];
 
 var address1Client1Corp1 = new Address({client:client1corp1.uuid,
   line1:'123, HiTec City', line2: '', city: 'Hyderabad', state: 'Telangana',

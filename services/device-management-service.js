@@ -1,5 +1,7 @@
-var Device = require('../models/device-model.js').Device,
-    DeviceTypeManagementService = require('./device-type-management-service.js');
+var Device = require('../models/device-model').Device,
+    Client = require('../models/client-model').Client,
+    Role = require('../models/role-model').Role,
+    DeviceTypeManagementService = require('./device-type-management-service');
 
 var _parseAndSendDevices = (devices, callback) => {
   var context = {
@@ -65,15 +67,23 @@ exports.getDevice = (id, callback) => {
   });
 }
 
-exports.getDevicesByClient = (clientUuid) => {
+exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesOnly) => {
   return new Promise(
     (resolve, reject) => {
-      Device.find({client: clientUuid}, (err, devices) => {
-        if (err) {
-          console.error('error while reading devices from DB = ' + err);
-          reject(err);
+      Client.find({uuid: clientUuid}).exec()
+      .then(clients => {
+        return Role.find({uuid: clients[0].role}).exec();
+      })
+      .then(roles => {
+        if ((roles[0].name !== 'admin') && (showAllDevices === 'true')) reject(403);
+        if ((roles[0].name !== 'admin') && (showUnassignedDevicesOnly === 'true')) reject(403);
+        if ((showAllDevices !== 'true') && (showUnassignedDevicesOnly === 'true')) reject(400);
+        if (roles[0].name === 'admin') {
+          if (showAllDevices === 'true') return (showUnassignedDevicesOnly === 'true') ? Device.find({client: {$exists: false}}).exec() : Device.find().exec();
         }
-
+        return Device.find({client: clientUuid}).exec();
+      })
+      .then(devices => {
         if (!devices.length) {
           console.error('No devices found in DB...');
           resolve(null);
@@ -91,11 +101,16 @@ exports.getDevicesByClient = (clientUuid) => {
               status: d.status,
               deviceType: d.deviceType,
               deviceId: d.deviceId,
+              client: d.client,
             };
             return dev;
           }),
         };
         resolve(context);
+      })
+      .catch(err => {
+        console.log('error occured while reading devices by client: ' + err.stack);
+        reject(err);
       });
   });
 }
