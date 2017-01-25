@@ -1,15 +1,21 @@
 var utils = require('../models/utilities'),
     BasicAuth = require('basic-auth'),
+    User = require('../models/user-model').User,
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
- * @api {get} /devices Get all available devices belonging to logged in user
+ * @api {get} /devices Get all available devices belonging to logged in user.
  * @apiName getAllDevices
  * @apiGroup Device
  *
- * @apiParam {json} Request-header must contain the credentials of logged in user
+ * @apiParam {json} Request-header must contain the credentials of logged in user.
+ * @apiParam {json} all /devices?all=true will return all devices in the corporate, provided the logged in user
+ * has role admin.
+ * @apiParam {json} unassignedOnly /devices?unassignedOnly=true will return all devices in the corporate that are
+ * not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will
+ * be returned.  This option must be preceded by the param all=true else it will be ignored.
  *
  * @apiSuccess (200) {Device[]} devices Array of devices.
  * @apiSuccessExample {json} Success-Response:
@@ -41,14 +47,19 @@ var utils = require('../models/utilities'),
  */
  exports.getAllDevices = (req, res) => {
   "use strict";
-
   // validate credentials
   var credentials = BasicAuth(req);
-  UserManagementService.getUser(credentials).then(user => {
-    if (!user || user === undefined) return res.sendStatus(403);
-    else {
-      DeviceManagementService.getDevicesByClient(user.client).then(devices => {return res.status(200).send(devices);});
-    }
+  User.find({username: credentials.name}).then(users => {
+    if (!users[0] || users[0] === undefined || credentials.name.toLowerCase().localeCompare(users[0].username.toLowerCase()) || credentials.pass.localeCompare(users[0].password)) return res.sendStatus(403);
+    return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
+  })
+  .then(devices => {
+    console.log('\ndevices: ' + JSON.stringify(devices));
+    return res.status(200).send(devices);
+  })
+  .catch(err => {
+    console.log('error occured while sending all devices by client ' + err);
+    return res.sendStatus(err);
   });
 };
 

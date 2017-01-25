@@ -775,7 +775,7 @@
   {
     "type": "get",
     "url": "/devices",
-    "title": "Get all available devices belonging to logged in user",
+    "title": "Get all available devices belonging to logged in user.",
     "name": "getAllDevices",
     "group": "Device",
     "parameter": {
@@ -786,7 +786,21 @@
             "type": "json",
             "optional": false,
             "field": "Request-header",
-            "description": "<p>must contain the credentials of logged in user</p>"
+            "description": "<p>must contain the credentials of logged in user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "json",
+            "optional": false,
+            "field": "all",
+            "description": "<p>/devices?all=true will return all devices in the corporate, provided the logged in user has role admin.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "json",
+            "optional": false,
+            "field": "unassignedOnly",
+            "description": "<p>/devices?unassignedOnly=true will return all devices in the corporate that are not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will be returned.  This option must be preceded by the param all=true else it will be ignored.</p>"
           }
         ]
       }
@@ -1108,7 +1122,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/user-controller.js",
+    "filename": "./controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1167,7 +1181,7 @@
   {
     "type": "put",
     "url": "/users",
-    "title": "Add a new user",
+    "title": "Update an existing user",
     "name": "updateUser",
     "group": "User",
     "parameter": {
@@ -1233,7 +1247,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/user-controller.js",
+    "filename": "./controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
