@@ -203,3 +203,63 @@ exports.addDevice = function (req, res) {
     return res.status('201').send(device);
   });
 };
+
+/**
+ * @api {put} /devices/:uuid Update an existing device
+ * @apiName updateDevice
+ * @apiGroup Device
+ *
+ * @apiParam (device) {json} Give a device as JSON.
+ * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
+ *   {
+ *     "name":"Device 01",
+ *     "latitude":"100.001",
+ *     "longitude":"100.001",
+ *     "status":"new",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status": "registered"
+ *   },
+ * All the fields above are optional. Send in only the fields you want to change with new values.
+ * Only those fields will be updated.  Other fields will be left as it is.
+ *
+ * @apiSuccess (200) {Device} Updated device is returned as JSON.
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
+ *     "timestamp": 1483155714863,
+ *     "name": "device 100",
+ *     "latitude": "103.001",
+ *     "longitude": "103.001",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status": "new"
+ *   }
+ *
+ * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
+ * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
+ */
+ exports.updateDevice = (req, res) => {
+   "use strict";
+   if (!req || !req.body) return res.sendStatus(400);
+
+   var uuid = req.params.uuid;
+   var device = new Device();
+   device.uuid = uuid;
+   if (req.body.deviceId !== undefined) device.deviceId = req.body.deviceId;
+   if (req.body.name !== undefined) device.name = req.body.name;
+   if (req.body.latitude !== undefined) device.latitude = req.body.latitude;
+   if (req.body.longitude !== undefined) device.longitude = req.body.longitude;
+   if (req.body.status !== undefined) device.status = req.body.status;
+   if (req.body.deviceType !== undefined) device.deviceType = req.body.deviceType;
+   if (req.body.client !== undefined) device.client = req.body.client;
+
+   DeviceManagementService.updateDevice(device)
+   .then(response => {
+     console.log('response received for update: ' + JSON.stringify(response));
+     return res.sendStatus(response);
+   });
+ };

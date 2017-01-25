@@ -930,6 +930,83 @@ define({ "api": [
     ]
   },
   {
+    "type": "put",
+    "url": "/devices/:uuid",
+    "title": "Update an existing device",
+    "name": "updateDevice",
+    "group": "Device",
+    "parameter": {
+      "fields": {
+        "device": [
+          {
+            "group": "device",
+            "type": "json",
+            "optional": false,
+            "field": "Give",
+            "description": "<p>a device as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
+          "content": "  {\n    \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\": \"registered\"\n  },\nSend in only the changed fields as only those will be updated.  Other fields will be left as it is.",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Device",
+            "optional": false,
+            "field": "Updated",
+            "description": "<p>device is returned as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/devices-controller.js",
+    "groupTitle": "Device",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//devices/:uuid"
+      }
+    ]
+  },
+  {
     "type": "post",
     "url": "/roles",
     "title": "Add a new role",

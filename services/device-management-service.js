@@ -16,6 +16,7 @@ var _parseAndSendDevices = (devices, callback) => {
         status: d.status,
         deviceType: d.deviceType,
         deviceId: d.deviceId,
+        client: d.client,
       };
       return device;
     }),
@@ -137,3 +138,42 @@ exports.addDevice = (device, callback) => {
     return callback(err);
   });
 }
+
+exports.updateDevice = (device) => {
+  return new Promise(
+    (resolve, reject) => {
+      var deviceToUpdate = {};
+      deviceToUpdate.uuid = device.uuid;
+      Device.find({uuid: device.uuid}).exec()
+      .then(devices => {
+        if (device.deviceId !== undefined) deviceToUpdate.deviceId = device.deviceId;
+        else if (devices[0].deviceId !== undefined) deviceToUpdate.deviceId = devices[0].deviceId;
+
+        if (device.name !== undefined) deviceToUpdate.name = device.name;
+        else if (devices[0].name !== undefined) deviceToUpdate.name = devices[0].name;
+
+        if (device.latitude !== undefined) deviceToUpdate.latitude = device.latitude;
+        else if (devices[0].latitude !== undefined) deviceToUpdate.latitude = devices[0].latitude;
+
+        if (device.longitude !== undefined) deviceToUpdate.longitude = device.longitude;
+        else if (devices[0].longitude !== undefined) deviceToUpdate.longitude = devices[0].longitude;
+
+        if (device.status !== undefined) deviceToUpdate.status = device.status;
+        else if (devices[0].status !== undefined) deviceToUpdate.status = devices[0].status;
+
+        if (device.deviceType !== undefined) deviceToUpdate.deviceType = device.deviceType;
+        else if (devices[0].deviceType !== undefined) deviceToUpdate.deviceType = devices[0].deviceType;
+
+        if (device.client !== undefined) deviceToUpdate.client = device.client;
+        else if (devices[0].client !== undefined) deviceToUpdate.client = devices[0].client;
+
+        console.log('\ndeviceToUpdate: ' + JSON.stringify(deviceToUpdate));
+        return Device.findOneAndUpdate({uuid: device.uuid}, deviceToUpdate, {runValidators: true}).exec();
+      })
+      .then(info => {resolve(200);})
+      .catch(err => {
+        console.log('\nerr: ' + JSON.stringify(err));
+        reject(err);
+      });
+  });
+};
