@@ -716,7 +716,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
+          "content": "  {\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  },\nIf the client entry above is not provided then the device will be considered unassigned to any client.",
           "type": "json"
         }
       ]
