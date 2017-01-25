@@ -191,7 +191,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\": Temperature\",\n  \"description\":\"Temperature of the device\",\n  \"deviceType\": {\n    \"uuid\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  }\n},",
+          "content": "{\n  \"name\": Temperature\",\n  \"description\":\"Temperature of the device\",\n  \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  \"category\": \"Basic device metrics\"\n},",
           "type": "json"
         }
       ]
@@ -211,7 +211,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"temperature\",\n  \"description\": \"Temperature of the device\",\n  \"deviceType\": {\n    \"uuid\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  }\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"10a8cf19-49cf-4080-9879-0048602ca4ab\",\n  \"timestamp\": 1485332172923,\n  \"name\": \"Temperature\",\n  \"description\": \"Temperature of the device\",\n  \"deviceType\": \"e7a79943-d3bf-44ef-9f20-767b5c00b604\",\n  \"category\": \"Basic device metrics\"\n}",
           "type": "json"
         }
       ]
@@ -280,7 +280,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestam\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Latitude of the device\",\n      \"category\": \"GPS coordinates\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestam\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Longitude of the device\",\n      \"category\": \"GPS coordinates\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Temperature of the device\",\n      \"category\": \"Device basic metrics\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -327,7 +327,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Latitude of the device\",\n      \"category\": \"GPS Coordinates\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]

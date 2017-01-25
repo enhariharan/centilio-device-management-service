@@ -1,5 +1,5 @@
-var DeviceParam = require('../models/device-param-model.js').DeviceParam,
-    DeviceTypeManagementService = require('./device-type-management-service.js');
+var DeviceParam = require('../models/device-param-model').DeviceParam,
+    DeviceTypeManagementService = require('./device-type-management-service');
 
 exports.getAllDeviceParams = function(callback) {
   DeviceParam.find(function (err, deviceParams) {
@@ -19,10 +19,9 @@ exports.getAllDeviceParams = function(callback) {
           uuid: deviceParam.uuid,
           timestamp: deviceParam.timestamp,
           name: deviceParam.name,
-          latitude: deviceParam.latitude,
-          longitude: deviceParam.longitude,
-          status: deviceParam.status,
           deviceType: deviceParam.deviceType,
+          description: deviceParam.description,
+          category: deviceParam.category,
         };
         return dev;
       }),
@@ -50,10 +49,9 @@ exports.getDeviceParam = function(uuid, callback) {
           uuid: deviceParam.uuid,
           timestamp: deviceParam.timestamp,
           name: deviceParam.name,
-          latitude: deviceParam.latitude,
-          longitude: deviceParam.longitude,
-          status: deviceParam.status,
           deviceType: deviceParam.deviceType,
+          description: deviceParam.description,
+          category: deviceParam.category,
         };
         return dev;
       }),
@@ -62,31 +60,17 @@ exports.getDeviceParam = function(uuid, callback) {
   });
 }
 
-exports.addDeviceParam = function(deviceParam, callback) {
-  console.info('deviceParam: ' + JSON.stringify(deviceParam));
-  var deviceParamToSave = new DeviceParam(deviceParam);
-  deviceParamToSave.deviceType = deviceParam.deviceType.uuid;
-  console.info('deviceParamToSave: ' + JSON.stringify(deviceParamToSave));
+exports.addDeviceParam = (deviceParam) => {
+  return new Promise(
+    (resolve, reject) => {
+      var deviceParamToSave = new DeviceParam(deviceParam);
 
-
-  // validate that the deviceType already exists in the devicetypes collection.
-  if (deviceParamToSave.deviceType == undefined || deviceParamToSave.deviceType == null) {
-        console.log('device param does not have a valid device type.');
-        return callback(400);
-  }
-  console.info('deviceParam.deviceType.uuid: ' + deviceParam.deviceType.uuid);
-  DeviceTypeManagementService.getDeviceType(deviceParam.deviceType.uuid, function(err) {
-    if (err) {
-      console.log('device param does not have a valid device type.');
-      return callback(400);
-    }
-  });
-
-  // Now save new deviceParam into collection "deviceparams"
-  deviceParamToSave.save(function(err) {
-    if (err) {
-      console.log('Error while saving device param to database.');
-    }
-    return callback(err);
+      // validate that the deviceType already exists in the devicetypes collection.
+      if (!deviceParamToSave.deviceType || deviceParamToSave.deviceType === undefined) reject(400);
+      DeviceTypeManagementService.getDeviceType(deviceParam.deviceType.uuid).then(deviceType => {
+        return deviceParamToSave.save()
+      })
+      .then(deviceParam => {resolve(deviceParam);})
+      .catch(err => {reject(err);});
   });
 }
