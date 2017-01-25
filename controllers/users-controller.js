@@ -48,7 +48,7 @@ exports.addUser = function (req, res) {
 
 
 /**
- * @api {put} /users Add a new user
+ * @api {put} /users Update an existing user
  * @apiName updateUser
  * @apiGroup User
  *
