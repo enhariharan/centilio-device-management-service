@@ -1,6 +1,7 @@
 var utils = require('../models/utilities'),
     BasicAuth = require('basic-auth'),
     User = require('../models/user-model').User,
+    Device = require('../models/device-model').Device,
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');
@@ -160,6 +161,7 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
  *     "deviceId": "01234567890123456789",
  *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *   },
+ * If the client entry above is not provided then the device will be considered unassigned to any client.
  *
  * @apiSuccess (201) {Device} Created devices is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
@@ -183,17 +185,16 @@ exports.addDevice = function (req, res) {
   "use strict";
   if (!req || !req.body) return res.sendStatus(400);
 
-  var device = {
-    uuid: utils.getUuid(),
-    timestamp: utils.getTimestamp(),
-    deviceId: req.body.deviceId,
-    name: req.body.name,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    status: req.body.status,
-    deviceType: req.body.deviceType,
-    client: req.body.client
-  };
+  var device = new Device();
+  device.uuid = utils.getUuid();
+  device.timestamp = utils.getTimestamp();
+  device.deviceId = req.body.deviceId;
+  device.name = req.body.name;
+  device.latitude = req.body.latitude;
+  device.longitude = req.body.longitude;
+  device.status = req.body.status;
+  device.deviceType = req.body.deviceType;
+  if (req.body.client !== undefined) device.client = req.body.client;
 
   DeviceManagementService.addDevice(device, err => {
     if (err === 400) return res.status('400').send('error encountered while adding device to DB.  Please check your JSON.');
