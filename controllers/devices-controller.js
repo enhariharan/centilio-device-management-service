@@ -150,14 +150,14 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
   User.find({username: credentials.name}).exec()
   .then(user => {
     if (!user || user === undefined || credentials.name.toLowerCase().localeCompare(user[0].username.toLowerCase()) || credentials.pass.localeCompare(user[0].password)) return res.sendStatus(403);
-    return DeviceManagementService.getDeviceByClient(uuid, user[0].client);
+    return DeviceManagementService.getDeviceByUuidAndClientUuid(uuid, user[0].client);
   })
   .then(device => {
     if (!device || device === undefined || device.length === 0) return res.status('400').send('No such device found in DB...');
     return DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid);
   })
   .then(deviceReadings => {
-    console.log('\ngetDeviceReadingsByDeviceUuid.deviceReadings: ' + JSON.stringify(deviceReadings));
+    console.log('\ndeviceReadings: ' + JSON.stringify(deviceReadings));
     if (!deviceReadings || deviceReadings.length === 0) return res.status('200').send('No device readings found for this device...');
     return res.status('200').send(deviceReadings);
   });

@@ -119,7 +119,7 @@ exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesO
   });
 }
 
-exports.getDeviceByClient = (deviceUuid, clientUuid) => {
+exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
   return new Promise(
     (resolve, reject) => {
       Device.find({uuid: deviceUuid, client: clientUuid}).exec()
