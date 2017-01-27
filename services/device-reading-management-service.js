@@ -1,6 +1,6 @@
-var DeviceReading = require('../models/device-reading-model.js').DeviceReading,
-    Device = require('../models/device-model.js').Device,
-    DeviceReadingManagementService = require('./device-reading-management-service.js');
+var DeviceReading = require('../models/device-reading-model').DeviceReading,
+    Device = require('../models/device-model').Device,
+    DeviceReadingManagementService = require('./device-reading-management-service');
 
 exports.getAllDeviceReadings = (callback) => {
   DeviceReading.find({}).sort('-timestamp').exec((err, deviceReadings) => {
@@ -97,8 +97,7 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeSta
       }
 
       deviceReadingsPromise.then(deviceReadings => {
-        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings: ' + JSON.stringify(deviceReadings));
-        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings.length: ' + JSON.stringify(deviceReadings.length));
+
         if (!deviceReadings || deviceReadings.length == 0) resolve(null); // no deviceReadings found
         if (deviceReadings.length == undefined) resolve(deviceReadings); // only one deviceReading returned
 
