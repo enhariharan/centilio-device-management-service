@@ -2,6 +2,7 @@ var utils = require('../models/utilities.js'),
     ClientManagementService = require('../services/client-management-service.js'),
     UserManagementService = require('../services/user-management-service.js'),
     RoleManagementService = require('../services/role-management-service.js'),
+    Validator = require('../security/validator'),
     BasicAuth = require('basic-auth');
 
 /**
@@ -66,15 +67,13 @@ var utils = require('../models/utilities.js'),
  */
 exports.getAllClients = function (req, res) {
   "use strict";
-  var credentials = BasicAuth(req);
-  if (credentials === undefined || !credentials) return res.sendStatus(403);
+
+  // Validate input and exit in case of an error right now
+  if (!Validator.isValidCredentials(req)) return res.sendStatus(403);
+
   var client = null;
   UserManagementService.getUser(credentials).then(user => {
-    console.info('\nuser: ' + JSON.stringify(user));
-    if (!user || user === undefined || !user.role || user.role === undefined) {
-      console.error('403 - Invalid login credentials');
-      return res.sendStatus(403);
-    }
+    if (!user || user === undefined || !user.role || user.role === undefined) return res.sendStatus(403);
     client = user.client;
     return RoleManagementService.getRole(user.role);
   })
