@@ -191,7 +191,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\": Temperature\",\n  \"description\":\"Temperature of the device\",\n  \"deviceType\": {\n    \"uuid\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  }\n},",
+          "content": "{\n  \"name\": Temperature\",\n  \"description\":\"Temperature of the device\",\n  \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  \"category\": \"Basic device metrics\"\n},",
           "type": "json"
         }
       ]
@@ -211,7 +211,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"temperature\",\n  \"description\": \"Temperature of the device\",\n  \"deviceType\": {\n    \"uuid\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n  }\n}",
+          "content": "HTTP/1.1 201 Created\n{\n  \"uuid\": \"10a8cf19-49cf-4080-9879-0048602ca4ab\",\n  \"timestamp\": 1485332172923,\n  \"name\": \"Temperature\",\n  \"description\": \"Temperature of the device\",\n  \"deviceType\": \"e7a79943-d3bf-44ef-9f20-767b5c00b604\",\n  \"category\": \"Basic device metrics\"\n}",
           "type": "json"
         }
       ]
@@ -280,7 +280,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestam\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Latitude of the device\",\n      \"category\": \"GPS coordinates\"\n    },\n    {\n      \"uuid\": \"7c806c7c-c10d-4302-ac52-664ca0cc3d7e\",\n      \"timestam\": \"2017-01-05T09:11:21.991Z\",\n      \"name\": \"longitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Longitude of the device\",\n      \"category\": \"GPS coordinates\"\n    },\n    {\n      \"uuid\": \"a07a0400-65b4-41be-8ab5-2c13f01e06c3\",\n      \"timestamp\": \"2017-01-05T09:12:57.119Z\",\n      \"name\": \"temperature\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Temperature of the device\",\n      \"category\": \"Device basic metrics\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -327,7 +327,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"deviceParams\": [\n    {\n      \"uuid\": \"31d6c240-291b-4130-b706-4b2fe6e0f090\",\n      \"timestamp\": \"2017-01-05T09:10:44.629Z\",\n      \"name\": \"latitude\",\n      \"deviceType\": \"bd1dbf4f-c708-44d9-8dc1-8498d8f4923d\"\n      \"description\":\"Latitude of the device\",\n      \"category\": \"GPS Coordinates\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -716,7 +716,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
+          "content": "  {\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  },\nIf the client entry above is not provided then the device will be considered unassigned to any client.",
           "type": "json"
         }
       ]
@@ -775,7 +775,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/devices",
-    "title": "Get all available devices belonging to logged in user",
+    "title": "Get all available devices belonging to logged in user.",
     "name": "getAllDevices",
     "group": "Device",
     "parameter": {
@@ -786,7 +786,21 @@ define({ "api": [
             "type": "json",
             "optional": false,
             "field": "Request-header",
-            "description": "<p>must contain the credentials of logged in user</p>"
+            "description": "<p>must contain the credentials of logged in user.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "json",
+            "optional": false,
+            "field": "all",
+            "description": "<p>/devices?all=true will return all devices in the corporate, provided the logged in user has role admin.</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "json",
+            "optional": false,
+            "field": "unassignedOnly",
+            "description": "<p>/devices?unassignedOnly=true will return all devices in the corporate that are not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will be returned.  This option must be preceded by the param all=true else it will be ignored.</p>"
           }
         ]
       }
@@ -912,6 +926,83 @@ define({ "api": [
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//devices/:uuid/deviceReadings"
+      }
+    ]
+  },
+  {
+    "type": "put",
+    "url": "/devices/:uuid",
+    "title": "Update an existing device",
+    "name": "updateDevice",
+    "group": "Device",
+    "parameter": {
+      "fields": {
+        "device": [
+          {
+            "group": "device",
+            "type": "json",
+            "optional": false,
+            "field": "Give",
+            "description": "<p>a device as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
+          "content": "  {\n    \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\": \"registered\"\n  },\nSend in only the changed fields as only those will be updated.  Other fields will be left as it is.",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Device",
+            "optional": false,
+            "field": "Updated",
+            "description": "<p>device is returned as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./controllers/devices-controller.js",
+    "groupTitle": "Device",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//devices/:uuid"
       }
     ]
   },
@@ -1108,7 +1199,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/user-controller.js",
+    "filename": "./controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1167,7 +1258,7 @@ define({ "api": [
   {
     "type": "put",
     "url": "/users",
-    "title": "Add a new user",
+    "title": "Update an existing user",
     "name": "updateUser",
     "group": "User",
     "parameter": {
@@ -1233,7 +1324,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/user-controller.js",
+    "filename": "./controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {

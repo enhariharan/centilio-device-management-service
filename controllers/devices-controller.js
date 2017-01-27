@@ -1,15 +1,22 @@
 var utils = require('../models/utilities'),
     BasicAuth = require('basic-auth'),
+    User = require('../models/user-model').User,
+    Device = require('../models/device-model').Device,
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
- * @api {get} /devices Get all available devices belonging to logged in user
+ * @api {get} /devices Get all available devices belonging to logged in user.
  * @apiName getAllDevices
  * @apiGroup Device
  *
- * @apiParam {json} Request-header must contain the credentials of logged in user
+ * @apiParam {json} Request-header must contain the credentials of logged in user.
+ * @apiParam {json} all /devices?all=true will return all devices in the corporate, provided the logged in user
+ * has role admin.
+ * @apiParam {json} unassignedOnly /devices?unassignedOnly=true will return all devices in the corporate that are
+ * not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will
+ * be returned.  This option must be preceded by the param all=true else it will be ignored.
  *
  * @apiSuccess (200) {Device[]} devices Array of devices.
  * @apiSuccessExample {json} Success-Response:
@@ -41,14 +48,19 @@ var utils = require('../models/utilities'),
  */
  exports.getAllDevices = (req, res) => {
   "use strict";
-
   // validate credentials
   var credentials = BasicAuth(req);
-  UserManagementService.getUser(credentials).then(user => {
-    if (!user || user === undefined) return res.sendStatus(403);
-    else {
-      DeviceManagementService.getDevicesByClient(user.client).then(devices => {return res.status(200).send(devices);});
-    }
+  User.find({username: credentials.name}).then(users => {
+    if (!users[0] || users[0] === undefined || credentials.name.toLowerCase().localeCompare(users[0].username.toLowerCase()) || credentials.pass.localeCompare(users[0].password)) return res.sendStatus(403);
+    return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
+  })
+  .then(devices => {
+    console.log('\ndevices: ' + JSON.stringify(devices));
+    return res.status(200).send(devices);
+  })
+  .catch(err => {
+    console.log('error occured while sending all devices by client ' + err);
+    return res.sendStatus(err);
   });
 };
 
@@ -149,6 +161,7 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
  *     "deviceId": "01234567890123456789",
  *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
  *   },
+ * If the client entry above is not provided then the device will be considered unassigned to any client.
  *
  * @apiSuccess (201) {Device} Created devices is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
@@ -172,17 +185,16 @@ exports.addDevice = function (req, res) {
   "use strict";
   if (!req || !req.body) return res.sendStatus(400);
 
-  var device = {
-    uuid: utils.getUuid(),
-    timestamp: utils.getTimestamp(),
-    deviceId: req.body.deviceId,
-    name: req.body.name,
-    latitude: req.body.latitude,
-    longitude: req.body.longitude,
-    status: req.body.status,
-    deviceType: req.body.deviceType,
-    client: req.body.client
-  };
+  var device = new Device();
+  device.uuid = utils.getUuid();
+  device.timestamp = utils.getTimestamp();
+  device.deviceId = req.body.deviceId;
+  device.name = req.body.name;
+  device.latitude = req.body.latitude;
+  device.longitude = req.body.longitude;
+  device.status = req.body.status;
+  device.deviceType = req.body.deviceType;
+  if (req.body.client !== undefined) device.client = req.body.client;
 
   DeviceManagementService.addDevice(device, err => {
     if (err === 400) return res.status('400').send('error encountered while adding device to DB.  Please check your JSON.');
@@ -191,3 +203,63 @@ exports.addDevice = function (req, res) {
     return res.status('201').send(device);
   });
 };
+
+/**
+ * @api {put} /devices/:uuid Update an existing device
+ * @apiName updateDevice
+ * @apiGroup Device
+ *
+ * @apiParam (device) {json} Give a device as JSON.
+ * @apiParamExample {json} Request-header "Content-Type: application/json" must be set.  Request-Example:
+ *   {
+ *     "name":"Device 01",
+ *     "latitude":"100.001",
+ *     "longitude":"100.001",
+ *     "status":"new",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status": "registered"
+ *   },
+ * All the fields above are optional. Send in only the fields you want to change with new values.
+ * Only those fields will be updated.  Other fields will be left as it is.
+ *
+ * @apiSuccess (200) {Device} Updated device is returned as JSON.
+ * @apiSuccessExample {json} Success-Response:
+ *   HTTP/1.1 200 OK
+ *   {
+ *     "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
+ *     "timestamp": 1483155714863,
+ *     "name": "device 100",
+ *     "latitude": "103.001",
+ *     "longitude": "103.001",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId": "01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status": "new"
+ *   }
+ *
+ * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
+ * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
+ */
+ exports.updateDevice = (req, res) => {
+   "use strict";
+   if (!req || !req.body) return res.sendStatus(400);
+
+   var uuid = req.params.uuid;
+   var device = new Device();
+   device.uuid = uuid;
+   if (req.body.deviceId !== undefined) device.deviceId = req.body.deviceId;
+   if (req.body.name !== undefined) device.name = req.body.name;
+   if (req.body.latitude !== undefined) device.latitude = req.body.latitude;
+   if (req.body.longitude !== undefined) device.longitude = req.body.longitude;
+   if (req.body.status !== undefined) device.status = req.body.status;
+   if (req.body.deviceType !== undefined) device.deviceType = req.body.deviceType;
+   if (req.body.client !== undefined) device.client = req.body.client;
+
+   DeviceManagementService.updateDevice(device)
+   .then(response => {
+     console.log('response received for update: ' + JSON.stringify(response));
+     return res.sendStatus(response);
+   });
+ };

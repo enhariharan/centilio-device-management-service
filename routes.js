@@ -1,15 +1,15 @@
 var bodyparser = require('body-parser'),
     jsonParser = bodyparser.json();
 
-var main = require('./controllers/main.js'),
-    devices = require('./controllers/devices-controller.js'),
-    deviceParams = require('./controllers/device-params-controller.js'),
-    clients = require('./controllers/clients-controller.js'),
-    roles = require('./controllers/roles-controller.js'),
-    deviceTypes = require('./controllers/device-types-controller.js'),
-    deviceReadings = require('./controllers/device-readings-controller.js'),
-    user = require('./controllers/user-controller.js'),
-    login = require('./controllers/login-controller.js');
+var main = require('./controllers/main'),
+    devices = require('./controllers/devices-controller'),
+    deviceParams = require('./controllers/device-params-controller'),
+    clients = require('./controllers/clients-controller'),
+    roles = require('./controllers/roles-controller'),
+    deviceTypes = require('./controllers/device-types-controller'),
+    deviceReadings = require('./controllers/device-readings-controller'),
+    user = require('./controllers/users-controller'),
+    login = require('./controllers/login-controller');
 
 module.exports = function(app) {
   "use strict";
@@ -21,6 +21,7 @@ module.exports = function(app) {
 
   app.get('/devices', devices.getAllDevices);
   app.get('/devices/:uuid', devices.getDevice);
+  app.put('/devices/:uuid', devices.updateDevice);
   app.get('/devices/:uuid/deviceReadings', devices.getDeviceReadingsByDeviceUuid);
   app.post('/devices', jsonParser, devices.addDevice);
 
