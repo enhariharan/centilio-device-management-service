@@ -82,32 +82,36 @@ exports.addDeviceReading = (deviceReading, callback) => {
   });
 }
 
-exports.getDeviceReadingsByDeviceUuid = (deviceUuid, callback) => {
-  DeviceReading.find({device: deviceUuid}).sort('-timestamp').exec((err, deviceReadings) => {
-    if (err) {
-      console.error('error while reading device readings from DB = ' + err);
-      return callback(err, null);
-    }
+exports.getDeviceReadingsByDeviceUuid = (deviceUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      console.info('deviceUUID: ' + JSON.stringify(deviceUuid));
+      DeviceReading.find({device: deviceUuid}).sort('-timestamp').exec()
+      .then(deviceReadings => {
+        if (!deviceReadings || deviceReadings.length == 0) {
+          console.error('No device readings found in DB...');
+          resolve(null);
+        }
 
-    if (!deviceReadings.length) {
-      console.error('No device readings found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      deviceReadings: deviceReadings.map( (dr) => {
-        var devReading = {
-          uuid: dr.uuid,
-          timestamp: dr.timestamp,
-          device: dr.device,
-          readings: [],
+        var context = {
+          deviceReadings: deviceReadings.map( (dr) => {
+            var devReading = {
+              uuid: dr.uuid,
+              timestamp: dr.timestamp,
+              device: dr.device,
+              readings: [],
+            };
+            dr.readings.forEach( (r) => {devReading.readings.push(r);});
+            return devReading;
+          }),
         };
-        dr.readings.forEach( (r) => {devReading.readings.push(r);});
-        return devReading;
-      }),
-    };
-    console.info('\n returning: ' + JSON.stringify(context));
-    return callback(0, context);
+        console.info('\n returning deviceReadings: ' + JSON.stringify(context));
+        resolve(context);
+      })
+      .catch(err => {
+        console.info('\n err: ' + JSON.stringify(err));
+        reject(err);
+    });
   });
 }
 
