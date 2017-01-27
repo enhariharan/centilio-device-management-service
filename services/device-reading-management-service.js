@@ -82,16 +82,25 @@ exports.addDeviceReading = (deviceReading, callback) => {
   });
 }
 
-exports.getDeviceReadingsByDeviceUuid = (deviceUuid) => {
+exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeStamp, toTimeStamp) => {
   return new Promise(
     (resolve, reject) => {
-      console.info('deviceUUID: ' + JSON.stringify(deviceUuid));
-      DeviceReading.find({device: deviceUuid}).sort('-timestamp').exec()
-      .then(deviceReadings => {
-        if (!deviceReadings || deviceReadings.length == 0) {
-          console.error('No device readings found in DB...');
-          resolve(null);
-        }
+      var deviceReadingsPromise = null;
+      var fromTime = new Date('2017-01-01T00:00:00');
+      var toTime = new Date();
+
+      if (showLatestOnly) deviceReadingsPromise = DeviceReading.findOne({device: deviceUuid}).sort('-timestamp').exec();
+      else {
+        if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
+        if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
+        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec();
+      }
+
+      deviceReadingsPromise.then(deviceReadings => {
+        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings: ' + JSON.stringify(deviceReadings));
+        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings.length: ' + JSON.stringify(deviceReadings.length));
+        if (!deviceReadings || deviceReadings.length == 0) resolve(null); // no deviceReadings found
+        if (deviceReadings.length == undefined) resolve(deviceReadings); // only one deviceReading returned
 
         var context = {
           deviceReadings: deviceReadings.map( (dr) => {

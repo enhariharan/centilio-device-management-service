@@ -154,7 +154,7 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
   })
   .then(device => {
     if (!device || device === undefined || device.length === 0) return res.status('400').send('No such device found in DB...');
-    return DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid);
+    return DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, req.query.latestOnly === 'true', req.query.from, req.query.to);
   })
   .then(deviceReadings => {
     console.log('\ndeviceReadings: ' + JSON.stringify(deviceReadings));
