@@ -74,15 +74,13 @@ exports.getDevice = (id, callback) => {
 exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesOnly) => {
   return new Promise(
     (resolve, reject) => {
-      Client.find({uuid: clientUuid}).exec()
-      .then(clients => {
-        return Role.find({uuid: clients[0].role}).exec();
-      })
-      .then(roles => {
-        if ((roles[0].name !== 'admin') && (showAllDevices === 'true')) reject(403);
-        if ((roles[0].name !== 'admin') && (showUnassignedDevicesOnly === 'true')) reject(403);
+      Client.findOne({uuid: clientUuid}).exec()
+      .then(client => {return Role.findOne({uuid: client.role}).exec();})
+      .then(role => {
+        if ((role.name !== 'admin') && (showAllDevices === 'true')) reject(403);
+        if ((role.name !== 'admin') && (showUnassignedDevicesOnly === 'true')) reject(403);
         if ((showAllDevices !== 'true') && (showUnassignedDevicesOnly === 'true')) reject(400);
-        if (roles[0].name === 'admin') {
+        if (role.name === 'admin') {
           if (showAllDevices === 'true') return (showUnassignedDevicesOnly === 'true') ? Device.find({client: {$exists: false}}).exec() : Device.find().exec();
         }
         return Device.find({client: clientUuid}).exec();
@@ -122,7 +120,16 @@ exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesO
 exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
   return new Promise(
     (resolve, reject) => {
-      Device.find({uuid: deviceUuid, client: clientUuid}).exec()
+      Client.findOne({uuid: clientUuid}).exec()
+      .then(client => {
+        if (!client || client === undefined) reject(403);
+        return Role.findOne({uuid: client.role}).exec();
+      })
+      .then(role => {
+        if (!role) reject(403);
+        if (role.name === 'admin') return Device.find({uuid: deviceUuid}).exec();
+        else return Device.find({uuid: deviceUuid, client: clientUuid}).exec();
+      })
       .then(devices => {resolve(devices[0]);})
       .catch(err => {reject(err);});
   });
