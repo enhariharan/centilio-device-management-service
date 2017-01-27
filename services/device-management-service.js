@@ -58,13 +58,16 @@ exports.getAllDevices = (callback) => {
 }
 
 exports.getDevice = (id, callback) => {
-  Device.find({uuid: id}).exec().then(devices => {
-    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-    else return Device.find({deviceId: id}).exec();
-  })
-  .then(devices => {
-    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-    else return callback(0, null);
+  return new Promise(
+    (resolve, reject) => {
+      Device.find({uuid: id}).exec().then(devices => {
+        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+        else return Device.find({deviceId: id}).exec();
+      })
+      .then(devices => {
+        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+        else resolve(null);
+      });
   });
 }
 
@@ -113,6 +116,15 @@ exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesO
         console.log('error occured while reading devices by client: ' + err.stack);
         reject(err);
       });
+  });
+}
+
+exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      Device.find({uuid: deviceUuid, client: clientUuid}).exec()
+      .then(devices => {resolve(devices[0]);})
+      .catch(err => {reject(err);});
   });
 }
 

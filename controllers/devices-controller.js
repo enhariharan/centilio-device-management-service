@@ -103,7 +103,12 @@ exports.getDevice = function (req, res) {
  * @apiName getDeviceReadingsByDeviceUuid
  * @apiGroup Device
  *
- * @apiParam None
+ * @apiParam latestOnly - If this param is set to true (/devices/:uuid/deviceReadings?latestOnly=true) then only
+ * the latest reading recorded for this device is returned.  Else all readings of this device are returned.
+ * @apiParam from - If this param is set to true (/devicereadings/:uuid/deviceReadings?from=timestamp) then all
+ * readings, for this device, from the given timestamp till the present moment are returned.
+ * @apiParam to - If this param is set to true (/devicereadings/:uuid/deviceReadings?to=timestamp) then all
+ * readings, for this device, from the beginning to the given timestamp are returned.
  *
  * @apiSuccess (200) {Device} Device readings array as JSON.
  * @apiSuccessExample {json} Success-Response:
@@ -137,11 +142,24 @@ exports.getDevice = function (req, res) {
  */
 exports.getDeviceReadingsByDeviceUuid = (req, res) => {
   "use strict";
+
+  var credentials = BasicAuth(req); // TODO: Change this to JWT based stateless token based authentication
+  if (credentials === undefined || !credentials) return res.sendStatus(403);
   var uuid = req.params.uuid;
-  DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, (err, context) => {
-    if (err) return res.status('500').send('error encountered while reading device readings for device ' + uuid);
-    if (!context) return res.status('400').send('No such device found in DB...');
-    return res.status('200').send(context);
+
+  User.find({username: credentials.name}).exec()
+  .then(user => {
+    if (!user || user === undefined || credentials.name.toLowerCase().localeCompare(user[0].username.toLowerCase()) || credentials.pass.localeCompare(user[0].password)) return res.sendStatus(403);
+    return DeviceManagementService.getDeviceByUuidAndClientUuid(uuid, user[0].client);
+  })
+  .then(device => {
+    if (!device || device === undefined || device.length === 0) return res.status('400').send('No such device found in DB...');
+    return DeviceReadingManagementService.getDeviceReadingsByDeviceUuid(uuid, req.query.latestOnly === 'true', req.query.from, req.query.to);
+  })
+  .then(deviceReadings => {
+    console.log('\ndeviceReadings: ' + JSON.stringify(deviceReadings));
+    if (!deviceReadings || deviceReadings.length === 0) return res.status('200').send('No device readings found for this device...');
+    return res.status('200').send(deviceReadings);
   });
 };
 

@@ -82,32 +82,45 @@ exports.addDeviceReading = (deviceReading, callback) => {
   });
 }
 
-exports.getDeviceReadingsByDeviceUuid = (deviceUuid, callback) => {
-  DeviceReading.find({device: deviceUuid}).sort('-timestamp').exec((err, deviceReadings) => {
-    if (err) {
-      console.error('error while reading device readings from DB = ' + err);
-      return callback(err, null);
-    }
+exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeStamp, toTimeStamp) => {
+  return new Promise(
+    (resolve, reject) => {
+      var deviceReadingsPromise = null;
+      var fromTime = new Date('2017-01-01T00:00:00');
+      var toTime = new Date();
 
-    if (!deviceReadings.length) {
-      console.error('No device readings found in DB...');
-      return callback(0, null);
-    }
+      if (showLatestOnly) deviceReadingsPromise = DeviceReading.findOne({device: deviceUuid}).sort('-timestamp').exec();
+      else {
+        if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
+        if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
+        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec();
+      }
 
-    var context = {
-      deviceReadings: deviceReadings.map( (dr) => {
-        var devReading = {
-          uuid: dr.uuid,
-          timestamp: dr.timestamp,
-          device: dr.device,
-          readings: [],
+      deviceReadingsPromise.then(deviceReadings => {
+        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings: ' + JSON.stringify(deviceReadings));
+        console.error('\ngetDeviceReadingsByDeviceUuid.deviceReadings.length: ' + JSON.stringify(deviceReadings.length));
+        if (!deviceReadings || deviceReadings.length == 0) resolve(null); // no deviceReadings found
+        if (deviceReadings.length == undefined) resolve(deviceReadings); // only one deviceReading returned
+
+        var context = {
+          deviceReadings: deviceReadings.map( (dr) => {
+            var devReading = {
+              uuid: dr.uuid,
+              timestamp: dr.timestamp,
+              device: dr.device,
+              readings: [],
+            };
+            dr.readings.forEach( (r) => {devReading.readings.push(r);});
+            return devReading;
+          }),
         };
-        dr.readings.forEach( (r) => {devReading.readings.push(r);});
-        return devReading;
-      }),
-    };
-    console.info('\n returning: ' + JSON.stringify(context));
-    return callback(0, context);
+        console.info('\n returning deviceReadings: ' + JSON.stringify(context));
+        resolve(context);
+      })
+      .catch(err => {
+        console.info('\n err: ' + JSON.stringify(err));
+        reject(err);
+    });
   });
 }
 
