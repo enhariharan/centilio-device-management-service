@@ -50,6 +50,7 @@ var utils = require('../models/utilities'),
   "use strict";
   // validate credentials
   var credentials = BasicAuth(req);
+  if (!credentials || credentials === undefined) return res.sendStatus(403);
   User.find({username: credentials.name}).then(users => {
     if (!users[0] || users[0] === undefined || credentials.name.toLowerCase().localeCompare(users[0].username.toLowerCase()) || credentials.pass.localeCompare(users[0].password)) return res.sendStatus(403);
     return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
@@ -105,9 +106,9 @@ exports.getDevice = function (req, res) {
  *
  * @apiParam latestOnly - If this param is set to true (/devices/:uuid/deviceReadings?latestOnly=true) then only
  * the latest reading recorded for this device is returned.  Else all readings of this device are returned.
- * @apiParam from - If this param is set to true (/devicereadings/:uuid/deviceReadings?from=timestamp) then all
+ * @apiParam from - If this param is set (/devicereadings/:uuid/deviceReadings?from=timestamp) then all
  * readings, for this device, from the given timestamp till the present moment are returned.
- * @apiParam to - If this param is set to true (/devicereadings/:uuid/deviceReadings?to=timestamp) then all
+ * @apiParam to - If this param is set (/devicereadings/:uuid/deviceReadings?to=timestamp) then all
  * readings, for this device, from the beginning to the given timestamp are returned.
  *
  * @apiSuccess (200) {Device} Device readings array as JSON.
