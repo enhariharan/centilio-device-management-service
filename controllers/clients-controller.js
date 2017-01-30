@@ -1,12 +1,12 @@
-var utils = require('../models/utilities.js'),
-    ClientManagementService = require('../services/client-management-service.js'),
-    UserManagementService = require('../services/user-management-service.js'),
-    RoleManagementService = require('../services/role-management-service.js'),
+var utils = require('../models/utilities'),
+    ClientManagementService = require('../services/client-management-service'),
+    UserManagementService = require('../services/user-management-service'),
+    RoleManagementService = require('../services/role-management-service'),
     Validator = require('../security/validator'),
     BasicAuth = require('basic-auth');
 
 /**
- * @api {get} /clients Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.
+ * @api {get} /clients Get all available clients. Only admin role can access this URI.
  * @apiName getAllClients
  * @apiGroup Client
  *

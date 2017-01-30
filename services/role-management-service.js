@@ -1,4 +1,5 @@
-var Role = require('../models/role-model.js').Role;
+var Role = require('../models/role-model').Role,
+    User = require('../models/user-model').User;
 
 exports.getAllRoles = (callback) => {
   Role.find(function (err, roles) {
