@@ -1,14 +1,16 @@
-var Client = require('../models/client-model').Client;
-var User = require('../models/user-model').User;
-var Address = require('../models/client-model').Address;
-var Email = require('../models/client-model').Email;
-var ContactNumber = require('../models/client-model').ContactNumber;
-var Device = require('../models/device-model').Device;
-var Role = require('../models/role-model').Role;
-var Validator = require('validator');
-var RoleManagementService = require('./role-management-service');
+var BasicAuth = require('basic-auth'),
+    Client = require('../models/client-model').Client,
+    User = require('../models/user-model').User,
+    Address = require('../models/client-model').Address,
+    Email = require('../models/client-model').Email,
+    ContactNumber = require('../models/client-model').ContactNumber,
+    Device = require('../models/device-model').Device,
+    Role = require('../models/role-model').Role,
+    Validator = require('validator'),
+    RoleManagementService = require('./role-management-service'),
+    UserManagementService = require('./user-management-service');
 
-exports.getAllClients = function(callback) {
+var getAllClients = (callback) => {
   Client.find(function (err, clients) {
     if (err) {
       console.error('error while reading clients from DB = ' + err);
@@ -43,24 +45,19 @@ exports.getAllClients = function(callback) {
   });
 }
 
-exports.getAllClientsByCorporate = function(orgName) {
+var getAllClientsByCorporate = (orgName) => {
   return new Promise(
     (resolve, reject) => {
       Client.find({'corporateName': orgName}).exec().then( clients => {
-        if (!clients.length) {
-          console.info('No clients found in DB...' + clients.length);
-          resolve(0, null);
-        }
-        console.info('\nclientsByCorporate ==> : ' + JSON.stringify(clients));
+        if (!clients.length) resolve(0, null);
         resolve(clients);
       });
   });
 }
 
-exports.getClient = function(clientUuid) {
+var getClient = (clientUuid) => {
   return new Promise(
     (resolve, reject) => {
-      console.info('\ngetClient(' + clientUuid + ')');
       // initialize the query result that will be sent back
       var clientDTO = { uuid: '',
         timestamp: null,
@@ -121,128 +118,113 @@ exports.getClient = function(clientUuid) {
   );
 }
 
-exports.getClientByUsername = function(username) {
+var getClientByUsername = (username) => {
   return new Promise(
     (resolve, reject) => {
-      console.info('\ngetClientByUsername() called with username: ', username);
-      UserManagementService.getUser({username: username})
-      .then(user => {
-        console.info('\ngetClientByUsername() called with username: ', username);
-        console.info('\nuser: ', user);
-        return _getClient(user.client);
-      }).then(client => {
-        console.info('\nclient: ', client);
-        resolve(client);
-      });
-    }
-  );
+      UserManagementService.getUserByCredentials({name: username})
+      .then(user => {return getClient(user.client);})
+      .then(client => {resolve(client);})
+      .catch(err => {reject(err)});
+  });
 }
 
-exports.addClient = function(clientDTO, callback) {
-  var ClientSaveException = {};
-
-  // validate role.  Cannot be empty and the role must be present in collection "roles"
-  if (clientDTO.role === undefined || clientDTO.role === null) {
-    console.error("'role' cannot be empty.");
-    return callback(400);
-  }
-
-  // TODO: There is an issue with validating roles as of now. So uncomment and
-  // fix this when needed. As on today role name is not being checked if it is
-  // already present in the db. That is dangerous since user can use any role
-  // while adding clients.
-  //
-  // var isRoleValid = RoleManagementService.CheckIfRolePresentByName(client.role);
-  // if (!isRoleValid) {
-  //   console.error("'role' has a invalid value.  Please provide a valid role.");
-  //   return callback(400);
-  // }
-  //
-
-  // validate adresses.  Cannot be empty, at least one address should be provided.
-  if (clientDTO.addresses === undefined || clientDTO.addresses === null || clientDTO.addresses.length === 0) {
-    console.error("'addresses' cannot be empty.  Please provide at least one address.");
-    return callback(400);
-  }
-
-  // validate emails.  Cannot be empty, at least one email should be provided.
-  if (clientDTO.emails === undefined || clientDTO.emails === null || clientDTO.emails.length === 0) {
-    console.error("'emails' cannot be empty.  Please provide at least one email.");
-    return callback(400);
-  }
-  // TODO: Email address validation must be done. Use Validator.isEmail().
-
-  // validate contact numbers.  Cannot be empty, at least one contact number should be provided.
-  if (clientDTO.contactNumbers === undefined || clientDTO.contactNumbers === null || clientDTO.contactNumbers.length === 0) {
-    console.error("'contactNumbers' cannot be empty.  Please provide at least one email.");
-    return callback(400);
-  }
-  // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
-
-  // All validations are done, data looks good to save into DB.
-  // So create a new object to save and proceed to save everything
-  var clientToSave = new Client({
-    uuid: clientDTO.uuid,
-    timestamp: clientDTO.timestamp,
-    corporateName: clientDTO.corporateName,
-    firstName: clientDTO.firstName,
-    lastName: clientDTO.lastName,
-    middleName: clientDTO.middleName,
-    primaryEmail: clientDTO.primaryEmail,
-    type: clientDTO.type,
-    role: clientDTO.role,
+var getClientByAuthCredentials = (req) => {
+  return new Promise(
+    (resolve, reject) => {
+      var credentials = BasicAuth(req);
+      getClientByUsername(credentials.name)
+      .then(client => {resolve(client);})
+      .catch(err => {reject(err)});
   });
+}
 
-  // Save addresses in collection "addresses".
-  // TODO: if saving client fails, then every save in addresses must be rolled back also.
-  clientDTO.addresses.forEach((address) => {
-    var addressToSave = new Address(address);
-    addressToSave.client = clientDTO.uuid;
-    addressToSave.save((err, address, numAffected) => {
-      if (err) {
-        console.error('Error while saving address to database.');
-        return callback(err);
-      }
-    });
+var _validate = (client) => {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('\n+_validate(%s)', client.firstName);
+      if (!client.role || client.role === undefined ||
+          !client.addresses || client.addresses === undefined || client.addresses.length === 0 ||
+          !client.emails || client.emails === undefined || client.emails.length === 0 ||
+          !client.contactNumbers || client.contactNumbers === undefined ||
+          client.contactNumbers.length === 0) reject(400);
+
+      // TODO: Email address validation must be done. Use Validator.isEmail().
+      // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
+
+      console.log('\nabout to query role (%s)', client.role);
+      RoleManagementService.getRole(client.role)
+      .then(role => {
+        console.log('\nfound role (%s)', role.name);
+        if (!role || role === undefined) reject(400);
+        console.log('\nclient (%s) is now considered valid', client.firstName);
+        resolve(client);
+      })
+      .catch(err => {
+        console.log('\nError caught while validating role (%s)', err);
+        reject(err);
+      });
   });
+};
 
-  // Save emails in collection "emails".
-  // TODO: if saving client fails, then every save in emails must be rolled back also.
-  clientDTO.emails.forEach((email) => {
-    var emailToSave = new Email(email);
-    emailToSave.client = clientDTO.uuid;
-    emailToSave.save((err) => {
-      if (err) {
-        console.error('Error while saving email to database.');
-        return callback(err);
-      }
-    });
-  });
+var _createPromises = (client) => {
+  return new Promise(
+    (resolve, reject) => {
+      console.log('\nReceived client: ' + JSON.stringify(client));
+      var clientToSave = new Client({
+        uuid: client.uuid,
+        timestamp: client.timestamp,
+        corporateName: client.corporateName,
+        firstName: client.firstName,
+        lastName: client.lastName,
+        middleName: client.middleName,
+        primaryEmail: client.primaryEmail,
+        type: client.type,
+        role: client.role,
+      });
 
-  // Save contact numbers in collection "contactNumbers".
-  // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
-  clientDTO.contactNumbers.forEach((contactNumber) => {
-    var contactNumberToSave = new ContactNumber(contactNumber);
-    contactNumberToSave.client = clientDTO.uuid;
-    contactNumberToSave.save((err) => {
-      if (err) {
-        console.error('Error while saving contact number to database.');
-        return callback(err);
-      }
-    });
-  });
+      var saveToDbPromises = [];
 
-  // Finally save client into collection "emails".
-  clientToSave.save((err) => {
-    if (err) {
-      console.log('Error while saving client to database.');
-      // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
+      // Save addresses in collection "addresses".
       // TODO: if saving client fails, then every save in addresses must be rolled back also.
+      client.addresses.forEach(a => {
+        var addressToSave = new Address(a);
+        addressToSave.client = client.uuid;
+        saveToDbPromises.push(addressToSave.save());
+      });
+
+      // Save emails in collection "emails".
       // TODO: if saving client fails, then every save in emails must be rolled back also.
-    } else {
-      console.info('client ' + clientToSave.corporateName + ' saved.....');
-    }
-    return callback(err);
+      client.emails.forEach(e => {
+        var emailToSave = new Email(e);
+        emailToSave.client = client.uuid;
+        saveToDbPromises.push(emailToSave.save());
+      });
+
+      // Save contact numbers in collection "contactNumbers".
+      // TODO: if saving client fails, then every save in contactNumbers must be rolled back also.
+      client.contactNumbers.forEach(cn => {
+        var contactNumberToSave = new ContactNumber(cn);
+        contactNumberToSave.client = client.uuid;
+        saveToDbPromises.push(contactNumberToSave.save());
+      });
+
+      // Finally save client into collection "emails".
+      saveToDbPromises.push(clientToSave.save());
+      resolve(saveToDbPromises);
+  });
+};
+
+var addClient = (client) => {
+  return new Promise(
+    (resolve, reject) => {
+      _validate(client)
+      .then(validClient => {return _createPromises(validClient);})
+      .then(promises => {return Promise.all(promises);})
+      .then(results => {resolve(results);})
+      .catch(err => {
+        console.log('\naddClient().err ' + err);
+        reject(err);
+      });
   });
 }
 
@@ -273,3 +255,5 @@ var _fillDtoWithClientContactNumberDetails = (clientDTO, contactNumbers) => {
 var _fillDtoWithDeviceDetails = (clientDTO, devices) => {
   if (devices.length != 0) devices: devices.map(d => {clientDTO.devices.push(d);});
 }
+
+module.exports = {getAllClients, getAllClientsByCorporate, getClient, getClientByUsername, getClientByAuthCredentials, addClient};

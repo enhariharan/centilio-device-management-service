@@ -96,7 +96,7 @@ exports.login = function (req, res) {
   // validate if the user is present and passwords match
   // if match found, send back client details
   // if match not found, send error code 400 or 500 as needed
-  UserManagementService.getUser(credentials)
+  UserManagementService.getUserByCredentials(credentials)
   .then(user => {
       console.error('user: ' + JSON.stringify(user));
     return ClientManagementService.getClient(user.client);

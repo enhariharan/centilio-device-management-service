@@ -1,4 +1,5 @@
-var Role = require('../models/role-model.js').Role;
+var Role = require('../models/role-model').Role,
+    User = require('../models/user-model').User;
 
 exports.getAllRoles = (callback) => {
   Role.find(function (err, roles) {
@@ -30,17 +31,49 @@ exports.getAllRoles = (callback) => {
 exports.getRole = (roleUuid) => {
   return new Promise(
     (resolve, reject) => {
-      Role.find({'uuid': roleUuid}).exec().then((roles) => {
-        console.info('roles: ' + JSON.stringify(roles));
-        if (roles === undefined || !roles) reject(err || 400);
-        resolve(roles[0]);
+      Role.findOne({'uuid': roleUuid}).exec()
+      .then((role) => {
+        if (role === undefined || !role) reject(err || 400);
+        resolve(role);
       })
+      .catch(err => {
+        console.log('RoleManagementService.getRole() returning err ' + err);
+        reject(err);
+      });
+  });
+}
+
+exports.getRoleByUsername = (username) => {
+  return new Promise(
+    (resolve, reject) => {
+      User.findOne({'username': username}).exec()
+      .then(user => {return Role.findOne({'uuid': user.role}).exec();})
+      .then(role => {
+        if (role === undefined || !role) reject(err || 400);
+        resolve(role);
+      })
+      .catch(err => {reject(err);})
+  });
+}
+
+exports.getRoleByClient = (clientUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      Client.findOne({'uuid': clientUuid}).exec()
+      .then(client => {
+        if (client === undefined || !client) reject(err || 400);
+        return Role.findOne({'uuid': client.role}).exec();
+      })
+      .then(role => {
+        if (role === undefined || !role) reject(err || 400);
+        resolve(role);
+      })
+      .catch(err => {reject(err);})
   });
 }
 
 exports.addRole = (role, callback) => {
   var roleToSave = new Role(role);
-  console.log('roleToSave: ' + JSON.stringify(roleToSave));
   roleToSave.save(function(err) {
     if (err) {
       console.error('Error while saving role to database.');
