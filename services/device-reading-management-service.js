@@ -93,7 +93,7 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeSta
       else {
         if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
         if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
-        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec();
+        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: new Date(fromTime), $lte: new Date(toTime)}}).sort('-timestamp').exec();
       }
 
       deviceReadingsPromise.then(deviceReadings => {
