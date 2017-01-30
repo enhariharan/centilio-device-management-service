@@ -70,4 +70,28 @@ var isAuthorizedForGetClientByUuid = (req) => {
   });
 };
 
-module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid};
+// Authorization rules are as below:
+// user must have valid logged in credentials.
+// ?all query param is accessible to admin role only.
+// ?unassignedOnly query param is accessible to admin role only.
+// ?unassignedOnly query is entertained only if ?all query is 'true'.
+var isAuthorizedForGetAllDevices = (req) => {
+  return new Promise(
+    (resolve, reject) => {
+      isUserAdmin(req)
+      .then(result => {
+        if (!result) reject(403);
+        if (req.query.unassignedOnly !== undefined && (req.query.all === undefined || req.query.all !== 'true')) reject(400);
+        resolve(true);
+      })
+      .catch(err => {
+        isValidCredentials(req)
+        .then(result => {
+          if (req.query.all !== undefined || req.query.unassignedOnly !== undefined) reject(403);
+          resolve(true);
+        })
+        .catch(err => {reject(err);})
+      });
+  });
+};
+module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid, isAuthorizedForGetAllDevices};
