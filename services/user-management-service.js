@@ -3,27 +3,23 @@ var User = require('../models/user-model').User,
     Email = require('../models/client-model').Email,
     Utilities = require('../models/utilities');
 
-exports.getUser = function(credentials) {
+exports.getUserByCredentials = (credentials) => {
   return new Promise(
     function(resolve, reject) {
-      User.find({username: credentials.name}).exec()
-      .then(
-        users => {
-          if (users !== null && users.length === 0) reject(400);
-          if (users !== null && users.length !== 1) reject(500);
-          if (users[0].password !== credentials.pass) reject(400);
+      User.findOne({username: credentials.name}).exec()
+      .then(user => {
+          if (user !== null && user.length === 0) reject(400);
           var userDTO = {
-            username: users[0].username,
-            gender: users[0].gender,
-            profilePicPath: users[0].profilePicPath,
-            client: users[0].client,
-            role: users[0].role
+            username: user.username,
+            gender: user.gender,
+            profilePicPath: user.profilePicPath,
+            client: user.client,
+            role: user.role
           };
           resolve(userDTO);
-        }
-      ).catch(err => { reject(err); });
-    }
-  );
+      })
+      .catch(err => { reject(err); });
+  });
 };
 
 exports.addUser = function(credentials, newUserDetails) {
