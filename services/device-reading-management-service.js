@@ -2,34 +2,6 @@ var DeviceReading = require('../models/device-reading-model').DeviceReading,
     Device = require('../models/device-model').Device,
     DeviceReadingManagementService = require('./device-reading-management-service');
 
-exports.getAllDeviceReadings = (callback) => {
-  DeviceReading.find({}).sort('-timestamp').exec((err, deviceReadings) => {
-    if (err) {
-      console.error('error while reading device readings from DB = ' + err);
-      return callback(err, null);
-    }
-
-    if (!deviceReadings.length) {
-      console.info('No device readings found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      deviceReadings: deviceReadings.map(dr => {
-        var devReading = {
-          uuid: dr.uuid,
-          timestamp: dr.timestamp,
-          device: dr.device,
-          readings: [],
-        };
-        dr.readings.forEach(r => {devReading.readings.push(r);});
-        return devReading;
-      }),
-    };
-    return callback(0, context);
-  });
-}
-
 exports.getDeviceReading = (uuid, callback) => {
   DeviceReading.find({uuid: uuid}).exec((err, deviceReadings) => {
     if (err) {
@@ -89,11 +61,12 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeSta
       var fromTime = new Date('2017-01-01T00:00:00');
       var toTime = new Date();
 
-      if (showLatestOnly) deviceReadingsPromise = DeviceReading.findOne({device: deviceUuid}).sort('-timestamp').exec();
+      if (showLatestOnly) deviceReadingsPromise = DeviceReading.findOne({device: deviceUuid}).sort({timestamp: -1}).exec();
       else {
         if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
         if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
-        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec();
+        console.log('getDeviceReadingsByDeviceUuid() from ' + fromTime + ' to ' + toTime);
+        deviceReadingsPromise = DeviceReading.find({device: deviceUuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort({timestamp: -1}).exec();
       }
 
       deviceReadingsPromise.then(deviceReadings => {
@@ -129,12 +102,14 @@ exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly, fromTimeStamp,
       var deviceReadingsPromises = [];
       var fromTime = new Date('2017-01-01T00:00:00');
       var toTime = new Date();
+
       devices.forEach( d => {
-        if (showLatestOnly) deviceReadingsPromises.push(DeviceReading.findOne({device: d.uuid}).sort('-timestamp').exec());
+        if (showLatestOnly) deviceReadingsPromises.push(DeviceReading.findOne({device: d.uuid}).sort({timestamp: -1}).exec());
         else {
           if (fromTimeStamp !== undefined) fromTime = new Date(new Number(fromTimeStamp));
           if (toTimeStamp !== undefined) toTime = new Date(new Number(toTimeStamp));
-          deviceReadingsPromises.push(DeviceReading.find({device: d.uuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort('-timestamp').exec());
+          console.log('\ngetAllDeviceReadingsByDevices() for device ' + d.uuid + ' from ' + fromTime + ' to ' + toTime);
+          deviceReadingsPromises.push(DeviceReading.find({device: d.uuid, timestamp: {$gte: fromTime, $lte: toTime}}).sort({timestamp: -1}).exec());
         }
       });
       Promise.all(deviceReadingsPromises).then(readings => {resolve(readings);});
