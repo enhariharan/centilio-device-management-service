@@ -57,16 +57,21 @@ exports.getAllDevices = (callback) => {
   });
 }
 
-exports.getDevice = (id, callback) => {
+exports.getDevice = (id) => {
   return new Promise(
     (resolve, reject) => {
-      Device.find({uuid: id}).exec().then(devices => {
-        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-        else return Device.find({deviceId: id}).exec();
+      Device.findOne({uuid: id}).exec()
+      .then(device => {
+        if (device || device !== undefined) resolve(device);
+        return Device.findOne({deviceId: id}).exec();
       })
-      .then(devices => {
-        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-        else resolve(null);
+      .then(device => {
+        if (device || device !== undefined) resolve(device);
+        reject(400);
+      })
+      .catch(err => {
+        console.log('DeviceManagementService.getDevice() threw err ' + err + err.stack);
+        reject(err);
       });
   });
 }

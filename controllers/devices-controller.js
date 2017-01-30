@@ -65,7 +65,8 @@ var utils = require('../models/utilities'),
 };
 
 /**
- * @api {get} /devices/:id Get device by given uuid or deviceId
+ * @api {get} /devices/:id Get device by given uuid or deviceId. Admin can query for any device.
+ * User can query for devices owned by that user.
  * @apiName getDevice
  * @apiGroup Device
  *
@@ -91,11 +92,21 @@ var utils = require('../models/utilities'),
 exports.getDevice = function (req, res) {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceManagementService.getDevice(uuid, (err, context) => {
-    if (err) return res.status('500').send('error encountered while reading device from DB');
-    if (!context) return res.status('400').send('No such device found in DB...');
-    return res.status('200').send(context);
-  });
+  Validator.isAuthorizedForGetDeviceById(req)
+  .then(result => {
+    console.log('Validator.isAuthorizedForGetDeviceById() returned ' + result);
+    if (!result || result === false) return res.sendStatus(403);
+    return DeviceManagementService.getDevice(req.params.uuid);
+  })
+  .then(device => {
+    console.log('device ' + JSON.stringify(device.name));
+    if (!device || device === undefined) return res.status('400').send('No such device found in DB...');
+    return res.status('200').send(device);
+  })
+  .catch(err => {
+    console.log('DevicesController.getDevice() - err' + err + err.stack);
+    return res.status('500').send('error encountered while reading device from DB');
+  })
 };
 
 /**
