@@ -75,7 +75,7 @@ exports.getAllClients = (req, res) => {
     return ClientManagementService.getClientByAuthCredentials(req);
   })
   .then(client => {
-    if (!client || client == undefined) return res.sendStatus(403);
+    if (!client || client === undefined) return res.sendStatus(403);
     return ClientManagementService.getAllClientsByCorporate(client.corporateName);
   })
   .then(context => {
@@ -160,7 +160,7 @@ exports.getClient = (req, res) => {
     return res.status('200').send(client);
   })
   .catch(err => {
-    if (err == false || err === 403) return res.sendStatus(403);
+    if (err === false || err === 403) return res.sendStatus(403);
     if (err) return res.status('500').send('error encountered while reading client from DB' + err.stack);
   });
 };
@@ -257,8 +257,8 @@ exports.addClient = (req, res) => {
   })
   .catch(err => {
     console.log('saving client threw err: ' + err.stack);
-    if (err == false || err === 403) return res.sendStatus('403');
-    if (err == 400) return res.sendStatus('400');
+    if (err === false || err === 403) return res.sendStatus('403');
+    if (err === 400) return res.sendStatus('400');
     return res.sendStatus('500');
   });
 };

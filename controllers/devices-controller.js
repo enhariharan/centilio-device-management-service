@@ -106,7 +106,7 @@ exports.getDevice = function (req, res) {
   .catch(err => {
     console.log('DevicesController.getDevice() - err' + err + err.stack);
     return res.status('500').send('error encountered while reading device from DB');
-  })
+  });
 };
 
 /**
