@@ -70,7 +70,7 @@ module.exports = function(grunt) {
           'views/*.js',
           'public/**/*.js'
           ],
-        tasks: ['cafemocha', 'jshint', 'exec', 'apidoc'],
+        tasks: ['cafemocha', 'jshint', /*'exec',*/ 'apidoc'],
       },
     },
   });
@@ -87,5 +87,5 @@ module.exports = function(grunt) {
   });
 
   // register tasks
-  grunt.registerTask('default', ['cafemocha', 'jshint', 'exec', 'apidoc', 'watch']);
+  grunt.registerTask('default', ['cafemocha', 'jshint', /*'exec',*/ 'apidoc', 'watch']);
 };
