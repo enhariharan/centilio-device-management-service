@@ -4,7 +4,7 @@
  */
 var mongoose = require('mongoose'),
     utilities = require('../../models/utilities');
-var credentials = require('../../credentials');
+var credentials = require('../../src/app/configuration');
 var Role = require('../../models/role-model').Role;
 var User = require('../../models/user-model').User;
 var Client = require('../../models/client-model').Client;

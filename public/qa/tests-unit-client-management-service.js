@@ -3,7 +3,7 @@ var ClientManagementService = require('../../services/client-management-service.
 var Client = require('../../models/client-model.js').Client;
 var Utils = require('../../models/utilities.js');
 var mongoose = require('mongoose');
-var credentials = require('../../credentials.js');
+var credentials = require('../../src/app/configuration');
 var opts = {
   server: {
     socketOptions: { keepAlive: 1 }

@@ -6,7 +6,7 @@ var assert = require('chai').assert,
     Client = require('../../models/client-model.js').Client,
     User = require('../../models/user-model.js').User,
 
-    credentials = require('../../credentials.js'),
+    credentials = require('../../src/app/configuration'),
     opts = { server: { socketOptions: { keepAlive: 1 } } },
     dbConnection = mongoose.createConnection(credentials.mongo.test.connectionString, opts),
 

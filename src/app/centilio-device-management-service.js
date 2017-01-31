@@ -1,6 +1,6 @@
 var express = require('express'),
     http = require('http'),
-    credentials = require('../../credentials.js'),
+    credentials = require('./configuration'),
     mongoose = require('mongoose'),
     cors = require('cors'),
     PushNotifications = require('./push-notifications'),
