@@ -2,7 +2,7 @@ var assert = require('chai').assert,
     mongoose = require('mongoose'),
     restler = require('restler'),
 
-    ClientManagementService = require('../../services/client-management-service.js'),
+    ClientManagementService = require('../../src/services/client-management-service.js'),
     Client = require('../../src/models/client-model.js').Client,
     User = require('../../src/models/user-model.js').User,
 

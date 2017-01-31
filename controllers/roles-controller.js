@@ -1,5 +1,5 @@
 var utils = require('../src/models/utilities.js');
-var RoleManagementService = require('../services/role-management-service.js');
+var RoleManagementService = require('../src/services/role-management-service');
 
 /**
  * @api {get} /roles Get all available roles

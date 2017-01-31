@@ -1,5 +1,5 @@
 var utils = require('../src/models/utilities');
-var DeviceParamManagementService = require('../services/device-param-management-service');
+var DeviceParamManagementService = require('../src/services/device-param-management-service');
 
 /**
  * @api {get} /deviceParams Get all available device params
