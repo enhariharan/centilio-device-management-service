@@ -1,8 +1,8 @@
-var utils = require('../src/models/utilities'),
-    ClientManagementService = require('../src/services/client-management-service'),
-    UserManagementService = require('../src/services/user-management-service'),
-    RoleManagementService = require('../src/services/role-management-service'),
-    Validator = require('../security/validator'),
+var utils = require('../models/utilities'),
+    ClientManagementService = require('../services/client-management-service'),
+    UserManagementService = require('../services/user-management-service'),
+    RoleManagementService = require('../services/role-management-service'),
+    Validator = require('../../security/validator'),
     BasicAuth = require('basic-auth');
 
 /**

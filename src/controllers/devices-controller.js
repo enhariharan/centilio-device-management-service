@@ -1,10 +1,10 @@
-var utils = require('../src/models/utilities'),
+var utils = require('../models/utilities'),
     BasicAuth = require('basic-auth'),
-    User = require('../src/models/user-model').User,
-    Device = require('../src/models/device-model').Device,
-    DeviceManagementService = require('../src/services/device-management-service'),
-    UserManagementService = require('../src/services/user-management-service'),
-    DeviceReadingManagementService = require('../src/services/device-reading-management-service');
+    User = require('../models/user-model').User,
+    Device = require('../models/device-model').Device,
+    DeviceManagementService = require('../services/device-management-service'),
+    UserManagementService = require('../services/user-management-service'),
+    DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
  * @api {get} /devices Get all available devices belonging to logged in user.
