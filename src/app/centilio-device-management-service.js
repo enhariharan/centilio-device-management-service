@@ -1,9 +1,9 @@
 var express = require('express'),
     http = require('http'),
-    credentials = require('./credentials.js'),
+    credentials = require('../../credentials.js'),
     mongoose = require('mongoose'),
     cors = require('cors'),
-    PushNotifications = require('./src/app/push-notifications'),
+    PushNotifications = require('./push-notifications'),
     app = express();
 
 // var Device = require('./models/device-model.js');
@@ -119,7 +119,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-require('./routes.js')(app);
+require('../../routes.js')(app);
 
 // custom 404 page
 app.use(function(req, res) {
