@@ -68,7 +68,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
@@ -115,7 +115,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
@@ -162,7 +162,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
@@ -239,7 +239,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -286,7 +286,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -333,7 +333,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -410,7 +410,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -469,7 +469,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -516,7 +516,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -593,7 +593,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -640,7 +640,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -687,7 +687,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -764,7 +764,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -826,7 +826,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -874,7 +874,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -933,7 +933,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -1010,7 +1010,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -1087,7 +1087,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/roles-controller.js",
+    "filename": "./src/controllers/roles-controller.js",
     "groupTitle": "Role",
     "sampleRequest": [
       {
@@ -1134,7 +1134,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/roles-controller.js",
+    "filename": "./src/controllers/roles-controller.js",
     "groupTitle": "Role",
     "sampleRequest": [
       {
@@ -1211,7 +1211,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/users-controller.js",
+    "filename": "./src/controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1259,7 +1259,7 @@
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/login-controller.js",
+    "filename": "./src/controllers/login-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1336,7 +1336,7 @@
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/users-controller.js",
+    "filename": "./src/controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
