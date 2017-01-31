@@ -2,7 +2,7 @@
   {
     "type": "post",
     "url": "/clients",
-    "title": "Add a new client",
+    "title": "Add a new client. Only admin can access this URI.",
     "name": "addClient",
     "group": "Client",
     "parameter": {
@@ -79,7 +79,7 @@
   {
     "type": "get",
     "url": "/clients",
-    "title": "Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.",
+    "title": "Get all available clients. Only admin role can access this URI.",
     "name": "getAllClients",
     "group": "Client",
     "parameter": {
@@ -125,8 +125,8 @@
   },
   {
     "type": "get",
-    "url": "/clients/:uuid",
-    "title": "Get client by given uuid",
+    "url": "/clients/:uuid Get client by given uuid. Admin can access any uuid. Users can access only",
+    "title": "their details by providing their client uuid.",
     "name": "getClient",
     "group": "Client",
     "parameter": {
@@ -156,7 +156,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n      {\n        \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n        \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n        \"name\": \"Centilio\",\n        \"type\": \"corporate\"\n      },\n    ]\n  }",
           "type": "json"
         }
       ]
@@ -166,7 +166,7 @@
     "groupTitle": "Client",
     "sampleRequest": [
       {
-        "url": "http://api.centilio.com/v1//clients/:uuid"
+        "url": "http://api.centilio.com/v1//clients/:uuid Get client by given uuid. Admin can access any uuid. Users can access only"
       }
     ]
   },
@@ -437,13 +437,13 @@
             "group": "Parameter",
             "optional": false,
             "field": "from",
-            "description": "<ul> <li>If this param is set to true (/devicereadings?from=timestamp) then all readings from the given timestamp till the prent moment are returned.</li> </ul>"
+            "description": "<ul> <li>If this param is set (/devicereadings?from=timestamp) then all readings from the given timestamp till the present moment are returned.</li> </ul>"
           },
           {
             "group": "Parameter",
             "optional": false,
             "field": "to",
-            "description": "<ul> <li>If this param is set to true (/devicereadings?to=timestamp) then all readings from the beginning to the given timestamp are returned.</li> </ul>"
+            "description": "<ul> <li>If this param is set (/devicereadings?to=timestamp) then all readings from the beginning to the given timestamp are returned.</li> </ul>"
           }
         ]
       }
@@ -894,8 +894,20 @@
           {
             "group": "Parameter",
             "optional": false,
-            "field": "None",
-            "description": ""
+            "field": "latestOnly",
+            "description": "<ul> <li>If this param is set to true (/devices/:uuid/deviceReadings?latestOnly=true) then only the latest reading recorded for this device is returned.  Else all readings of this device are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "from",
+            "description": "<ul> <li>If this param is set (/devicereadings/:uuid/deviceReadings?from=timestamp) then all readings, for this device, from the given timestamp till the present moment are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "to",
+            "description": "<ul> <li>If this param is set (/devicereadings/:uuid/deviceReadings?to=timestamp) then all readings, for this device, from the beginning to the given timestamp are returned.</li> </ul>"
           }
         ]
       }
@@ -950,7 +962,7 @@
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "  {\n    \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\": \"registered\"\n  },\nSend in only the changed fields as only those will be updated.  Other fields will be left as it is.",
+          "content": "  {\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\": \"registered\"\n  },\nAll the fields above are optional. Send in only the fields you want to change with new values.\nOnly those fields will be updated.  Other fields will be left as it is.",
           "type": "json"
         }
       ]

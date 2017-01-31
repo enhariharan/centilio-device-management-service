@@ -1,6 +1,6 @@
 var loadtest = require('loadtest'),
     expect = require('chai').expect,
-    credentials = require('../../credentials');
+    credentials = require('../../src/app/configuration');
 
 suite('Stress tests', function() {
   test('Homepage should handle 500 requests in a second', function(done) {

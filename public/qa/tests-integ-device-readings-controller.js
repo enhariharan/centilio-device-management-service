@@ -3,7 +3,7 @@ var assert = require('chai').assert,
     restler = require('restler'),
     utilities = require('../../models/utilities'),
 
-    credentials = require('../../credentials.js'),
+    credentials = require('../../src/app/configuration'),
     opts = { server: { socketOptions: { keepAlive: 1 } } },
     dbConnection = mongoose.createConnection(credentials.mongo.test.connectionString, opts),
 
