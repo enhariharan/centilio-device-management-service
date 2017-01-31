@@ -1,7 +1,7 @@
-var User = require('../src/models/user-model').User,
-    Client = require('../src/models/client-model').Client,
-    Email = require('../src/models/client-model').Email,
-    Utilities = require('../src/models/utilities');
+var User = require('../models/user-model').User,
+    Client = require('../models/client-model').Client,
+    Email = require('../models/client-model').Email,
+    Utilities = require('../models/utilities');
 
 exports.getUserByCredentials = (credentials) => {
   return new Promise(

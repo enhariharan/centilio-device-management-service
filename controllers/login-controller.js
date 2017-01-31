@@ -1,6 +1,6 @@
 var BasicAuth = require('basic-auth'),
-    UserManagementService = require('../services/user-management-service'),
-    ClientManagementService = require('../services/client-management-service');
+    UserManagementService = require('../src/services/user-management-service'),
+    ClientManagementService = require('../src/services/client-management-service');
 
 /**
  * @api {get} /login login into the device manager

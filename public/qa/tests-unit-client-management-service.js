@@ -1,5 +1,5 @@
 var assert = require('chai').assert;
-var ClientManagementService = require('../../services/client-management-service.js');
+var ClientManagementService = require('../../src/services/client-management-service.js');
 var Client = require('../../src/models/client-model.js').Client;
 var Utils = require('../../src/models/utilities.js');
 var mongoose = require('mongoose');

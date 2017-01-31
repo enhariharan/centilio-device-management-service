@@ -1,8 +1,8 @@
 var BasicAuth = require('basic-auth'),
     User = require('../src/models/user-model').User,
-    UserManagementService = require('../services/user-management-service'),
-    ClientManagementService = require('../services/client-management-service'),
-    RoleManagementService = require('../services/role-management-service');
+    UserManagementService = require('../src/services/user-management-service'),
+    ClientManagementService = require('../src/services/client-management-service'),
+    RoleManagementService = require('../src/services/role-management-service');
 
 var isValidCredentials = (req) => {
   return new Promise(
