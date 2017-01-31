@@ -119,7 +119,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-require('../../routes.js')(app);
+require('./routes.js')(app);
 
 // custom 404 page
 app.use(function(req, res) {
