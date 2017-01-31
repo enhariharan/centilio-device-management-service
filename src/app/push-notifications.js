@@ -3,7 +3,7 @@ var socketio = require('socket.io'),
     features = require('./features');
 var socket = null;
 
-var startWebDocketServer = (webServer) => {
+var startWebSocketServer = (webServer) => {
   "use strict";
 
   if (features.pushNotifications !== true) {return;}
@@ -24,4 +24,4 @@ var sendDeviceReadingNotification = (readings) => {
   if (socket) socket.emit('readingsNotification', {description: 'A device reading is now available'});
 };
 
-module.exports = {startWebDocketServer, sendDeviceReadingNotification};
+module.exports = {startWebSocketServer, sendDeviceReadingNotification};
