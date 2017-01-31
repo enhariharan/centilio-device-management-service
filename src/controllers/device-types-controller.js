@@ -1,4 +1,4 @@
-var utils = require('../models/utilities.js');
+var utils = require('../models/utilities');
 var DeviceTypeManagementService = require('../services/device-type-management-service');
 
 /**
