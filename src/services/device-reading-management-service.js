@@ -1,6 +1,7 @@
 var DeviceReading = require('../models/device-reading-model').DeviceReading,
     Device = require('../models/device-model').Device,
-    DeviceReadingManagementService = require('./device-reading-management-service');
+    DeviceReadingManagementService = require('./device-reading-management-service'),
+    PushNotifications = require('../app/push-notifications');
 
 exports.getDeviceReading = (uuid, callback) => {
   DeviceReading.find({uuid: uuid}).exec((err, deviceReadings) => {
@@ -50,8 +51,10 @@ exports.addDeviceReading = (deviceReading, callback) => {
   console.error('\ndeviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
   deviceReadingToSave.save((err) => {
     if (err) console.log('Error while saving device reading to database.' + err.stack);
+    PushNotifications.sendDeviceReadingNotification(err);
     return callback(err);
   });
+
 }
 
 exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeStamp, toTimeStamp) => {
