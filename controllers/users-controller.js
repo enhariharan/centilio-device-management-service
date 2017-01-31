@@ -1,7 +1,7 @@
 var BasicAuth = require('basic-auth'),
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service'),
-    utilities = require('../models/utilities');
+    utilities = require('../src/models/utilities');
 
 /**
  * @api {post} /users Add a new user

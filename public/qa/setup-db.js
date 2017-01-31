@@ -3,18 +3,18 @@
  * This script sets up a sample database.
  */
 var mongoose = require('mongoose');
-var utilities = require('../../models/utilities');
+var utilities = require('../../src/models/utilities');
 var credentials = require('../../src/app/configuration');
-var Role = require('../../models/role-model').Role;
-var User = require('../../models/user-model').User;
-var Client = require('../../models/client-model').Client;
-var Address = require('../../models/client-model').Address;
-var Email = require('../../models/client-model').Email;
-var ContactNumber = require('../../models/client-model').ContactNumber;
-var Device = require('../../models/device-model').Device;
-var DeviceParam = require('../../models/device-param-model').DeviceParam;
-var DeviceReading = require('../../models/device-reading-model').DeviceReading;
-var DeviceType = require('../../models/device-type-model').DeviceType;
+var Role = require('../../src/models/role-model').Role;
+var User = require('../../src/models/user-model').User;
+var Client = require('../../src/models/client-model').Client;
+var Address = require('../../src/models/client-model').Address;
+var Email = require('../../src/models/client-model').Email;
+var ContactNumber = require('../../src/models/client-model').ContactNumber;
+var Device = require('../../src/models/device-model').Device;
+var DeviceParam = require('../../src/models/device-param-model').DeviceParam;
+var DeviceReading = require('../../src/models/device-reading-model').DeviceReading;
+var DeviceType = require('../../src/models/device-type-model').DeviceType;
 
 var opts = {
  server: {

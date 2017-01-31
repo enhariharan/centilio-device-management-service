@@ -3,8 +3,8 @@ var assert = require('chai').assert,
     restler = require('restler'),
 
     ClientManagementService = require('../../services/client-management-service.js'),
-    Client = require('../../models/client-model.js').Client,
-    User = require('../../models/user-model.js').User,
+    Client = require('../../src/models/client-model.js').Client,
+    User = require('../../src/models/user-model.js').User,
 
     credentials = require('../../src/app/configuration'),
     opts = { server: { socketOptions: { keepAlive: 1 } } },

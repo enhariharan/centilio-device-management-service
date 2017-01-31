@@ -1,7 +1,7 @@
-var utils = require('../models/utilities'),
+var utils = require('../src/models/utilities'),
     BasicAuth = require('basic-auth'),
-    User = require('../models/user-model').User,
-    Device = require('../models/device-model').Device,
+    User = require('../src/models/user-model').User,
+    Device = require('../src/models/device-model').Device,
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');

@@ -1,4 +1,4 @@
-var utils = require('../models/utilities'),
+var utils = require('../src/models/utilities'),
     ClientManagementService = require('../services/client-management-service'),
     UserManagementService = require('../services/user-management-service'),
     RoleManagementService = require('../services/role-management-service'),

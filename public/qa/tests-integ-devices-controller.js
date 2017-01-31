@@ -1,8 +1,8 @@
 var assert = require('chai').assert,
     mongoose = require('mongoose'),
     restler = require('restler'),
-    utilities = require('../../models/utilities'),
-    Device = require('../../models/device-model').Device,
+    utilities = require('../../src/models/utilities'),
+    Device = require('../../src/models/device-model').Device,
 
     credentials = require('../../src/app/configuration'),
     opts = { server: { socketOptions: { keepAlive: 1 } } },

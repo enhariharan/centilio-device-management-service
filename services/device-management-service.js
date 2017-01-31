@@ -1,6 +1,6 @@
-var Device = require('../models/device-model').Device,
-    Client = require('../models/client-model').Client,
-    Role = require('../models/role-model').Role,
+var Device = require('../src/models/device-model').Device,
+    Client = require('../src/models/client-model').Client,
+    Role = require('../src/models/role-model').Role,
     DeviceTypeManagementService = require('./device-type-management-service');
 
 var _parseAndSendDevices = (devices, callback) => {

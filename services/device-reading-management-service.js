@@ -1,5 +1,5 @@
-var DeviceReading = require('../models/device-reading-model').DeviceReading,
-    Device = require('../models/device-model').Device,
+var DeviceReading = require('../src/models/device-reading-model').DeviceReading,
+    Device = require('../src/models/device-model').Device,
     DeviceReadingManagementService = require('./device-reading-management-service');
 
 exports.getDeviceReading = (uuid, callback) => {

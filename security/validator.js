@@ -1,5 +1,5 @@
 var BasicAuth = require('basic-auth'),
-    User = require('../models/user-model').User,
+    User = require('../src/models/user-model').User,
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service'),
     RoleManagementService = require('../services/role-management-service');
