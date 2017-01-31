@@ -9,7 +9,7 @@ var startWebSocketServer = (webServer) => {
   if (features.pushNotifications !== true) {return;}
 
   webSocketIO = socketio(webServer);
-  console.log('push notificatios enabled ');
+  console.log('push notifications enabled ');
   webSocketIO.on('connection', (skt) => {
     socket = skt;
     console.log('A new client connected: ' + JSON.stringify(socket));
