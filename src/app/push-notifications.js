@@ -21,7 +21,7 @@ var startWebSocketServer = (webServer) => {
 var sendDeviceReadingNotification = (readings) => {
   "use strict";
   if (features.pushNotifications !== true) {return;}
-  if (socket) socket.emit('readingsNotification', {description: 'A device reading is now available'});
+  if (socket) socket.emit('deviceReadings', {description: 'A device reading is now available'});
 };
 
 module.exports = {startWebSocketServer, sendDeviceReadingNotification};
