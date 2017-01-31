@@ -3,6 +3,7 @@ var express = require('express'),
     credentials = require('./credentials.js'),
     mongoose = require('mongoose'),
     cors = require('cors'),
+    PushNotifications = require('./src/app/push-notifications'),
     app = express();
 
 // var Device = require('./models/device-model.js');
@@ -145,7 +146,9 @@ app.set('view engine', 'handlebars');
 function startServer() {
   "use strict";
 
-  http.createServer(app).listen(app.get('port'), function() {
+  var webServer = http.createServer(app);
+  PushNotifications.startWebSocketServer(webServer);
+  webServer.listen(app.get('port'), function() {
     console.log('server started on http://localhost:' + app.get('port') +
       ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
   });
