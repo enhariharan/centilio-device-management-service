@@ -1,4 +1,4 @@
-var DeviceType = require('../models/device-type-model.js').DeviceType;
+var DeviceType = require('../src/models/device-type-model.js').DeviceType;
 
 exports.getAllDeviceTypes = function(callback) {
   DeviceType.find(function (err, deviceTypes) {

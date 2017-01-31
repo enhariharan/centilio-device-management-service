@@ -6,7 +6,7 @@ var express = require('express'),
     PushNotifications = require('./push-notifications'),
     app = express();
 
-// var Device = require('./models/device-model.js');
+// var Device = require('./src/models/device-model.js');
 
 app.set('port', credentials.server.port || 4123);
 app.use(express.static(__dirname + '/public'));
