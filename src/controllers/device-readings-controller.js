@@ -205,7 +205,7 @@ exports.addDeviceReading = function (req, res) {
 
   DeviceReadingManagementService.addDeviceReading(deviceReading)
   .then(savedDeviceReading => {
-    console.info('saved device readings ' + JSON.stringify(savedDeviceReading));
+    console.info('\nsaved device readings ' + JSON.stringify(savedDeviceReading));
     return res.status('201').send(savedDeviceReading);
   })
   .catch(err => {
