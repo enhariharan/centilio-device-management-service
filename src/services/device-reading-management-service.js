@@ -32,30 +32,25 @@ exports.getDeviceReading = (uuid, callback) => {
 }
 
 exports.addDeviceReading = (deviceReading, callback) => {
-  var deviceReadingToSave = new DeviceReading(deviceReading);
-
-  // Validate that the device mentioned in the POST is present in the DB
-  if (deviceReading.device === undefined || deviceReading.device === null) {
-    console.error('Device uuid not provided in the device reading.');
-    return callback(400);
+  return new Promise() {
+    (resolve, reject) => {
+      Device.findOne({uuid: deviceReading.device}).exec()
+      .then(device => {
+        var deviceReadingToSave = new DeviceReading(deviceReading);
+        deviceReadingToSave.device = device.uuid;
+        return deviceReadingToSave.save();
+      })
+      .then(savedDeviceReading => {
+        console.error('\nsaved deviceReading: ' + JSON.stringify(savedDeviceReading));
+        PushNotifications.sendDeviceReadingNotification(err);
+        resolve(savedDeviceReading);
+      })
+      .catch(err => {
+        console.log('Error while saving device reading to database.' + err + err.stack);
+        reject(err);
+      });
   }
-  Device.find({uuid: deviceReading.device}, (err) => {
-    if (err) {
-      console.error('Device uuid was incorrect in the device reading.');
-      return callback(400);
-    }
-  });
-  deviceReadingToSave.device = deviceReading.device;
-
-  // Now save new device reading into collection "devicereadings"
-  console.error('\ndeviceReadingToSave: ' + JSON.stringify(deviceReadingToSave));
-  deviceReadingToSave.save((err) => {
-    if (err) console.log('Error while saving device reading to database.' + err.stack);
-    PushNotifications.sendDeviceReadingNotification(err);
-    return callback(err);
-  });
-
-}
+};
 
 exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeStamp, toTimeStamp) => {
   return new Promise(

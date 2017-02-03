@@ -192,6 +192,7 @@ exports.getDeviceReading = (req, res) => {
  */
 exports.addDeviceReading = function (req, res) {
   if (!req || !req.body) return res.sendStatus(400);
+  if (req.body.device === undefined || req.body.device === null) return res.sendStatus(400);
 
   var deviceReading = {
     uuid: utils.getUuid(),
@@ -202,16 +203,16 @@ exports.addDeviceReading = function (req, res) {
   };
   req.body.readings.forEach(r => {deviceReading.readings.push(r);});
 
-  DeviceReadingManagementService.addDeviceReading(deviceReading, err => {
+  DeviceReadingManagementService.addDeviceReading(deviceReading)
+  then(savedDeviceReading => {
+    return res.status('201').send(savedDeviceReading);
+  })
+  .catch(err => {
     if (err === 400) {
       console.error('error encountered while adding device reading to DB.  Please check your JSON.');
       return res.sendStatus('400');
     }
-    if (err) {
-      console.error('Internal server error occured while adding device readings');
-      return res.sendStatus('500');
-    }
-
-    return res.status('201').send(deviceReading);
+    console.error('Internal server error occured while adding device readings ' + err);
+    return res.sendStatus('500');
   });
 };
