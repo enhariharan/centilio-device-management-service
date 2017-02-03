@@ -56,7 +56,7 @@ var utils = require('../models/utilities'),
     return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
   })
   .then(devices => {
-    console.log('\ndevices: ' + JSON.stringify(devices));
+    console.log('\nsending %d devices', devices.length());
     return res.status(200).send(devices);
   })
   .catch(err => {
