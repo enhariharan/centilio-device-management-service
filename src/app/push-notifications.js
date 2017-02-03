@@ -13,6 +13,9 @@ var startWebSocketServer = (webServer) => {
   webSocketIO.on('connection', (skt) => {
     socket = skt;
     console.log('A new client connected: ' + JSON.stringify(socket));
+    client.on('join', function(data) {
+       console.log(data);
+    });
     // setTimeout(() => {socket.emit('testerEvent', { description: 'A custom event named testerEvent!'});}, 4000);
     socket.on('disconnect', () => {console.log('A client disconnected');});
   });
@@ -21,7 +24,21 @@ var startWebSocketServer = (webServer) => {
 var sendDeviceReadingNotification = (readings) => {
   "use strict";
   if (features.pushNotifications !== true) {return;}
-  if (socket) socket.emit('deviceReadings', {description: 'A device reading is now available'});
+
+  if (socket) {
+    console.log('\nsend deviceReadings notification: ' + JSON.stringify(readings));
+    socket.emit('deviceReadings', {deviceId: , message: 'A device reading is now available'});
+  }
 };
 
-module.exports = {startWebSocketServer, sendDeviceReadingNotification};
+var sendDisplayBrightnessNotification = (event) => {
+  "use strict";
+  if (features.pushNotifications !== true) return;
+
+  if (socket) {
+    console.log('\nsending displayBrightness notification: ' + JSON.stringify(event));
+    socket.emit(event.name, {deviceId: event.device, message: event.message});
+  }
+};
+
+module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightness};
