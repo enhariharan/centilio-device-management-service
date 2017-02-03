@@ -27,7 +27,7 @@ var sendDeviceReadingNotification = (readings) => {
 
   if (socket) {
     console.log('\nsend deviceReadings notification: ' + JSON.stringify(readings));
-    socket.emit('deviceReadings', {deviceId: , message: 'A device reading is now available'});
+    socket.emit('deviceReadings', {deviceId: readings.uuid, message: 'A device reading is now available'});
   }
 };
 
@@ -41,4 +41,4 @@ var sendDisplayBrightnessNotification = (event) => {
   }
 };
 
-module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightness};
+module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightnessNotification};
