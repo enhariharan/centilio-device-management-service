@@ -1,7 +1,7 @@
 var socketio = require('socket.io'),
     webSocketIO = null,
-    features = require('./features');
-var socket = null;
+    features = require('./features'),
+    socket = null;
 
 var startWebSocketServer = (webServer) => {
   "use strict";
@@ -12,11 +12,9 @@ var startWebSocketServer = (webServer) => {
   console.log('push notifications enabled ');
   webSocketIO.on('connection', (skt) => {
     socket = skt;
-    console.log('A new client connected: ' + JSON.stringify(socket));
-    client.on('join', function(data) {
+    socket.on('join', function(data) {
        console.log(data);
     });
-    // setTimeout(() => {socket.emit('testerEvent', { description: 'A custom event named testerEvent!'});}, 4000);
     socket.on('disconnect', () => {console.log('A client disconnected');});
   });
 };
