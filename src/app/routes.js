@@ -9,6 +9,7 @@ var main = require('../../src/controllers/main'),
     deviceTypes = require('../../src/controllers/device-types-controller'),
     deviceReadings = require('../../src/controllers/device-readings-controller'),
     user = require('../../src/controllers/users-controller'),
+    events = require('../../src/controllers/events-controller'),
     login = require('../../src/controllers/login-controller');
 
 module.exports = function(app) {
@@ -36,6 +37,8 @@ module.exports = function(app) {
   app.get('/deviceReadings', deviceReadings.getAllDeviceReadings);
   app.get('/deviceReadings/:uuid', deviceReadings.getDeviceReading);
   app.post('/deviceReadings', jsonParser, deviceReadings.addDeviceReading);
+
+  app.post('/events', jsonParser, events.sendEvent);
 
   app.get('/clients', clients.getAllClients);
   app.get('/clients/:uuid', clients.getClient);
