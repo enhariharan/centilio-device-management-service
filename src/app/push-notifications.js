@@ -41,4 +41,4 @@ var sendDisplayBrightnessNotification = (event) => {
   }
 };
 
-module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightness};
+module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightnessNotification};
