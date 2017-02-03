@@ -32,7 +32,7 @@ exports.getDeviceReading = (uuid, callback) => {
 }
 
 exports.addDeviceReading = (deviceReading, callback) => {
-  return new Promise( {
+  return new Promise(
     (resolve, reject) => {
       Device.findOne({uuid: deviceReading.device}).exec()
       .then(device => {
