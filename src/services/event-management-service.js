@@ -10,6 +10,11 @@ exports.sendEventNotification = (event) => {
           resolve();
           break;
 
+        case 'playAudio':
+          PushNotifications.sendPlayAudioNotification(event);
+          resolve();
+          break;
+
         default:
           reject(400); // sending 400 - bad request error for an unknown event
           break;
