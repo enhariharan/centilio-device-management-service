@@ -20,8 +20,8 @@ var Validator = require('../security/validator');
  *     "device": "491eeac5-f7c5-4c08-a19a-0dc376098702",
  *     "name" : "playAudio",
  *     "message" : {
- *       action: "play",
- *       value: "file-name.mp3"
+ *       "action": "play",
+ *       "value": "file-name.mp3"
  *     }
  *   }
  * @apiSuccess (200) {OK} OK.
