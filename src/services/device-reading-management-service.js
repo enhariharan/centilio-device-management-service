@@ -42,7 +42,7 @@ exports.addDeviceReading = (deviceReading, callback) => {
       })
       .then(savedDeviceReading => {
         console.error('\nsaved deviceReading: ' + JSON.stringify(savedDeviceReading));
-        PushNotifications.sendDeviceReadingNotification(err);
+        PushNotifications.sendDeviceReadingNotification(savedDeviceReading);
         resolve(savedDeviceReading);
       })
       .catch(err => {
