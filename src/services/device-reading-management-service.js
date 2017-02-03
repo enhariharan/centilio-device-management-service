@@ -32,7 +32,7 @@ exports.getDeviceReading = (uuid, callback) => {
 }
 
 exports.addDeviceReading = (deviceReading, callback) => {
-  return new Promise() {
+  return new Promise( {
     (resolve, reject) => {
       Device.findOne({uuid: deviceReading.device}).exec()
       .then(device => {
@@ -49,7 +49,7 @@ exports.addDeviceReading = (deviceReading, callback) => {
         console.log('Error while saving device reading to database.' + err + err.stack);
         reject(err);
       });
-  }
+  });
 };
 
 exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeStamp, toTimeStamp) => {
