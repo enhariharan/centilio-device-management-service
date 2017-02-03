@@ -55,14 +55,8 @@ var utils = require('../models/utilities'),
     if (!users[0] || users[0] === undefined || credentials.name.toLowerCase().localeCompare(users[0].username.toLowerCase()) || credentials.pass.localeCompare(users[0].password)) return res.sendStatus(403);
     return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
   })
-  .then(devices => {
-    console.log('\nsending %d devices', devices.length());
-    return res.status(200).send(devices);
-  })
-  .catch(err => {
-    console.log('error occured while sending all devices by client ' + err);
-    return res.sendStatus(err);
-  });
+  .then(devices => {return res.status(200).send(devices);})
+  .catch(err => {return res.sendStatus(err);});
 };
 
 /**
