@@ -122,20 +122,10 @@ app.use(function(req, res, next) {
 require('./routes.js')(app);
 
 // custom 404 page
-app.use(function(req, res) {
-  "use strict";
-
-  console.error('404 - Page not found');
-  res.status(404).render('404');
-});
+app.use((req, res) => { res.status(404).render('404'); });
 
 // custom 500 page
-app.use(function(err, req, res, next) {
-  "use strict";
-
-  console.error(err.stack);
-  res.status(500).render('500');
-});
+app.use((err, req, res, next) => { res.status(500).render('500'); });
 
 // Setup view layout engines.
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
