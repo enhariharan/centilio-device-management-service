@@ -190,9 +190,9 @@ exports.getDeviceReading = (req, res) => {
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
-exports.addDeviceReading = function (req, res) {
+exports.addDeviceReading = (req, res) => {
   if (!req || !req.body) return res.sendStatus(400);
-  if (req.body.device === undefined || req.body.device === null) return res.sendStatus(400);
+  if (!req.body.device || req.body.device === undefined) return res.sendStatus(400);
 
   var deviceReading = {
     uuid: utils.getUuid(),
@@ -205,7 +205,7 @@ exports.addDeviceReading = function (req, res) {
 
   DeviceReadingManagementService.addDeviceReading(deviceReading)
   .then(savedDeviceReading => {
-    console.info('\nsaved device readings ' + JSON.stringify(savedDeviceReading));
+    console.info('\nsaved device readings: ' + JSON.stringify(savedDeviceReading));
     return res.status('201').send(savedDeviceReading);
   })
   .catch(err => {
