@@ -21,7 +21,6 @@ var opts = {
    socketOptions: { keepAlive: 1 }
  }
 };
-mongoose.connect(credentials.mongo.test.connectionString, opts);
 
 var roleUser = new Role(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'user', status: 'active'});
@@ -335,18 +334,45 @@ var setupDeviceParams = function() {
   });
 };
 
-var setupDeviceReadings = function() {
-  return new Promise(function(resolve, reject) {
+var setupDeviceReadings = () => {
+  return new Promise((resolve, reject) => {
     deviceReadings.forEach(dr => { dr.save(err => { if (err) reject('error while saving device readings.'); }); });
     resolve('all device readings saved.');
   });
 };
 
-Promise.all([
-  setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
-  setupClientContactNumbers(), setupDevices(), setupDeviceParams(), setupDeviceReadings(),
-])
-.then(messages => {messages.forEach(m => {console.log(m);});})
-.catch(err => {console.error(err.stack);});
+var setupDB = (dbConnection) => {
+  return new Promise((resolve, reject) => {
+    var conn = null;
+    if (!dbConnection || dbConnection === undefined) conn = mongoose.createConnection(credentials.mongo.test.connectionString, opts);
+    else conn = dbConnection;
+    console.log('dbConnection readyState: ' + conn.readyState);
+    // conn.close();
+    conn.on('connecting', () => {console.log('\nconnecting');});
+    conn.on('connected', () => {console.log('\nconnected');});
+    conn.on('open', () => {console.log('\nopened');});
+    conn.on('disconnecting', () => {console.log('\ndisconnecting');});
+    conn.on('disconnected', () => {console.log('\ndisconnected');});
+    conn.on('close', () => {console.log('\nclosed');});
+    conn.on('reconnected', () => {console.log('\nreconnected');});
+    conn.on('error', (err) => {console.log('\nError raised: ' + err + err.stack);});
+    // conn.open();
 
-mongoose.connection.close();
+    Promise.all([
+      setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
+      setupClientContactNumbers(), setupDevices(), setupDeviceParams(), setupDeviceReadings(),
+    ])
+    .then(messages => {
+      messages.forEach(m => {console.log(m);});
+      conn.close();
+      resolve();
+    })
+    .catch(err => {
+      conn.close();
+      console.error(err.stack);
+    });
+  });
+};
+
+if (require.main === module) setupDB();
+else module.exports = {setupDB};
