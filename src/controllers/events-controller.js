@@ -37,7 +37,7 @@ exports.sendEvent = (req, res) => {
 
   if (!event || event === undefined) res.sendStatus(400);
 
-  validator.isUserAdmin()
+  Validator.isUserAdmin()
   .then(result => {
     if (!result || result !== true) throw(403);
     return eventsManagementService.sendEventNotification(event);
