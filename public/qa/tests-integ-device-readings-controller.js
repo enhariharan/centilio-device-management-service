@@ -17,7 +17,7 @@ suite('device readings router integration tests - ', function() {
         testPassword = 'password',
         deviceReading = {
           timestamp: utilities.getTimestamp(),
-          device: '01234567890',
+          device: '60cd747e-4c07-4f58-aa75-8d4fcfbc7f85',
           readings: [
             {type: 'latitude', value: '17.264333'},
             {type: 'longitude', value: '78.234667'},
@@ -26,7 +26,7 @@ suite('device readings router integration tests - ', function() {
           ]
         };
 
-    restler.postJson(url, deviceReading, { method: 'post', username: testUserName, password:  testPassword })
+    restler.postJson(url, deviceReading, {method: 'post', username: testUserName, password:  testPassword})
     .on('complete', (result, res) => {
       assert(result !== null && result !== '' && result !== undefined);
       assert(result.uuid !== null);
