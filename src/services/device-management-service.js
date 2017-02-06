@@ -67,7 +67,8 @@ exports.getDevice = (id, callback) => {
       .then(devices => {
         if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
         else resolve(null);
-      });
+      })
+      .catch(err => { reject(err); });
   });
 }
 
