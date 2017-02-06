@@ -22,7 +22,7 @@ exports.getUserByCredentials = (credentials) => {
   });
 };
 
-exports.addUser = function(credentials, newUserDetails) {
+exports.addUser = (credentials, newUserDetails) => {
   return new Promise(
     (resolve, reject) => {
       var clientToSave = null;
@@ -30,29 +30,26 @@ exports.addUser = function(credentials, newUserDetails) {
       var emailToSave = null;
 
       User.find({username: credentials.name}).exec()
-      .then(
-        users => {
-          if (users === undefined || users === null || users.length === 0) {
-            reject(400);
-          }
-          return Client.find({uuid: users[0].client}).exec();
+      .then(users => {
+        console.log('\nfound credentials for user: ' + credentials.name);
+        if (!users || users === undefined || users.length === 0) reject('400 - ' + credentials.name +' not found.');
+        return Client.find({uuid: users[0].client}).exec();
       })
-      .then(
-        adminClients => {
-          var clientToSave = new Client({
-            uuid: Utilities.getUuid(),
-            timestamp: Utilities.getTimestamp(),
-            firstName: newUserDetails.firstName,
-            lastName: newUserDetails.lastName,
-            middleName: '',
-            corporateName: adminClients[0].corporateName,
-            type: 'corporate',
-            role: newUserDetails.role,
-            primaryEmail: newUserDetails.email,
-          });
-          return clientToSave.save();
+      .then(adminClients => {
+        var clientToSave = new Client({
+          uuid: Utilities.getUuid(),
+          timestamp: Utilities.getTimestamp(),
+          firstName: newUserDetails.firstName,
+          lastName: newUserDetails.lastName,
+          middleName: '',
+          corporateName: adminClients[0].corporateName,
+          type: 'corporate',
+          role: newUserDetails.role,
+          primaryEmail: newUserDetails.email,
+        });
+        return clientToSave.save();
       })
-      .then(client => {
+      .then(savedClient => {
         var userToSave = new User({
           uuid: Utilities.getUuid(),
           timestamp: Utilities.getTimestamp(),
@@ -61,23 +58,24 @@ exports.addUser = function(credentials, newUserDetails) {
           role: newUserDetails.role,
           status: 'new user',
           profilePicPath: '',
-          client: client.uuid
+          client: savedClient.uuid
         });
         return userToSave.save();
       })
-      .then(user => {
+      .then(savedUser => {
         var emailToSave = new Email({
           email: newUserDetails.email,
           type: 'primary',
-          client: user.uuid
+          client: savedUser.uuid
         });
         return emailToSave.save();
       })
-      .then(email => {
+      .then(savedEmail => {
         resolve(newUserDetails);
       })
       .catch(err => {
-        console.info('\nerror: ' + JSON.stringify(err) + err.stack);
+        console.log('\naddNewuser() resulted in error : ' + JSON.stringify(err) + ' ' + err);
+        reject(err);
       });
   });
 };

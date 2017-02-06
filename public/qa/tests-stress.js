@@ -2,8 +2,8 @@ var loadtest = require('loadtest'),
     expect = require('chai').expect,
     credentials = require('../../src/app/configuration');
 
-suite('Stress tests', function() {
-  test('Homepage should handle 500 requests in a second', function(done) {
+suite('Stress tests', () => {
+  test('Homepage should handle 500 requests in a second', (done) => {
     var options = {
       url: 'http://localhost:' + credentials.server.port,
       concurrency: 4,

@@ -36,11 +36,15 @@ exports.addDeviceReading = (deviceReading, callback) => {
     (resolve, reject) => {
       Device.findOne({uuid: deviceReading.device}).exec()
       .then(device => {
+        if (!device || device === undefined) throw('500: device ' + deviceReading.device + ' was not found');
+
         var deviceReadingToSave = new DeviceReading(deviceReading);
         deviceReadingToSave.device = device.uuid;
         return deviceReadingToSave.save();
       })
       .then(savedDeviceReading => {
+        if (!savedDeviceReading || savedDeviceReading === undefined) throw('500: device ' + savedDeviceReading.device + '  was not saved properly');
+
         console.error('\nsaved deviceReading: ' + JSON.stringify(savedDeviceReading));
         PushNotifications.sendDeviceReadingNotification(savedDeviceReading);
         resolve(savedDeviceReading);
