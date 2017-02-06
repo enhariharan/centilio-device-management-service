@@ -10,8 +10,7 @@ var assert = require('chai').assert,
     baseurl = 'http://localhost:' + credentials.server.port,
     url = baseurl + '/deviceReadings';
 
-suite('device readings router integration tests - ', function() {
-
+suite('device readings router integration tests - ', () => {
   test('add new device reading', (done) => {
     var testUserName = 'userclient1Corp1',
         testPassword = 'password',
