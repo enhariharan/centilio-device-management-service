@@ -39,7 +39,7 @@ var _disconnect = (socket) => {
 var _mapDeviceToSocket = (deviceUuid, socketId) => {
   "use strict";
   deviceToSocketsMap.set(deviceUuid, socketId);
-  console.log('\nmapped device ' + deviceUuid + ' to socket ' + socket.id);
+  console.log('\nmapped device ' + deviceUuid + ' to socket ' + socketId);
 }
 
 var _handleNewConnection = (socket) => {
