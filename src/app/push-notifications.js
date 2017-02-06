@@ -1,42 +1,76 @@
 var socketio = require('socket.io'),
     webSocketIO = null,
     features = require('./features'),
-    socket = null;
+    socketsMap = new Map(),
+    deviceToSocketsMap = new Map();
 
-function _sendNotification(event) {
+var _event = {
+  name: '',
+  uuid: '',
+  message: {}
+};
+
+var _sendNotification = (eventName, deviceUuid, message) => {
   "use strict";
   if (features.pushNotifications !== true) return;
 
-  if (socket) {
-    console.log('\nsending notification: ' + JSON.stringify(event));
-    socket.emit(event.name, {deviceId: event.device, message: event.message});
-  }
+  var socketId = deviceToSocketsMap.get(deviceUuid);
+  if (!socketId || socketId === undefined) return;
+
+  var socket = socketsMap.get(socketId);
+  console.log('\nsending notification for event %s for device %s via socket %s', JSON.stringify(eventName), JSON.stringify(deviceUuid), JSON.stringify(socketId));
+  if (!socket || socket === undefined) return;
+
+  socket.emit(eventName, {deviceId: deviceUuid, message: message});
+};
+
+var _disconnect = (socket) => {
+  "use strict";
+  console.log('\n_disconnect(%s) ', socket.id);
+  socketsMap.delete(socket.id);
+  deviceToSocketsMap.forEach((value, key) => {
+    if (value === socket.id) {
+      deviceToSocketsMap.delete(key);
+      console.log('\nsocket ' + socket.id + ' of device ' + key + ' disconnected');
+    }
+  });
 }
+
+var _mapDeviceToSocket = (deviceUuid, socketId) => {
+  "use strict";
+  deviceToSocketsMap.set(deviceUuid, socketId) = new Map();
+  console.log('\nmapped device ' + deviceUuid + ' to socket ' + socket.id);
+}
+
+var _handleNewConnection = (socket) => {
+  "use strict";
+  socketsMap.set(JSON.stringify(socket.id), socket);
+  socket.on('join', (deviceUuid) => {_mapDeviceToSocket(deviceUuid, socket.id)});
+  socket.on('disconnect', () => {_disconnect(socket)});
+  socket.on('hi', (deviceUuid) => {console.log('deviceUuid; %s', deviceUuid);});
+  socket.emit('hi', {device: '0123456789'});
+};
 
 var startWebSocketServer = (webServer) => {
   "use strict";
-
-  if (features.pushNotifications !== true) {return;}
-
+  if (features.pushNotifications !== true) return;
   webSocketIO = socketio(webServer);
-  webSocketIO.on('connection', (skt) => {
-    socket = skt;
-    socket.on('join', (data) => {console.log(data);});
-    socket.on('disconnect', () => {console.log('A client disconnected');});
-  });
+  webSocketIO.on('connection', _handleNewConnection);
 };
 
 var sendDeviceReadingNotification = (readings) => {
   "use strict";
-  var event = {};
-  event.name = 'deviceReadings';
-  event.uuid = readings.uuid;
-  event.message = 'A device reading is now available';
-  _sendNotification(event);
+  _sendNotification('deviceReadings', readings.device, readings);
 };
 
-var sendDisplayBrightnessNotification = (event) => {_sendNotification(event);};
+var sendDisplayBrightnessNotification = (event) => {
+  "use strict";
+  _sendNotification('displayBrightness', event.device, event.message);
+};
 
-var sendPlayAudioNotification = (event) => {_sendNotification(event);};
+var sendPlayAudioNotification = (event) => {
+  "use strict";
+  _sendNotification('playAudio', event.device, event.message);
+};
 
 module.exports = {startWebSocketServer, sendDeviceReadingNotification, sendDisplayBrightnessNotification, sendPlayAudioNotification};
