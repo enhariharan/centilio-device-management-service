@@ -7,12 +7,12 @@ exports.sendEventNotification = (event) => {
       switch (event.name) {
         case 'displayBrightness':
           PushNotifications.sendDisplayBrightnessNotification(event);
-          resolve();
+          resolve(event);
           break;
 
         case 'playAudio':
           PushNotifications.sendPlayAudioNotification(event);
-          resolve();
+          resolve(event);
           break;
 
         default:

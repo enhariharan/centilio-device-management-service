@@ -52,10 +52,13 @@ var utils = require('../models/utilities'),
   // validate credentials
   Validator.isValidCredentials(req)
   .then(result => {
-    return DeviceManagementService.getDevicesByClient(users[0].client, req.query.all, req.query.unassignedOnly);
+    if (!result || result === undefined) throw (403);
+    var credentials = BasicAuth(req);
+    return UserManagementService.getUserByCredentials(credentials);
   })
-  .then(devices => {return res.status(200).send(devices);})
-  .catch(err => {return res.sendStatus(err);});
+  .then(user => { return DeviceManagementService.getDevicesByClient(user.client, req.query.all, req.query.unassignedOnly); })
+  .then(devices => { return res.status(200).send(devices); })
+  .catch(err => { return res.sendStatus(err); });
 };
 
 /**
