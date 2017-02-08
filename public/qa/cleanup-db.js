@@ -128,12 +128,22 @@ var cleanupDB = (dbConnection) => {
       return _createPromises(args, conn);
     })
     .then(promises => { return Promise.all(promises); })
-    .then(entities => { entities.forEach(e => {console.log('Removed ' + JSON.stringify(e) + ' documents');}); })
-    .catch(err => { console.error('\nerror deleting all documents: ' + err.stack); });
-
-    if (!dbConnection || dbConnection === undefined) dbConn.close();
+    .then(entities => {
+      entities.forEach(e => {console.log('Removed ' + JSON.stringify(e) + ' documents');});
+      if (!dbConn || dbConn === undefined) dbConn.close();
+      resolve(true);
+    })
+    .catch(err => {
+      console.error('\nerror deleting all documents: ' + err.stack);
+      if (!dbConn || dbConn === undefined) dbConn.close();
+      reject(err);
+    });
   });
 };
 
-if (require.main === module) cleanupDB();
+if (require.main === module) {
+  cleanupDB()
+  .then(result => { process.exit(); })
+  .catch(err => { console.log('\nerror while clearing all recordS'); });
+}
 else module.exports = {cleanupDB};
