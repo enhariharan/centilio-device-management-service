@@ -35,7 +35,7 @@ exports.sendEvent = (req, res) => {
   var event = req.body;
   console.log('\nevent received: ' + JSON.stringify(event));
 
-  if (!event || event === undefined) res.sendStatus(400);
+  if (!event || event === undefined) throw(400);
 
   Validator.isUserAdmin()
   .then(result => {

@@ -1,4 +1,5 @@
 var BasicAuth = require('basic-auth'),
+    Validator = require('../security/validator'),
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service');
 
@@ -96,23 +97,23 @@ exports.login = function (req, res) {
   // validate if the user is present and passwords match
   // if match found, send back client details
   // if match not found, send error code 400 or 500 as needed
-  UserManagementService.getUserByCredentials(credentials)
+  Validator.isValidCredentials(req)
+  .then(result => {
+    if (!result || result === undefined) throw(403);
+    return UserManagementService.getUserByCredentials(credentials)
+  })
   .then(user => {
-      console.error('user: ' + JSON.stringify(user));
+    if (!user || user === undefined) throw(403);
     return ClientManagementService.getClient(user.client);
   })
-  .then( client => {
-      console.error('client: ' + JSON.stringify(client));
+  .then(client => {
+    console.error('client: ' + JSON.stringify(client));
+    if (!client || cient === undefined) throw(500);
     res.status(200).send(client);
   })
   .catch(err => {
-    if (err == 500) {
-      console.error('500 - error fetching user details');
-      res.status(err).send('500 - error fetching user details');
-    }
-    if (err == 400) {
-      console.error('400 - incorrect username or password');
-      res.status(err).send('400 - incorrect username or password');
-    }
+    if (err == 500) console.error('500 - error fetching user details');
+    if (err == 403) console.error('403 - incorrect username or password');
+    res.sendStatus(err);
   });
 };

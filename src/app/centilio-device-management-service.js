@@ -34,11 +34,7 @@ switch (app.get('env')) {
 }
 
 // configure mongoose to connect to our MongoDB database
-var opts = {
-  server: {
-    socketOptions: { keepAlive: 1 }
-  }
-};
+var opts = { server: { socketOptions: { keepAlive: 1 } } };
 switch(app.get('env')) {
   case 'development':
     mongoose.connect(credentials.mongo.development.connectionString, opts);
