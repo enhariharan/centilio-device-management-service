@@ -1,11 +1,12 @@
 var express = require('express'),
     http = require('http'),
-    credentials = require('./credentials.js'),
+    credentials = require('./configuration'),
     mongoose = require('mongoose'),
     cors = require('cors'),
+    PushNotifications = require('./push-notifications'),
     app = express();
 
-// var Device = require('./models/device-model.js');
+// var Device = require('./src/models/device-model.js');
 
 app.set('port', credentials.server.port || 4123);
 app.use(express.static(__dirname + '/public'));
@@ -33,11 +34,7 @@ switch (app.get('env')) {
 }
 
 // configure mongoose to connect to our MongoDB database
-var opts = {
-  server: {
-    socketOptions: { keepAlive: 1 }
-  }
-};
+var opts = { server: { socketOptions: { keepAlive: 1 } } };
 switch(app.get('env')) {
   case 'development':
     mongoose.connect(credentials.mongo.development.connectionString, opts);
@@ -121,20 +118,10 @@ app.use(function(req, res, next) {
 require('./routes.js')(app);
 
 // custom 404 page
-app.use(function(req, res) {
-  "use strict";
-
-  console.error('404 - Page not found');
-  res.status(404).render('404');
-});
+app.use((req, res) => { res.status(404).render('404'); });
 
 // custom 500 page
-app.use(function(err, req, res, next) {
-  "use strict";
-
-  console.error(err.stack);
-  res.status(500).render('500');
-});
+app.use((err, req, res, next) => { res.status(500).render('500'); });
 
 // Setup view layout engines.
 var handlebars = require('express-handlebars').create({defaultLayout: 'main'});
@@ -145,7 +132,9 @@ app.set('view engine', 'handlebars');
 function startServer() {
   "use strict";
 
-  http.createServer(app).listen(app.get('port'), function() {
+  var webServer = http.createServer(app);
+  PushNotifications.startWebSocketServer(webServer);
+  webServer.listen(app.get('port'), function() {
     console.log('server started on http://localhost:' + app.get('port') +
       ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
   });

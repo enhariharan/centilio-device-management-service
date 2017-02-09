@@ -1,15 +1,16 @@
 var bodyparser = require('body-parser'),
     jsonParser = bodyparser.json();
 
-var main = require('./controllers/main'),
-    devices = require('./controllers/devices-controller'),
-    deviceParams = require('./controllers/device-params-controller'),
-    clients = require('./controllers/clients-controller'),
-    roles = require('./controllers/roles-controller'),
-    deviceTypes = require('./controllers/device-types-controller'),
-    deviceReadings = require('./controllers/device-readings-controller'),
-    user = require('./controllers/users-controller'),
-    login = require('./controllers/login-controller');
+var main = require('../../src/controllers/main'),
+    devices = require('../../src/controllers/devices-controller'),
+    deviceParams = require('../../src/controllers/device-params-controller'),
+    clients = require('../../src/controllers/clients-controller'),
+    roles = require('../../src/controllers/roles-controller'),
+    deviceTypes = require('../../src/controllers/device-types-controller'),
+    deviceReadings = require('../../src/controllers/device-readings-controller'),
+    user = require('../../src/controllers/users-controller'),
+    events = require('../../src/controllers/events-controller'),
+    login = require('../../src/controllers/login-controller');
 
 module.exports = function(app) {
   "use strict";
@@ -21,6 +22,7 @@ module.exports = function(app) {
 
   app.get('/devices', devices.getAllDevices);
   app.get('/devices/:uuid', devices.getDevice);
+  app.put('/devices/:uuid', devices.updateDevice);
   app.get('/devices/:uuid/deviceReadings', devices.getDeviceReadingsByDeviceUuid);
   app.post('/devices', jsonParser, devices.addDevice);
 
@@ -35,6 +37,8 @@ module.exports = function(app) {
   app.get('/deviceReadings', deviceReadings.getAllDeviceReadings);
   app.get('/deviceReadings/:uuid', deviceReadings.getDeviceReading);
   app.post('/deviceReadings', jsonParser, deviceReadings.addDeviceReading);
+
+  app.post('/events', jsonParser, events.sendEvent);
 
   app.get('/clients', clients.getAllClients);
   app.get('/clients/:uuid', clients.getClient);

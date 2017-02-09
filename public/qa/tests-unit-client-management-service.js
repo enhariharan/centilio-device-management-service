@@ -1,9 +1,9 @@
 var assert = require('chai').assert;
-var ClientManagementService = require('../../services/client-management-service.js');
-var Client = require('../../models/client-model.js').Client;
-var Utils = require('../../models/utilities.js');
+var ClientManagementService = require('../../src/services/client-management-service.js');
+var Client = require('../../src/models/client-model.js').Client;
+var Utils = require('../../src/models/utilities.js');
 var mongoose = require('mongoose');
-var credentials = require('../../credentials.js');
+var credentials = require('../../src/app/configuration');
 var opts = {
   server: {
     socketOptions: { keepAlive: 1 }
@@ -12,8 +12,8 @@ var opts = {
 
 var dbConnection = mongoose.createConnection(credentials.mongo.development.connectionString, opts);
 
-suite('ClientManagementService Unit tests', function() {
-  test('at least one address should be provided for a new Client to be saved successfully', function(done) {
+suite('ClientManagementService Unit tests', () => {
+  test('at least one address should be provided for a new Client to be saved successfully', (done) => {
     var client = {
       uuid: Utils.getUuid(),
       timestamp: Utils.getTimestamp(),
@@ -26,9 +26,7 @@ suite('ClientManagementService Unit tests', function() {
       addresses: []
     };
 
-    ClientManagementService.addClient(client, function(err) {
-      assert(err === 400);
-    });
+    ClientManagementService.addClient(client, (err) => { assert(err === 400); });
     done();
   });
 

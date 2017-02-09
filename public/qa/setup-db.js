@@ -3,25 +3,24 @@
  * This script sets up a sample database.
  */
 var mongoose = require('mongoose');
-var utilities = require('../../models/utilities');
-var credentials = require('../../credentials');
-var Role = require('../../models/role-model').Role;
-var User = require('../../models/user-model').User;
-var Client = require('../../models/client-model').Client;
-var Address = require('../../models/client-model').Address;
-var Email = require('../../models/client-model').Email;
-var ContactNumber = require('../../models/client-model').ContactNumber;
-var Device = require('../../models/device-model').Device;
-var DeviceParam = require('../../models/device-param-model').DeviceParam;
-var DeviceReading = require('../../models/device-reading-model').DeviceReading;
-var DeviceType = require('../../models/device-type-model').DeviceType;
+var utilities = require('../../src/models/utilities');
+var credentials = require('../../src/app/configuration');
+var Role = require('../../src/models/role-model').Role;
+var User = require('../../src/models/user-model').User;
+var Client = require('../../src/models/client-model').Client;
+var Address = require('../../src/models/client-model').Address;
+var Email = require('../../src/models/client-model').Email;
+var ContactNumber = require('../../src/models/client-model').ContactNumber;
+var Device = require('../../src/models/device-model').Device;
+var DeviceParam = require('../../src/models/device-param-model').DeviceParam;
+var DeviceReading = require('../../src/models/device-reading-model').DeviceReading;
+var DeviceType = require('../../src/models/device-type-model').DeviceType;
 
 var opts = {
  server: {
    socketOptions: { keepAlive: 1 }
  }
 };
-mongoose.connect(credentials.mongo.test.connectionString, opts);
 
 var roleUser = new Role(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'user', status: 'active'});
@@ -335,18 +334,45 @@ var setupDeviceParams = function() {
   });
 };
 
-var setupDeviceReadings = function() {
-  return new Promise(function(resolve, reject) {
+var setupDeviceReadings = () => {
+  return new Promise((resolve, reject) => {
     deviceReadings.forEach(dr => { dr.save(err => { if (err) reject('error while saving device readings.'); }); });
     resolve('all device readings saved.');
   });
 };
 
-Promise.all([
-  setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
-  setupClientContactNumbers(), setupDevices(), setupDeviceParams(), setupDeviceReadings(),
-])
-.then(messages => {messages.forEach(m => {console.log(m);});})
-.catch(err => {console.error(err.stack);});
+var setupDB = (dbConnection) => {
+  return new Promise((resolve, reject) => {
+    var conn = null;
+    if (!dbConnection || dbConnection === undefined) conn = mongoose.createConnection(credentials.mongo.test.connectionString, opts);
+    else conn = dbConnection;
+    console.log('dbConnection readyState: ' + conn.readyState);
+    // conn.close();
+    conn.on('connecting', () => {console.log('\nconnecting');});
+    conn.on('connected', () => {console.log('\nconnected');});
+    conn.on('open', () => {console.log('\nopened');});
+    conn.on('disconnecting', () => {console.log('\ndisconnecting');});
+    conn.on('disconnected', () => {console.log('\ndisconnected');});
+    conn.on('close', () => {console.log('\nclosed');});
+    conn.on('reconnected', () => {console.log('\nreconnected');});
+    conn.on('error', (err) => {console.log('\nError raised: ' + err + err.stack);});
+    // conn.open();
 
-mongoose.connection.close();
+    Promise.all([
+      setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
+      setupClientContactNumbers(), setupDevices(), setupDeviceParams(), setupDeviceReadings(),
+    ])
+    .then(messages => {
+      messages.forEach(m => {console.log(m);});
+      conn.close();
+      resolve();
+    })
+    .catch(err => {
+      conn.close();
+      console.error(err.stack);
+    });
+  });
+};
+
+if (require.main === module) setupDB();
+else module.exports = {setupDB};

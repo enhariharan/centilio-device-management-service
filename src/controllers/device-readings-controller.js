@@ -12,9 +12,9 @@ var utils = require('../models/utilities'),
  *
  * @apiParam latestOnly - If this param is set to true (/devicereadings?latestOnly=true) then only the latest
  * reading per device is returned.  Else all device readings of all devices of the user are returned.
- * @apiParam from - If this param is set to true (/devicereadings?from=timestamp) then all readings from the
- * given timestamp till the prent moment are returned.
- * @apiParam to - If this param is set to true (/devicereadings?to=timestamp) then all readings from the
+ * @apiParam from - If this param is set (/devicereadings?from=timestamp) then all readings from the
+ * given timestamp till the present moment are returned.
+ * @apiParam to - If this param is set (/devicereadings?to=timestamp) then all readings from the
  * beginning to the given timestamp are returned.
  *
  * @apiSuccess (200) {DeviceReadings[]} deviceReadings Array of device readings.
@@ -190,8 +190,9 @@ exports.getDeviceReading = (req, res) => {
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
-exports.addDeviceReading = function (req, res) {
+exports.addDeviceReading = (req, res) => {
   if (!req || !req.body) return res.sendStatus(400);
+  if (!req.body.device || req.body.device === undefined) return res.sendStatus(400);
 
   var deviceReading = {
     uuid: utils.getUuid(),
@@ -202,16 +203,17 @@ exports.addDeviceReading = function (req, res) {
   };
   req.body.readings.forEach(r => {deviceReading.readings.push(r);});
 
-  DeviceReadingManagementService.addDeviceReading(deviceReading, err => {
+  DeviceReadingManagementService.addDeviceReading(deviceReading)
+  .then(savedDeviceReading => {
+    console.info('\nsaved device readings: ' + JSON.stringify(savedDeviceReading));
+    return res.status('201').send(savedDeviceReading);
+  })
+  .catch(err => {
     if (err === 400) {
       console.error('error encountered while adding device reading to DB.  Please check your JSON.');
       return res.sendStatus('400');
     }
-    if (err) {
-      console.error('Internal server error occured while adding device readings');
-      return res.sendStatus('500');
-    }
-
-    return res.status('201').send(deviceReading);
+    console.error('Internal server error occured while adding device readings ' + err);
+    return res.sendStatus('500');
   });
 };

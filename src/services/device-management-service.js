@@ -16,6 +16,7 @@ var _parseAndSendDevices = (devices, callback) => {
         status: d.status,
         deviceType: d.deviceType,
         deviceId: d.deviceId,
+        client: d.client,
       };
       return device;
     }),
@@ -57,28 +58,30 @@ exports.getAllDevices = (callback) => {
 }
 
 exports.getDevice = (id, callback) => {
-  Device.find({uuid: id}).exec().then(devices => {
-    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-    else return Device.find({deviceId: id}).exec();
-  })
-  .then(devices => {
-    if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-    else return callback(0, null);
+  return new Promise(
+    (resolve, reject) => {
+      Device.find({uuid: id}).exec().then(devices => {
+        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+        else return Device.find({deviceId: id}).exec();
+      })
+      .then(devices => {
+        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+        else resolve(null);
+      })
+      .catch(err => { reject(err); });
   });
 }
 
 exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesOnly) => {
   return new Promise(
     (resolve, reject) => {
-      Client.find({uuid: clientUuid}).exec()
-      .then(clients => {
-        return Role.find({uuid: clients[0].role}).exec();
-      })
-      .then(roles => {
-        if ((roles[0].name !== 'admin') && (showAllDevices === 'true')) reject(403);
-        if ((roles[0].name !== 'admin') && (showUnassignedDevicesOnly === 'true')) reject(403);
+      Client.findOne({uuid: clientUuid}).exec()
+      .then(client => {return Role.findOne({uuid: client.role}).exec();})
+      .then(role => {
+        if ((role.name !== 'admin') && (showAllDevices === 'true')) reject(403);
+        if ((role.name !== 'admin') && (showUnassignedDevicesOnly === 'true')) reject(403);
         if ((showAllDevices !== 'true') && (showUnassignedDevicesOnly === 'true')) reject(400);
-        if (roles[0].name === 'admin') {
+        if (role.name === 'admin') {
           if (showAllDevices === 'true') return (showUnassignedDevicesOnly === 'true') ? Device.find({client: {$exists: false}}).exec() : Device.find().exec();
         }
         return Device.find({client: clientUuid}).exec();
@@ -115,6 +118,24 @@ exports.getDevicesByClient = (clientUuid, showAllDevices, showUnassignedDevicesO
   });
 }
 
+exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      Client.findOne({uuid: clientUuid}).exec()
+      .then(client => {
+        if (!client || client === undefined) reject(403);
+        return Role.findOne({uuid: client.role}).exec();
+      })
+      .then(role => {
+        if (!role) reject(403);
+        if (role.name === 'admin') return Device.find({uuid: deviceUuid}).exec();
+        else return Device.find({uuid: deviceUuid, client: clientUuid}).exec();
+      })
+      .then(devices => {resolve(devices[0]);})
+      .catch(err => {reject(err);});
+  });
+}
+
 exports.addDevice = (device, callback) => {
   var deviceToSave = new Device(device);
   deviceToSave.deviceType = device.deviceType;
@@ -137,3 +158,42 @@ exports.addDevice = (device, callback) => {
     return callback(err);
   });
 }
+
+exports.updateDevice = (device) => {
+  return new Promise(
+    (resolve, reject) => {
+      var deviceToUpdate = {};
+      deviceToUpdate.uuid = device.uuid;
+      Device.find({uuid: device.uuid}).exec()
+      .then(devices => {
+        if (device.deviceId !== undefined) deviceToUpdate.deviceId = device.deviceId;
+        else if (devices[0].deviceId !== undefined) deviceToUpdate.deviceId = devices[0].deviceId;
+
+        if (device.name !== undefined) deviceToUpdate.name = device.name;
+        else if (devices[0].name !== undefined) deviceToUpdate.name = devices[0].name;
+
+        if (device.latitude !== undefined) deviceToUpdate.latitude = device.latitude;
+        else if (devices[0].latitude !== undefined) deviceToUpdate.latitude = devices[0].latitude;
+
+        if (device.longitude !== undefined) deviceToUpdate.longitude = device.longitude;
+        else if (devices[0].longitude !== undefined) deviceToUpdate.longitude = devices[0].longitude;
+
+        if (device.status !== undefined) deviceToUpdate.status = device.status;
+        else if (devices[0].status !== undefined) deviceToUpdate.status = devices[0].status;
+
+        if (device.deviceType !== undefined) deviceToUpdate.deviceType = device.deviceType;
+        else if (devices[0].deviceType !== undefined) deviceToUpdate.deviceType = devices[0].deviceType;
+
+        if (device.client !== undefined) deviceToUpdate.client = device.client;
+        else if (devices[0].client !== undefined) deviceToUpdate.client = devices[0].client;
+
+        console.log('\ndeviceToUpdate: ' + JSON.stringify(deviceToUpdate));
+        return Device.findOneAndUpdate({uuid: device.uuid}, deviceToUpdate, {runValidators: true}).exec();
+      })
+      .then(info => {resolve(200);})
+      .catch(err => {
+        console.log('\nerr: ' + JSON.stringify(err));
+        reject(err);
+      });
+  });
+};

@@ -2,7 +2,7 @@ define({ "api": [
   {
     "type": "post",
     "url": "/clients",
-    "title": "Add a new client",
+    "title": "Add a new client. Only admin can access this URI.",
     "name": "addClient",
     "group": "Client",
     "parameter": {
@@ -68,7 +68,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
@@ -79,7 +79,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/clients",
-    "title": "Get all available clients according to these rules - (1) If logged in as admin, then all users belonging to his/her company are returned; (2) If not logged in as admin, then error code 403 is returned.",
+    "title": "Get all available clients. Only admin role can access this URI.",
     "name": "getAllClients",
     "group": "Client",
     "parameter": {
@@ -115,7 +115,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
@@ -125,8 +125,8 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/clients/:uuid",
-    "title": "Get client by given uuid",
+    "url": "/clients/:uuid Get client by given uuid. Admin can access any uuid. Users can access only",
+    "title": "their details by providing their client uuid.",
     "name": "getClient",
     "group": "Client",
     "parameter": {
@@ -156,17 +156,17 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": " HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n    },\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n      \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n      \"name\": \"Centilio\",\n      \"type\": \"corporate\"\n    },\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"clients\": [\n    {\n      \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n      \"timestamp\": \"2016-12-30T12:32:20.819Z\",\n      \"name\": \"Ashok Kumar\",\n      \"type\": \"retail\"\n      \"addresses\" :\n        [\n          {\n            \"line1\" : \"123, ABC Road\",\n            \"line2\" : \"DEF Blvd\",\n            \"city\" : \"GHIJK City\",\n            \"state\" : \"LM State\",\n            \"countryCode\" : \"IN\",\n            \"zipCode\" : \"NOPQRS\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"work\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\") *              },\n          },\n          {\n            \"line1\" : \"Address line 1\",\n            \"line2\" : \"Address line 2\",\n            \"city\" : \"City name\",\n            \"state\" : \"State Code\",\n            \"countryCode\" : \"country Code\",\n            \"zipCode\" : \"ZiPCoDe\",\n            \"latitude\" : \"100.01\",\n            \"longitude\" : \"100.01\",\n            \"type\" : \"home\",\n            \"uuid\" : \"9eab071b-529a-4175-8033-7043a8fcc510\",\n            \"timestamp\" : ISODate(\"2016-12-31T06:34:50.615Z\"),\n            \"status\" : \"active\",\n            \"_id\" : ObjectId(\"5867518afc5bcb32f456f9c5\")\n          },\n        ]\n      {\n        \"uuid\": \"491eeac5-f7c5-4c08-a19a-0dc376098612\",\n        \"timestamp\": \"2016-12-28T12:32:20.819Z\",\n        \"name\": \"Centilio\",\n        \"type\": \"corporate\"\n      },\n    ]\n  }",
           "type": "json"
         }
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/clients-controller.js",
+    "filename": "./src/controllers/clients-controller.js",
     "groupTitle": "Client",
     "sampleRequest": [
       {
-        "url": "http://api.centilio.com/v1//clients/:uuid"
+        "url": "http://api.centilio.com/v1//clients/:uuid Get client by given uuid. Admin can access any uuid. Users can access only"
       }
     ]
   },
@@ -239,7 +239,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -286,7 +286,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -333,7 +333,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-params-controller.js",
+    "filename": "./src/controllers/device-params-controller.js",
     "groupTitle": "Device_Params",
     "sampleRequest": [
       {
@@ -410,7 +410,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -437,13 +437,13 @@ define({ "api": [
             "group": "Parameter",
             "optional": false,
             "field": "from",
-            "description": "<ul> <li>If this param is set to true (/devicereadings?from=timestamp) then all readings from the given timestamp till the prent moment are returned.</li> </ul>"
+            "description": "<ul> <li>If this param is set (/devicereadings?from=timestamp) then all readings from the given timestamp till the present moment are returned.</li> </ul>"
           },
           {
             "group": "Parameter",
             "optional": false,
             "field": "to",
-            "description": "<ul> <li>If this param is set to true (/devicereadings?to=timestamp) then all readings from the beginning to the given timestamp are returned.</li> </ul>"
+            "description": "<ul> <li>If this param is set (/devicereadings?to=timestamp) then all readings from the beginning to the given timestamp are returned.</li> </ul>"
           }
         ]
       }
@@ -469,7 +469,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -516,7 +516,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-readings-controller.js",
+    "filename": "./src/controllers/device-readings-controller.js",
     "groupTitle": "Device_Readings",
     "sampleRequest": [
       {
@@ -593,7 +593,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -640,7 +640,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -687,7 +687,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/device-types-controller.js",
+    "filename": "./src/controllers/device-types-controller.js",
     "groupTitle": "Device_Type",
     "sampleRequest": [
       {
@@ -716,7 +716,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
-          "content": "{\n  \"name\":\"Device 01\",\n  \"latitude\":\"100.001\",\n  \"longitude\":\"100.001\",\n  \"status\":\"new\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n},",
+          "content": "  {\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  },\nIf the client entry above is not provided then the device will be considered unassigned to any client.",
           "type": "json"
         }
       ]
@@ -764,7 +764,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -826,7 +826,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -874,7 +874,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
@@ -894,8 +894,20 @@ define({ "api": [
           {
             "group": "Parameter",
             "optional": false,
-            "field": "None",
-            "description": ""
+            "field": "latestOnly",
+            "description": "<ul> <li>If this param is set to true (/devices/:uuid/deviceReadings?latestOnly=true) then only the latest reading recorded for this device is returned.  Else all readings of this device are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "from",
+            "description": "<ul> <li>If this param is set (/devicereadings/:uuid/deviceReadings?from=timestamp) then all readings, for this device, from the given timestamp till the present moment are returned.</li> </ul>"
+          },
+          {
+            "group": "Parameter",
+            "optional": false,
+            "field": "to",
+            "description": "<ul> <li>If this param is set (/devicereadings/:uuid/deviceReadings?to=timestamp) then all readings, for this device, from the beginning to the given timestamp are returned.</li> </ul>"
           }
         ]
       }
@@ -921,11 +933,167 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/devices-controller.js",
+    "filename": "./src/controllers/devices-controller.js",
     "groupTitle": "Device",
     "sampleRequest": [
       {
         "url": "http://api.centilio.com/v1//devices/:uuid/deviceReadings"
+      }
+    ]
+  },
+  {
+    "type": "put",
+    "url": "/devices/:uuid",
+    "title": "Update an existing device",
+    "name": "updateDevice",
+    "group": "Device",
+    "parameter": {
+      "fields": {
+        "device": [
+          {
+            "group": "device",
+            "type": "json",
+            "optional": false,
+            "field": "Give",
+            "description": "<p>a device as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
+          "content": "  {\n    \"name\":\"Device 01\",\n    \"latitude\":\"100.001\",\n    \"longitude\":\"100.001\",\n    \"status\":\"new\",\n    \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n    \"deviceId\": \"01234567890123456789\",\n    \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n    \"status\": \"registered\"\n  },\nAll the fields above are optional. Send in only the fields you want to change with new values.\nOnly those fields will be updated.  Other fields will be left as it is.",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Device",
+            "optional": false,
+            "field": "Updated",
+            "description": "<p>device is returned as JSON.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"uuid\": \"22e0805a-7002-4ae7-be1e-4877dd59fc04\",\n  \"timestamp\": 1483155714863,\n  \"name\": \"device 100\",\n  \"latitude\": \"103.001\",\n  \"longitude\": \"103.001\",\n  \"deviceType\":\"5612d680-e008-4482-97e2-0391ce5d3994\",\n  \"deviceId\": \"01234567890123456789\",\n  \"client\": \"b42f0bad-5a1d-485d-a0f2-308b8f53aed0\"\n  \"status\": \"new\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./src/controllers/devices-controller.js",
+    "groupTitle": "Device",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//devices/:uuid"
+      }
+    ]
+  },
+  {
+    "type": "post",
+    "url": "/events",
+    "title": "Send an event notification to the device. Only admin can access this URI.",
+    "name": "sendEvent",
+    "group": "Event",
+    "parameter": {
+      "fields": {
+        "event": [
+          {
+            "group": "event",
+            "type": "Event",
+            "optional": false,
+            "field": "event",
+            "description": "<p>Give an event as JSON</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Request-header \"Content-Type: application/json\" must be set.  Request-Example:",
+          "content": "{\n  \"device\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n  \"name\" : \"displayBrightness\",\n  \"message\" : {\n    action: \"reduce\",\n    value: \"3\"\n  }\n}\n\n{\n  \"device\": \"491eeac5-f7c5-4c08-a19a-0dc376098702\",\n  \"name\" : \"playAudio\",\n  \"message\" : {\n    \"action\": \"play\",\n    \"value\": \"file-name.mp3\"\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "OK",
+            "optional": false,
+            "field": "OK.",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "type": "String",
+            "optional": false,
+            "field": "BadRequest",
+            "description": "<p>Error code 400 is returned if the JSON format is incorrect.</p>"
+          }
+        ],
+        "403": [
+          {
+            "group": "403",
+            "type": "String",
+            "optional": false,
+            "field": "Unauthorized",
+            "description": "<p>Error code 403 is returned if credentials are invalid or not admin.</p>"
+          }
+        ],
+        "500": [
+          {
+            "group": "500",
+            "type": "String",
+            "optional": false,
+            "field": "InternalServerError",
+            "description": "<p>Error code 500 is returned in case of some error in the server.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "./src/controllers/events-controller.js",
+    "groupTitle": "Event",
+    "sampleRequest": [
+      {
+        "url": "http://api.centilio.com/v1//events"
       }
     ]
   },
@@ -998,7 +1166,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/roles-controller.js",
+    "filename": "./src/controllers/roles-controller.js",
     "groupTitle": "Role",
     "sampleRequest": [
       {
@@ -1045,7 +1213,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/roles-controller.js",
+    "filename": "./src/controllers/roles-controller.js",
     "groupTitle": "Role",
     "sampleRequest": [
       {
@@ -1122,7 +1290,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/users-controller.js",
+    "filename": "./src/controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1170,7 +1338,7 @@ define({ "api": [
       ]
     },
     "version": "0.0.0",
-    "filename": "./controllers/login-controller.js",
+    "filename": "./src/controllers/login-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1247,7 +1415,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "./controllers/users-controller.js",
+    "filename": "./src/controllers/users-controller.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
