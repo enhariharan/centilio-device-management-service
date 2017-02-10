@@ -209,14 +209,12 @@ exports.addDevice = function (req, res) {
   device.longitude = req.body.longitude;
   device.status = req.body.status;
   device.deviceType = req.body.deviceType;
+
   if (req.body.client !== undefined) device.client = req.body.client;
 
-  DeviceManagementService.addDevice(device, err => {
-    if (err === 400) return res.status('400').send('error encountered while adding device to DB.  Please check your JSON.');
-    if (err) return res.status('500').send('error encountered while adding device to DB.');
-
-    return res.status('201').send(device);
-  });
+  DeviceManagementService.addDevice(device)
+  .then(savedDevice => { return res.status('201').send(savedDevice); })
+  .catch(err => { return res.sendStatus(err); });
 };
 
 /**
