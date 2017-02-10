@@ -1,6 +1,7 @@
 var Device = require('../models/device-model').Device,
     Client = require('../models/client-model').Client,
     Role = require('../models/role-model').Role,
+    Utilities = require('../models/utilities'),
     DeviceTypeManagementService = require('./device-type-management-service');
 
 var _parseAndSendDevices = (devices, callback) => {
@@ -136,26 +137,45 @@ exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
   });
 }
 
-exports.addDevice = (device, callback) => {
-  var deviceToSave = new Device(device);
-  deviceToSave.deviceType = device.deviceType;
-
-  // validate that the deviceType already exists in the devicetypes collection.
-  if (deviceToSave.deviceType == undefined || !deviceToSave.deviceType) {
+exports.addDevice = (device) => {
+  return new Promise(
+    (resolve, reject) => {
+      if (device.deviceType == undefined || !device.deviceType) {
         console.log('device does not have a valid device type.');
-        return callback(400);
-  }
-  DeviceTypeManagementService.getDeviceType(deviceToSave.deviceType, err => {
-    if (err) {
-      console.log('device does not have a valid device type.');
-      return callback(400);
-    }
-  });
+        reject(400);
+      }
 
-  // Now save new device into collection "device"
-  deviceToSave.save(err => {
-    if (err) console.log('Error while saving device to database.');
-    return callback(err);
+      DeviceTypeManagementService.getDeviceType(device.deviceType)
+      .then(deviceType => {
+        // A hack: It is assumed that device.deviceType will contain wither a UUID or the device name.
+        // device uuid will be provided in almost all cases but device name will be provided when user
+        // adds a new device with a new device type. Hence, this below logic
+        // What does it do? It checks the collection DeviceType for a document with the given UUID. If not found
+        // then it is assumed that device.deviceType is a new device type and so a new document is added to
+        // the devicetype collection.
+        if (!deviceType || deviceType === undefined) {
+          // create a new device type document and add to devicetype collection
+          var newDeviceType = {
+            uuid: Utilities.getUuid(),
+            timestamp: Utilities.getTimestamp(),
+            name: device.deviceType,
+            status: 'active' };
+          return DeviceTypeManagementService.addDeviceType(newDeviceType);
+        } else return deviceType; // return existing deviceType document
+      })
+      .then(deviceType => {
+        var deviceToSave = new Device(device);
+        deviceToSave.deviceType = device.deviceType;
+        return deviceToSave.save();
+      })
+      .then( savedDevice => {
+        console.info('saved new device (%s) of type (%s).', savedDevice.name, savedDevice.deviceType);
+        resolve(savedDevice);
+      })
+      .catch(err => {
+        console.error('Error while saving device to database.');
+        reject(err);
+      });
   });
 }
 
