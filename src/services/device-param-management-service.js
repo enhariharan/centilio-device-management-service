@@ -67,10 +67,9 @@ exports.addDeviceParam = (deviceParam) => {
 
       // validate that the deviceType already exists in the devicetypes collection.
       if (!deviceParamToSave.deviceType || deviceParamToSave.deviceType === undefined) reject(400);
-      DeviceTypeManagementService.getDeviceType(deviceParam.deviceType.uuid).then(deviceType => {
-        return deviceParamToSave.save()
-      })
-      .then(deviceParam => {resolve(deviceParam);})
-      .catch(err => {reject(err);});
+      DeviceTypeManagementService.getDeviceType(deviceParam.deviceType.uuid)
+      .then(deviceType => { return deviceParamToSave.save() })
+      .then(deviceParam => { resolve(deviceParam); })
+      .catch(err => { reject(err); });
   });
 }

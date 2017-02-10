@@ -107,8 +107,8 @@ exports.login = function (req, res) {
     return ClientManagementService.getClient(user.client);
   })
   .then(client => {
-    console.error('client: ' + JSON.stringify(client));
-    if (!client || cient === undefined) throw(500);
+    console.info('client: ' + JSON.stringify(client));
+    if (!client || client === undefined) throw(500);
     res.status(200).send(client);
   })
   .catch(err => {
