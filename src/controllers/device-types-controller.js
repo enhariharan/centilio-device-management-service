@@ -41,7 +41,7 @@ var DeviceTypeManagementService = require('../services/device-type-management-se
 };
 
 /**
- * @api {get} /devicetypes/:uuid Get device type by given uuid
+ * @api {get} /deviceTypes/:uuid Get device type by given uuid
  * @apiName getDeviceType
  * @apiGroup Device Type
  *
@@ -74,7 +74,7 @@ exports.getDeviceType = function (req, res) {
 };
 
 /**
- * @api {post} /devicetypes Add a new device type
+ * @api {post} /deviceTypes Add a new device type
  * @apiName addDeviceType
  * @apiGroup Device Type
  *
@@ -101,10 +101,7 @@ exports.getDeviceType = function (req, res) {
 exports.addDeviceType = function (req, res) {
   console.log('req.body: ' + JSON.stringify(req.body));
 
-  if (!req || !req.body) {
-    console.error('invalid request object');
-    return res.status(400).send('Bad Request');
-  }
+  if (!req || !req.body) return res.sendStatus(400);
 
   var deviceType = {
     uuid: utils.getUuid(),
@@ -113,8 +110,7 @@ exports.addDeviceType = function (req, res) {
     status: req.body.status,  // TODO: Need to add logic (PUT REST API) to change this to 'retired' when needed.
   };
 
-  DeviceTypeManagementService.addDeviceType(deviceType, function (err) {
-    if (err) return res.status('500').send('error encountered while adding device type to DB ' + err.stack);
-    return res.status('201').send(deviceType);
-  });
+  DeviceTypeManagementService.addDeviceType(deviceType)
+  .then(savedDeviceType => { return res.status('201').send(savedDeviceType); })
+  .catch(err => { return res.sendStatus(err); });
 };
