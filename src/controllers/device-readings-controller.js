@@ -1,12 +1,21 @@
-var utils = require('../models/utilities.js');
-var DeviceReadingManagementService = require('../services/device-reading-management-service.js');
+var utils = require('../models/utilities'),
+    DeviceReadingManagementService = require('../services/device-reading-management-service'),
+    DeviceManagementService = require('../services/device-management-service'),
+    User = require('../models/user-model').User,
+    UserManagementService = require('../services/user-management-service'),
+    BasicAuth = require('basic-auth');
 
 /**
- * @api {get} /deviceReadings Get all available device readings
+ * @api {get} /deviceReadings Get device readings of all devices belonging to the logged in user.
  * @apiName getAllDeviceReadings
  * @apiGroup Device Readings
  *
- * @apiParam None
+ * @apiParam latestOnly - If this param is set to true (/devicereadings?latestOnly=true) then only the latest
+ * reading per device is returned.  Else all device readings of all devices of the user are returned.
+ * @apiParam from - If this param is set (/devicereadings?from=timestamp) then all readings from the
+ * given timestamp till the present moment are returned.
+ * @apiParam to - If this param is set (/devicereadings?to=timestamp) then all readings from the
+ * beginning to the given timestamp are returned.
  *
  * @apiSuccess (200) {DeviceReadings[]} deviceReadings Array of device readings.
  * @apiSuccessExample {json} Success-Response:
@@ -33,16 +42,21 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
  *       ]
  *     }
  */
- exports.getAllDeviceReadings = function (req, res) {
-  "use strict";
+ exports.getAllDeviceReadings = (req, res) => {
+   "use strict";
 
-  DeviceReadingManagementService.getAllDeviceReadings(function (err, context) {
-    if (err) return res.status('500').send('error encountered while reading device readings from DB');
+   var credentials = BasicAuth(req); // TODO: Change this to JWT based stateless token based authentication
+   if (credentials === undefined || !credentials) return res.sendStatus(403);
 
-    if (!context) return res.status('200').send('No device readings found in DB...');
-
-    return res.status('200').send(context);
-  });
+   User.find({username: credentials.name}).exec().then(user => {
+     if (!user || user === undefined || credentials.name.toLowerCase().localeCompare(user[0].username.toLowerCase()) || credentials.pass.localeCompare(user[0].password)) return res.sendStatus(403);
+     return DeviceManagementService.getDevicesByClient(user[0].client);
+   })
+   .then(devices => {
+     return DeviceReadingManagementService.getAllDeviceReadingsByDevices(devices.devices, req.query.latestOnly === 'true', req.query.from, req.query.to);
+   })
+   .then(deviceReadings => {return res.status('200').send(deviceReadings);})
+   .catch(err => {console.log('err: ' + err);});
 };
 
 /**
@@ -103,14 +117,12 @@ var DeviceReadingManagementService = require('../services/device-reading-managem
  *       ]
  *     }
  */
-exports.getDeviceReading = function (req, res) {
+exports.getDeviceReading = (req, res) => {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceReadingManagementService.getDeviceReading(uuid, function (err, context) {
+  DeviceReadingManagementService.getDeviceReading(uuid, (err, context) => {
     if (err) return res.status('500').send('error encountered while reading device reading from DB');
-
     if (!context) return res.status('400').send('No such device reading found in DB...');
-
     return res.status('200').send(context);
   });
 };
@@ -178,11 +190,9 @@ exports.getDeviceReading = function (req, res) {
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
  */
-exports.addDeviceReading = function (req, res) {
-  if (!req || !req.body) {
-    console.error('invalid request object');
-    return res.status(400).send('Bad Request');
-  }
+exports.addDeviceReading = (req, res) => {
+  if (!req || !req.body) return res.sendStatus(400);
+  if (!req.body.device || req.body.device === undefined) return res.sendStatus(400);
 
   var deviceReading = {
     uuid: utils.getUuid(),
@@ -191,14 +201,19 @@ exports.addDeviceReading = function (req, res) {
     device: req.body.device,
     readings: [],
   };
-  req.body.readings.forEach(function(reading) {
-    deviceReading.readings.push(reading);
-  });
+  req.body.readings.forEach(r => {deviceReading.readings.push(r);});
 
-  DeviceReadingManagementService.addDeviceReading(deviceReading, function (err) {
-    if (err === 400) return res.status('400').send('error encountered while adding device reading to DB.  Please check your JSON.');
-    if (err)  return res.status('500').send('error encountered while adding device reading to DB.');
-
-    return res.status('201').send(deviceReading);
+  DeviceReadingManagementService.addDeviceReading(deviceReading)
+  .then(savedDeviceReading => {
+    console.info('\nsaved device readings: ' + JSON.stringify(savedDeviceReading));
+    return res.status('201').send(savedDeviceReading);
+  })
+  .catch(err => {
+    if (err === 400) {
+      console.error('error encountered while adding device reading to DB.  Please check your JSON.');
+      return res.sendStatus('400');
+    }
+    console.error('Internal server error occured while adding device readings ' + err);
+    return res.sendStatus('500');
   });
 };

@@ -7,7 +7,7 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "start": "node centilio-device-management-service-cluster.js",
+    "start": "node src/app/centilio-device-management-service-cluster.js",
     "test": "NODE_ENV=test mocha --recursive test",
     "test:coverage": "nyc npm test",
     "test:unit": "mocha --recursive test/middleware test/models test/routes",
@@ -47,6 +47,7 @@
     "express-handlebars": "^3.0.0",
     "express-logger": "0.0.3",
     "mongoose": "^4.7.5",
+    "socket.io": "^1.7.2",
     "uuid": "^3.0.1",
     "validator": "^6.2.0"
   },

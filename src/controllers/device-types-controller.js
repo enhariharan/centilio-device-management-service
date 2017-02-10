@@ -1,5 +1,5 @@
-var utils = require('../models/utilities.js');
-var DeviceTypeManagementService = require('../services/device-type-management-service.js');
+var utils = require('../models/utilities');
+var DeviceTypeManagementService = require('../services/device-type-management-service');
 
 /**
  * @api {get} /deviceTypes Get all available device types

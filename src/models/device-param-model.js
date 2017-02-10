@@ -1,6 +1,6 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    DeviceType = require('./device-type-model.js');
+    DeviceType = require('./device-type-model');
 
 var deviceParamSchema = Schema({
   // unique id and created timestamp
@@ -12,6 +12,9 @@ var deviceParamSchema = Schema({
 
   // description of the device parameter
   description: {type: String, required: true},
+
+  // category of the parameter
+  category: {type: String, required: true},
 
   // device type. stores uuid of device type which must be aleady present in "devicetypes" collection.
   // optional field to store which type of device provides this param.
