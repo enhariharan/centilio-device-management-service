@@ -161,7 +161,7 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
 };
 
 /**
- * @api {post} /devices Add a new device
+ * @api {post} /devices Add a new device. Only admin or logged in user can add new device.
  * @apiName addDevice
  * @apiGroup Device
  *
@@ -212,7 +212,8 @@ exports.addDevice = function (req, res) {
 
   if (req.body.client !== undefined) device.client = req.body.client;
 
-  DeviceManagementService.addDevice(device)
+  Validator.isValidCredentials(req)
+  .then(result => { return DeviceManagementService.addDevice(device); })
   .then(savedDevice => { return res.status('201').send(savedDevice); })
   .catch(err => { return res.sendStatus(err); });
 };
