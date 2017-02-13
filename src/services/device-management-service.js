@@ -4,27 +4,6 @@ var Device = require('../models/device-model').Device,
     Utilities = require('../models/utilities'),
     DeviceTypeManagementService = require('./device-type-management-service');
 
-var _parseAndSendDevices = (devices, callback) => {
-  var context = {
-    devices: devices.map( d => {
-      var device = {
-        uuid: d.uuid,
-        timestamp: d.timestamp,
-        serverTimestamp: d.serverTimestamp,
-        name: d.name,
-        latitude: d.latitude,
-        longitude: d.longitude,
-        status: d.status,
-        deviceType: d.deviceType,
-        deviceId: d.deviceId,
-        client: d.client,
-      };
-      return device;
-    }),
-  };
-  return callback(0, context);
-};
-
 exports.getAllDevices = (callback) => {
   Device.find((err, devices) => {
     if (err) {
@@ -58,15 +37,16 @@ exports.getAllDevices = (callback) => {
   });
 }
 
-exports.getDevice = (id, callback) => {
+exports.getDevice = (id) => {
   return new Promise(
     (resolve, reject) => {
-      Device.find({uuid: id}).exec().then(devices => {
-        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
-        else return Device.find({deviceId: id}).exec();
+      Device.findOne({uuid: id}).exec()
+      .then(device => {
+        if (device && device !== undefined) resolve(device);
+        return Device.findOne({deviceId: id}).exec();
       })
-      .then(devices => {
-        if (devices && devices.length !== null && devices.length > 0) return _parseAndSendDevices(devices, callback);
+      .then(device => {
+        if (device && device !== undefined) resolve(device);
         else resolve(null);
       })
       .catch(err => { reject(err); });
@@ -140,12 +120,30 @@ exports.getDeviceByUuidAndClientUuid = (deviceUuid, clientUuid) => {
 exports.addDevice = (device) => {
   return new Promise(
     (resolve, reject) => {
-      if (device.deviceType == undefined || !device.deviceType) {
+      if (device.deviceType === undefined || !device.deviceType) {
         console.log('device does not have a valid device type.');
         reject(400);
       }
+      if (device.uuid === undefined || !device.uuid || device.deviceId === undefined || !device.deviceId) {
+        console.log('device does not have a valid uuid and valid deviceId.');
+        reject(400);
+      }
 
-      DeviceTypeManagementService.getDeviceType(device.deviceType)
+      this.getDevice(device.uuid)
+      .then(foundDevice => {
+        if (foundDevice && foundDevice !== undefined) {
+          console.log('device with given uuid (%s) is already present.', foundDevice.uuid);
+          reject(400);
+        }
+        return this.getDevice(device.deviceId);
+      })
+      .then(foundDevice => {
+        if (foundDevice && foundDevice !== undefined) {
+          console.log('device with given deviceId (%s) is already present.', foundDevice.deviceId);
+          reject(400);
+        }
+        return DeviceTypeManagementService.getDeviceType(device.deviceType)
+      })
       .then(deviceType => {
         // A hack: It is assumed that device.deviceType will contain wither a UUID or the device name.
         // device uuid will be provided in almost all cases but device name will be provided when user
@@ -173,7 +171,7 @@ exports.addDevice = (device) => {
         resolve(savedDevice);
       })
       .catch(err => {
-        console.error('Error while saving device to database.');
+        console.error('Error while saving device to database.' + err.stack);
         reject(err);
       });
   });
