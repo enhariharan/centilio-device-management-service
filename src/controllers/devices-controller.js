@@ -2,13 +2,14 @@ var utils = require('../models/utilities'),
     BasicAuth = require('basic-auth'),
     User = require('../models/user-model').User,
     Device = require('../models/device-model').Device,
+    ClientManagementService = require('../services/client-management-service'),
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     Validator = require('../security/validator'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
- * @api {get} /devices Get all available devices belonging to logged in user.
+ * @api {get} /devices Get all available devices, excluding retired devices, belonging to logged in user.
  * @apiName getAllDevices
  * @apiGroup Device
  *
@@ -18,6 +19,8 @@ var utils = require('../models/utilities'),
  * @apiParam {json} unassignedOnly /devices?unassignedOnly=true will return all devices in the corporate that are
  * not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will
  * be returned.  This option must be preceded by the param all=true else it will be ignored.
+ * @apiParam {json} showRetiredDevices /devices?showRetiredDevices=true will return all devices including retired
+ * devices also. This option is set to false by default.
  *
  * @apiSuccess (200) {Device[]} devices Array of devices.
  * @apiSuccessExample {json} Success-Response:
@@ -49,14 +52,13 @@ var utils = require('../models/utilities'),
  */
  exports.getAllDevices = (req, res) => {
   "use strict";
-  // validate credentials
   Validator.isValidCredentials(req)
   .then(result => {
     if (!result || result === undefined) throw (403);
     var credentials = BasicAuth(req);
     return UserManagementService.getUserByCredentials(credentials);
   })
-  .then(user => { return DeviceManagementService.getDevicesByClient(user.client, req.query.all, req.query.unassignedOnly); })
+  .then(user => { return DeviceManagementService.getDevicesByClient(user.client, req.query); })
   .then(devices => { return res.status(200).send(devices); })
   .catch(err => { return res.sendStatus(err); });
 };
@@ -85,14 +87,27 @@ var utils = require('../models/utilities'),
  *     }]
  *   }
  */
-exports.getDevice = function (req, res) {
+exports.getDevice = (req, res) => {
   "use strict";
   var uuid = req.params.uuid;
-  DeviceManagementService.getDevice(uuid, (err, context) => {
-    if (err) return res.status('500').send('error encountered while reading device from DB');
-    if (!context) return res.status('400').send('No such device found in DB...');
-    return res.status('200').send(context);
-  });
+  Validator.isValidCredentials(req)
+  .then(result => {
+    if (!result || result === undefined) throw (403);
+    var credentials = BasicAuth(req);
+    return ClientManagementService.getClientByUsername(credentials.name);
+  })
+  .then(client => {
+    if (!client || client === undefined) throw (403);
+    return DeviceManagementService.getDeviceByUuidAndClientUuid(uuid, client.uuid);
+  })
+  .then(device => {
+    if (!device || device === undefined) throw(400);
+    return res.status('200').send(device);
+  })
+  .catch(err => {
+    console.info('error: ' + err.stack);
+    return res.sendStatus(err);
+  })
 };
 
 /**
@@ -271,9 +286,11 @@ exports.addDevice = function (req, res) {
    if (req.body.deviceType !== undefined) device.deviceType = req.body.deviceType;
    if (req.body.client !== undefined) device.client = req.body.client;
 
-   DeviceManagementService.updateDevice(device)
-   .then(response => {
-     console.log('response received for update: ' + JSON.stringify(response));
-     return res.sendStatus(response);
-   });
+  Validator.isValidCredentials(req)
+  .then(result => { return DeviceManagementService.updateDevice(device); })
+  .then(response => { return res.sendStatus(response); })
+  .catch(err => {
+    console.log('\nerr: ' + err.stack);
+    reject(err);
+  });
  };
