@@ -70,4 +70,13 @@ var isAuthorizedForGetClientByUuid = (req) => {
   });
 };
 
-module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid};
+var isValidCredentialsForInitialize = (req) => {
+  return new Promise(
+    (resolve, reject) => {
+      var credentials = BasicAuth(req);
+      if (credentials.name.toUpperCase() !== 'CENTILIO' || credentials.pass !== '10cA1UY7n23') reject(403);
+      resolve(true);
+   })
+}
+
+module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid, isValidCredentialsForInitialize};

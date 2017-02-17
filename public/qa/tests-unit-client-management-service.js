@@ -10,7 +10,7 @@ var opts = {
   }
 };
 
-var dbConnection = mongoose.createConnection(credentials.mongo.development.connectionString, opts);
+var dbConnection = mongoose.createConnection(credentials.getDbConnection('test'), opts);
 
 suite('ClientManagementService Unit tests', () => {
   test('at least one address should be provided for a new Client to be saved successfully', (done) => {

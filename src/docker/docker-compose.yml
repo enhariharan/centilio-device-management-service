@@ -1,0 +1,18 @@
+version: '2'
+services:
+  centilio-device-manager:
+    build:
+      context: ../..
+      dockerfile: src/docker/Dockerfile.centilio-device-manager
+    image: centilio-device-manager:0.0.1
+    ports:
+      - "4123:4123"
+
+  centilio-db:
+    build:
+      context: ../..
+      dockerfile: src/docker/Dockerfile.centilio-mongo-db
+    image: centilio-mongo-db:0.0.1
+    ports:
+      - "27017:27017"
+#    command: ["node", "public/qa/init-test-db.sh"]

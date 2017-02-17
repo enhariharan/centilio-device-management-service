@@ -1,0 +1,2 @@
+FROM mongo:latest
+WORKDIR /usr/src/centilio/centilio-device-manager

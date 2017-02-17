@@ -2,8 +2,9 @@
  * This script is intended to be used by testers or for demo purposes.
  * This script cleans up the test database.  It removes all documents from all collections.
  */
-var mongoose = require('mongoose'),
-    utilities = require('../../src/models/utilities');
+var app = require('express')();
+var mongoose = require('mongoose');
+var utilities = require('../../src/models/utilities');
 var credentials = require('../../src/app/configuration');
 var Role = require('../../src/models/role-model').Role;
 var User = require('../../src/models/user-model').User;
@@ -15,7 +16,6 @@ var Device = require('../../src/models/device-model').Device;
 var DeviceParam = require('../../src/models/device-param-model').DeviceParam;
 var DeviceReading = require('../../src/models/device-reading-model').DeviceReading;
 var DeviceType = require('../../src/models/device-type-model').DeviceType;
-
 var opts = { server: { socketOptions: { keepAlive: 1 } } };
 
 
@@ -96,7 +96,7 @@ function _createPromises(args, conn) {
 function _createDbConnection(dbConnection) {
   return new Promise((resolve, reject) => {
     var conn = (!dbConnection || dbConnection === undefined)
-    ? mongoose.createConnection(credentials.mongo.test.connectionString, opts)
+    ? mongoose.createConnection(credentials.getDbConnection(app.get('env')), opts)
     : dbConnection;
 
     conn.on('connecting', () => {console.log('\nconnecting to DB');});
