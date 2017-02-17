@@ -5,11 +5,13 @@ RUN mkdir -p /usr/src/centilio/centilio-device-manager
 WORKDIR /usr/src/centilio/centilio-device-manager
 
 # install app dependencies
-COPY package.json /usr/src/centilio/centilio-device-manager
+COPY package.json /usr/src/centilio/centilio-device-manager/
 RUN npm install
 
-# copy source files
+# copy source files and update the original configuration.js file with the one provided in src/docker
 COPY . /usr/src/centilio/centilio-device-manager
+RUN mv /usr/src/centilio/centilio-device-manager/src/app/configuration.js /usr/src/centilio/centilio-device-manager/src/app/configuration.js.orig
+COPY src/docker/configuration.js /usr/src/centilio/centilio-device-manager/src/app/
 
 # expose the port that the server listens to
 EXPOSE 4123
