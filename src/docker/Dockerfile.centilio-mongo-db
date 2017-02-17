@@ -1,0 +1,6 @@
+FROM mongo:latest
+
+ADD src/docker/init-test-db.sh /usr/src/centilio/centilio-device-manager/initTestDb.sh
+ADD src/docker/init-test-db.js /usr/src/centilio/centilio-device-manager/init-test-db.js
+WORKDIR /usr/src/centilio/centilio-device-manager
+#CMD ["sh", "initTestDb.sh"]
