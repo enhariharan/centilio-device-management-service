@@ -3,8 +3,8 @@ var configuration = {
     port: 4123,
   },
   mongo: {
-    development: {connectionString: 'mongodb://centilio-db/device-management-service-dev',},
-    test: {connectionString: 'mongodb://centilio-db/device-management-service-test',},
+    development: {connectionString: 'mongodb://localhost/device-management-service-dev',},
+    test: {connectionString: 'mongodb://localhost/device-management-service-test',},
     production: {connectionString: 'mongodb://produser:resudorp@ds145158.mlab.com:45158/device-management-service-prod',},
   },
 };
