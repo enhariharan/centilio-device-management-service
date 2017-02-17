@@ -10,38 +10,12 @@ var BasicAuth = require('basic-auth'),
     RoleManagementService = require('./role-management-service'),
     UserManagementService = require('./user-management-service');
 
-var getAllClients = (callback) => {
-  Client.find(function (err, clients) {
-    if (err) {
-      console.error('error while reading clients from DB = ' + err);
-      return callback(err, null);
-    }
-
-    if (!clients.length) {
-      console.info('No clients found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      clients: clients.map(function(client) {
-        var clientDTO = {
-          uuid: client.uuid,
-          timestamp: client.timestamp,
-          corporateName: client.corporateName,
-          firstName: client.firstName,
-          lastName: client.lastName,
-          middleName: client.middleName,
-          type: client.type,
-          role: client.role,
-          addresses: client.addresses,
-          emails: client.emails,
-          contactNumbers: client.contactNumbers,
-          devices: client.devices,
-        };
-        return clientDTO;
-      }),
-    };
-    return callback(0, context);
+var getAllClients = () => {
+  return new Promise(
+    (resolve, reject) => {
+      Client.find()
+      .then(clients => {resolve(clients)})
+      .catch(err => {reject(err)});
   });
 }
 

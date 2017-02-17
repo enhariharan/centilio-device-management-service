@@ -3,6 +3,7 @@
  * This script sets up a sample database.
  */
 var mongoose = require('mongoose');
+var app = require('express')();
 var utilities = require('../../src/models/utilities');
 var credentials = require('../../src/app/configuration');
 var Role = require('../../src/models/role-model').Role;
@@ -16,11 +17,7 @@ var DeviceParam = require('../../src/models/device-param-model').DeviceParam;
 var DeviceReading = require('../../src/models/device-reading-model').DeviceReading;
 var DeviceType = require('../../src/models/device-type-model').DeviceType;
 
-var opts = {
- server: {
-   socketOptions: { keepAlive: 1 }
- }
-};
+var opts = { server: { socketOptions: { keepAlive: 1 } } };
 
 var roleUser = new Role(
   {uuid: utilities.getUuid(), timestamp: utilities.getTimestamp(), name: 'user', status: 'active'});
@@ -344,10 +341,9 @@ var setupDeviceReadings = () => {
 var setupDB = (dbConnection) => {
   return new Promise((resolve, reject) => {
     var conn = null;
-    if (!dbConnection || dbConnection === undefined) conn = mongoose.createConnection(credentials.mongo.test.connectionString, opts);
+    if (!dbConnection || dbConnection === undefined) conn = mongoose.createConnection(credentials.getDbConnection(app.get('env')), opts);
     else conn = dbConnection;
     console.log('dbConnection readyState: ' + conn.readyState);
-    // conn.close();
     conn.on('connecting', () => {console.log('\nconnecting');});
     conn.on('connected', () => {console.log('\nconnected');});
     conn.on('open', () => {console.log('\nopened');});
@@ -356,7 +352,6 @@ var setupDB = (dbConnection) => {
     conn.on('close', () => {console.log('\nclosed');});
     conn.on('reconnected', () => {console.log('\nreconnected');});
     conn.on('error', (err) => {console.log('\nError raised: ' + err + err.stack);});
-    // conn.open();
 
     Promise.all([
       setupRoles(), setupDeviceTypes(), setupClients(), setupUsers(), setupClientAddresses(), setupClientEmails(),
@@ -365,11 +360,12 @@ var setupDB = (dbConnection) => {
     .then(messages => {
       messages.forEach(m => {console.log(m);});
       conn.close();
-      resolve();
+      resolve(true);
     })
     .catch(err => {
       conn.close();
       console.error(err.stack);
+      reject(err);
     });
   });
 };

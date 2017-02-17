@@ -4,11 +4,11 @@ var express = require('express'),
     mongoose = require('mongoose'),
     cors = require('cors'),
     PushNotifications = require('./push-notifications'),
+    ClientManagementService = require('../services/client-management-service.js'),
+    SetupDb = require('../../public/qa/setup-db.js'),
     app = express();
 
-// var Device = require('./src/models/device-model.js');
-
-app.set('port', credentials.server.port || 4123);
+app.set('port', credentials.getPort(app.get('env'))|| 4123);
 app.use(express.static(__dirname + '/public'));
 
 //TODO: Right now, CORS is enabled across the board.  Do check and limit this as needed.
@@ -35,21 +35,9 @@ switch (app.get('env')) {
 
 // configure mongoose to connect to our MongoDB database
 var opts = { server: { socketOptions: { keepAlive: 1 } } };
-switch(app.get('env')) {
-  case 'development':
-    mongoose.connect(credentials.mongo.development.connectionString, opts);
-    break;
-  case 'test':
-    mongoose.connect(credentials.mongo.test.connectionString, opts);
-    break;
-  case 'production':
-    mongoose.connect(credentials.mongo.production.connectionString, opts);
-    break;
-  default:
-    throw new Error('Unknown execution environment: ' + app.get('env'));
-  }
+mongoose.connect(credentials.getDbConnection(app.get('env')), opts);
 
-// proces every request in a domain so that any failure can be gracefully handled.
+// process every request in a domain so that any failure can be gracefully handled.
 app.use(function(req, res, next) {
   "use strict";
 
@@ -135,7 +123,7 @@ function startServer() {
   var webServer = http.createServer(app);
   PushNotifications.startWebSocketServer(webServer);
   webServer.listen(app.get('port'), function() {
-    console.log('server started on http://localhost:' + app.get('port') +
+    console.log('server started on port ' + app.get('port') +
       ' in ' + app.get('env') + ' mode; press Ctrl+C to terminate');
   });
 }
