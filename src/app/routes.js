@@ -10,7 +10,8 @@ var main = require('../../src/controllers/main'),
     deviceReadings = require('../../src/controllers/device-readings-controller'),
     user = require('../../src/controllers/users-controller'),
     events = require('../../src/controllers/events-controller'),
-    login = require('../../src/controllers/login-controller');
+    login = require('../../src/controllers/login-controller'),
+    init = require('../../src/controllers/init-controller');
 
 module.exports = function(app) {
   "use strict";
@@ -51,4 +52,6 @@ module.exports = function(app) {
 
   app.post('/users', user.addUser);
   app.put('/users', user.updateUser);
+
+  app.post('/init', init.initialize)
 };
