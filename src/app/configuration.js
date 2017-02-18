@@ -3,7 +3,7 @@ var configuration = {
     port: 4123,
   },
   mongo: {
-    development: {connectionString: 'mongodb://localhost/device-management-service-dev',},
+    development: {connectionString: 'mongodb://localhost/device-management-service-development',},
     test: {connectionString: 'mongodb://localhost/device-management-service-test',},
     production: {connectionString: 'mongodb://produser:resudorp@ds145158.mlab.com:45158/device-management-service-prod',},
   },
