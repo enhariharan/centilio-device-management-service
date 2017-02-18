@@ -56,30 +56,35 @@ exports.getDevice = (id) => {
 exports.getDevicesByClient = (clientUuid, options) => {
   return new Promise(
     (resolve, reject) => {
+      var isShowAllDevicesOptionPresent = (options !== undefined) && (options.showAllDevices === 'true');
+      var isShowUnassignedDevicesOnlyPresent = (options !== undefined) && (options.showUnassignedDevicesOnly === 'true');
+      var isShowRetiredDevicesOnlyPresent = (options !== undefined) && (options.showRetiredDevices === 'true');
+
       Client.findOne({uuid: clientUuid}).exec()
       .then(client => {return Role.findOne({uuid: client.role}).exec();})
       .then(role => {
-        if ((role.name !== 'admin') && (options.showAllDevices === 'true')) reject(403);
-        if ((role.name !== 'admin') && (options.showUnassignedDevicesOnly === 'true')) reject(403);
-        if ((options.showAllDevices !== 'true') && (options.showUnassignedDevicesOnly === 'true')) reject(400);
+        var isRoleAdmin = (role.name === 'admin');
+        if (!isRoleAdmin && isShowAllDevicesOptionPresent) reject(403);
+        if (!isRoleAdmin && isShowUnassignedDevicesOnlyPresent) reject(403);
+        if (!isShowAllDevicesOptionPresent && isShowUnassignedDevicesOnlyPresent) reject(400);
 
-        if (role.name === 'admin') {
-          if (options.showAllDevices === 'true') {
-            if (options.showUnassignedDevicesOnly === 'true') {
-              if (options.showRetiredDevices === 'true') return Device.find({client: {$exists: false}}).exec();
+        if (isRoleAdmin) {
+          if (isShowAllDevicesOptionPresent) {
+            if (isShowUnassignedDevicesOnlyPresent) {
+              if (isShowRetiredDevicesOnlyPresent) return Device.find({client: {$exists: false}}).exec();
               else return Device.find({client: {$exists: false}, status: {$ne: 'retired'}}).exec();
             } else {
-              if (options.showRetiredDevices === 'true') return Device.find().exec();
-              else return Device.find({status: {$ne: 'retired'}}).exec();
-              }
-            } else {
-              if (options.showRetiredDevices === 'true') return Device.find().exec();
+              if (isShowRetiredDevicesOnlyPresent) return Device.find().exec();
               else return Device.find({status: {$ne: 'retired'}}).exec();
             }
           } else {
-            if (options.showRetiredDevices === 'true') return Device.find({client: clientUuid}).exec();
-            else return Device.find({client: clientUuid, status: {$ne: 'retired'}}).exec();
+            if (isShowRetiredDevicesOnlyPresent) return Device.find().exec();
+            else return Device.find({status: {$ne: 'retired'}}).exec();
           }
+        } else {
+          if (isShowRetiredDevicesOnlyPresent) return Device.find({client: clientUuid}).exec();
+          else return Device.find({client: clientUuid, status: {$ne: 'retired'}}).exec();
+        }
       })
       .then(devices => {
         if (!devices || devices === undefined || !devices.length) {
