@@ -566,7 +566,8 @@ var surya = new User(
    status: 'activated',
    gender: 'male',
    profilePicPath: '//some/example/path',
-   client: clientSurya.uuid, role: roleAdmin.uuid});
+   client: clientSurya.uuid,
+   role: roleAdmin.uuid});
 var lydor = new User(
   {uuid: utilities.getUuid(),
    timestamp: utilities.getTimestamp(),

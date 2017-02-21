@@ -5,9 +5,13 @@ var BasicAuth = require('basic-auth'),
 exports.initializeDB = (req, res) => {
   "use strict";
 
-  Validator.isValidCredentialsForInitialize(req)
-  .then(result => { return InitService.initializeDB(); })
+  Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
+    console.info('isValidCreds: %s', JSON.stringify(result));
+    return InitService.initializeDB();
+  })
+  .then(result => {
+    console.info('initializeDB result: %s', JSON.stringify(result));
     if (!result || result !== true || result === undefined) throw(500);
     return res.sendStatus(200);
   })
@@ -20,7 +24,7 @@ exports.initializeDB = (req, res) => {
 exports.initializeInstance = (req, res) => {
   "use strict";
 
-  Validator.isValidCredentialsForInitialize(req)
+  Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => { return InitService.initializeInstance(req.body); })
   .then(savedClient => {
     if (!savedClient || savedClient === undefined) throw(500);
