@@ -52,6 +52,7 @@ module.exports = function(app) {
 
   app.get('/login', login.login);
 
+  app.get('/users', user.getAllUsers);
   app.post('/users', user.addUser);
   app.put('/users', user.updateUser);
 

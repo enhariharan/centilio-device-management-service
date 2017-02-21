@@ -22,6 +22,15 @@ exports.getUserByCredentials = (credentials) => {
   });
 };
 
+exports.getAllUsers = () => {
+  return new Promise(
+    function(resolve, reject) {
+      User.find().exec()
+      .then(users => { resolve(users); })
+      .catch(err => { reject(err); });
+  });
+};
+
 exports.addUser = (credentials, newUserDetails) => {
   return new Promise(
     (resolve, reject) => {
