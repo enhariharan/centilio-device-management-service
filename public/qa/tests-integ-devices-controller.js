@@ -1,10 +1,10 @@
 var assert = require('chai').assert,
     mongoose = require('mongoose'),
     restler = require('restler'),
-    utilities = require('../../models/utilities'),
-    Device = require('../../models/device-model').Device,
+    utilities = require('../../src/models/utilities'),
+    Device = require('../../src/models/device-model').Device,
 
-    credentials = require('../../credentials.js'),
+    credentials = require('../../src/app/configuration'),
     opts = { server: { socketOptions: { keepAlive: 1 } } },
     dbConnection = mongoose.createConnection(credentials.mongo.test.connectionString, opts),
 
@@ -22,7 +22,7 @@ suite('devices router integration tests - ', () => {
       result.devices.forEach(device => {
         // From this list, validate specifically the device readings of the device named 'device 1'
         if (device.name === 'device 1') {
-          restler.get(url+'/'+device.uuid+'/deviceReadings')
+          restler.get(url+'/'+device.uuid+'/deviceReadings', {method: 'get', username: 'userClient1Corp1', password: 'password'})
           .on('complete', (result, response) => {
             assert(result !== null);
             assert(result.deviceReadings !== null);

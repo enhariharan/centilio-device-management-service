@@ -21,7 +21,7 @@ var deviceSchema = Schema({
   // current status of the device - "new", "registered", "activated", "online", "offline", "retired"
   status: {type: String, required: true},
 
-  // device type. stores uuid of device type which must be aleady present in "devicetypes" collection.
+  // device type. stores uuid of device type which must be already present in "devicetypes" collection.
   deviceType: {type: String, ref: 'DeviceType'},
 
   // client. reference to the client that owns this device.

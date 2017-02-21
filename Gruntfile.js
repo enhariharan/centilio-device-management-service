@@ -13,6 +13,7 @@ module.exports = function(grunt) {
           'public/qa/tests-integ-login-controller.js',
           'public/qa/tests-integ-device-readings-controller.js',
           'public/qa/tests-integ-devices-controller.js'
+          'public/qa/tests-integ-push-notifications.js',
         ],
         options: {ui: 'tdd'},
       }
@@ -70,7 +71,7 @@ module.exports = function(grunt) {
           'views/*.js',
           'public/**/*.js'
           ],
-        tasks: ['cafemocha', 'jshint', 'exec', 'apidoc'],
+        tasks: ['cafemocha', 'jshint', /*'exec',*/ 'apidoc'],
       },
     },
   });
@@ -87,5 +88,5 @@ module.exports = function(grunt) {
   });
 
   // register tasks
-  grunt.registerTask('default', ['cafemocha', 'jshint', 'exec', 'apidoc', 'watch']);
+  grunt.registerTask('default', ['cafemocha', 'jshint', /*'exec',*/ 'apidoc', 'watch']);
 };
