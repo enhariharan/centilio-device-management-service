@@ -14,15 +14,16 @@ var getAllClients = () => {
   return new Promise(
     (resolve, reject) => {
       Client.find()
-      .then(clients => {resolve(clients)})
-      .catch(err => {reject(err)});
+      .then(clients => { resolve(clients); })
+      .catch(err => { reject(err); });
   });
 }
 
 var getAllClientsByCorporate = (orgName) => {
   return new Promise(
     (resolve, reject) => {
-      Client.find({'corporateName': orgName}).exec().then( clients => {
+      Client.find({'corporateName': orgName}).exec()
+      .then( clients => {
         if (!clients.length) resolve(0, null);
         resolve(clients);
       });
@@ -56,38 +57,33 @@ var getClient = (clientUuid) => {
       var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
-      findClientQueryPromise.then(
-        client => {
-          if (client === null) resolve(clientDTO);
-          _fillDtoWithClientDetails(clientDTO, client);
-          return Role.find({uuid: client.role}).exec();
-        }
-      ).then(
-        role => {
-          clientDTO.role = role[0].name;
-          return findAllAddressesForClientQueryPromise;
-        }
-      ).then(
-        addresses => {
-          _fillDtoWithClientAdressDetails(clientDTO, addresses);
-          return findAllEmailsForClientQueryPromise;
-        }
-      ).then(
-        emails => {
-          _fillDtoWithClientEmailDetails(clientDTO, emails);
-          return findAllContactNumbersForClientQueryPromise;
-        }
-      ).then(
-        contactNumbers => {
-          _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
-          return findAllDevicesForClientQueryPromise;
-        }
-      ).then(
-        devices => {
-          _fillDtoWithDeviceDetails(clientDTO, devices);
-          resolve(clientDTO);
-        }
-      ).catch(err => { reject(err); });
+      findClientQueryPromise
+      .then(client => {
+        if (client === null) resolve(clientDTO);
+        _fillDtoWithClientDetails(clientDTO, client);
+        return Role.findOne({uuid: client.role}).exec();
+      })
+      .then(role => {
+        clientDTO.role = role.name;
+        return findAllAddressesForClientQueryPromise;
+      })
+      .then(addresses => {
+        _fillDtoWithClientAdressDetails(clientDTO, addresses);
+        return findAllEmailsForClientQueryPromise;
+      })
+      .then(emails => {
+        _fillDtoWithClientEmailDetails(clientDTO, emails);
+        return findAllContactNumbersForClientQueryPromise;
+      })
+      .then(contactNumbers => {
+        _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
+        return findAllDevicesForClientQueryPromise;
+      })
+      .then(devices => {
+        _fillDtoWithDeviceDetails(clientDTO, devices);
+        resolve(clientDTO);
+      })
+      .catch(err => { reject(err); });
     }
   );
 }
@@ -96,9 +92,9 @@ var getClientByUsername = (username) => {
   return new Promise(
     (resolve, reject) => {
       UserManagementService.getUserByCredentials({name: username})
-      .then(user => {return getClient(user.client);})
-      .then(client => {resolve(client);})
-      .catch(err => {reject(err)});
+      .then(user => { return getClient(user.client); })
+      .then(client => { resolve(client); })
+      .catch(err => { reject(err); });
   });
 }
 
@@ -186,7 +182,7 @@ var addClient = (client) => {
       .then(promises => {return Promise.all(promises);})
       .then(results => {resolve(results);})
       .catch(err => {
-        console.log('\naddClient().err ' + err);
+        console.log('\naddClient().err - %s: %s', err, err.stack);
         reject(err);
       });
   });
