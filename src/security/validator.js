@@ -37,7 +37,7 @@ var isUserAdmin = (req) => {
         if (!role || role === undefined || role.name !== 'admin') reject(403);
         resolve(true);
       })
-      .catch(err => {reject(err);});
+      .catch(err => { reject(err); });
   });
 };
 
