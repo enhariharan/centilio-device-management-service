@@ -7,6 +7,7 @@ exports.initializeDB = (req, res) => {
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
+    if (!result || result === undefined) reject(403);
     console.info('isValidCreds: %s', JSON.stringify(result));
     return InitService.initializeDB();
   })
@@ -25,7 +26,10 @@ exports.initializeInstance = (req, res) => {
   "use strict";
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
-  .then(result => { return InitService.initializeInstance(req.body); })
+  .then(result => {
+    if (!result || result === undefined) reject(403);
+    return InitService.initializeInstance(req.body);
+  })
   .then(savedClient => {
     if (!savedClient || savedClient === undefined) throw(500);
     return res.status(200).send(savedClient);

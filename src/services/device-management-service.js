@@ -5,35 +5,17 @@ var Device = require('../models/device-model').Device,
     DeviceTypeManagementService = require('./device-type-management-service');
 
 exports.getAllDevices = (callback) => {
-  Device.find((err, devices) => {
-    if (err) {
-      console.error('error while reading devices from DB = ' + err);
-      return callback(err, null);
-    }
-
-    if (!devices.length) {
-      console.info('No devices found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      devices: devices.map(d => {
-        var dev = {
-          uuid: d.uuid,
-          timestamp: d.timestamp,
-          serverTimestamp: d.serverTimestamp,
-          name: d.name,
-          latitude: d.latitude,
-          longitude: d.longitude,
-          status: d.status,
-          deviceType: d.deviceType,
-          deviceId: d.deviceId
-        };
-        return dev;
-      }),
-    };
-    console.info('\ncontext: ' + JSON.stringify(context));
-    return callback(0, context);
+  return new Promise(
+    (resolve, reject) => {
+      Device.find()
+      .then(devices => {
+        console.error('devices: ' + JSON.stringify(devices));
+        resolve(devices);
+      })
+      .catch(err => {
+        console.error('error while reading devices from DB = ' + err);
+        reject(err);
+      })
   });
 }
 
