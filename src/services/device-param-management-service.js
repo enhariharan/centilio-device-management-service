@@ -2,6 +2,8 @@ var DeviceParam = require('../models/device-param-model').DeviceParam,
     DeviceTypeManagementService = require('./device-type-management-service');
 
 exports.getAllDeviceParams = (callback) => {
+  "use strict";
+
   DeviceParam.find((err, deviceParams) => {
     if (err) {
       console.error('error while reading device params from DB = ' + err);
@@ -93,6 +95,8 @@ exports.getDeviceParamsByDeviceUuid = (uuid, callback) => {
 }
 
 exports.addDeviceParam = (deviceParam) => {
+  "use strict";
+
   return new Promise(
     (resolve, reject) => {
       var deviceParamToSave = new DeviceParam(deviceParam);
