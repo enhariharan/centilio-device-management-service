@@ -1,5 +1,6 @@
 var Setup = require('../../public/qa/setup-db.js');
 exports.initialize = () => {
+exports.initializeDB = () => {
   return new Promise(
     (resolve, reject) => {
       Setup.setupDB()
