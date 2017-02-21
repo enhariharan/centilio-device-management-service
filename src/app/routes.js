@@ -25,6 +25,7 @@ module.exports = function(app) {
   app.get('/devices/:uuid', devices.getDevice);
   app.put('/devices/:uuid', devices.updateDevice);
   app.get('/devices/:uuid/deviceReadings', devices.getDeviceReadingsByDeviceUuid);
+  app.get('/devices/:uuid/deviceParams', devices.getDeviceParamsByDeviceUuid);
   app.post('/devices', jsonParser, devices.addDevice);
 
   app.get('/deviceParams', deviceParams.getAllDeviceParams);
