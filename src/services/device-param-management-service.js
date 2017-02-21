@@ -2,7 +2,7 @@ var DeviceParam = require('../models/device-param-model').DeviceParam,
     DeviceTypeManagementService = require('./device-type-management-service');
 
 exports.getAllDeviceParams = (callback) => {
-  DeviceParam.find(function (err, deviceParams) {
+  DeviceParam.find((err, deviceParams) => {
     if (err) {
       console.error('error while reading device params from DB = ' + err);
       return callback(err, null);
@@ -14,7 +14,7 @@ exports.getAllDeviceParams = (callback) => {
     }
 
     var context = {
-      deviceParams: deviceParams.map(function(deviceParam) {
+      deviceParams: deviceParams.map((deviceParam) => {
         var dev = {
           uuid: deviceParam.uuid,
           timestamp: deviceParam.timestamp,
@@ -33,7 +33,7 @@ exports.getAllDeviceParams = (callback) => {
 exports.getDeviceParam = (uuid, callback) => {
   "use strict";
 
-  DeviceParam.find({uuid: uuid}, function (err, deviceParams) {
+  DeviceParam.find({uuid: uuid}, (err, deviceParams) => {
     if (err) {
       console.error('error while reading device params from DB = ' + err);
       return callback(err, null);
@@ -45,7 +45,7 @@ exports.getDeviceParam = (uuid, callback) => {
     }
 
     var context = {
-      deviceParams: deviceParams.map(function(deviceParam) {
+      deviceParams: deviceParams.map((deviceParam) => {
         var dev = {
           uuid: deviceParam.uuid,
           timestamp: deviceParam.timestamp,
