@@ -52,6 +52,7 @@ var utils = require('../models/utilities'),
  */
  exports.getAllDevices = (req, res) => {
   "use strict";
+
   Validator.isValidCredentials(req)
   .then(result => {
     if (!result || result === undefined) throw (403);
@@ -89,6 +90,7 @@ var utils = require('../models/utilities'),
  */
 exports.getDevice = (req, res) => {
   "use strict";
+
   var uuid = req.params.uuid;
   Validator.isValidCredentials(req)
   .then(result => {
@@ -213,6 +215,7 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
  */
 exports.addDevice = function (req, res) {
   "use strict";
+
   if (!req || !req.body) return res.sendStatus(400);
 
   var device = new Device();
@@ -273,6 +276,7 @@ exports.addDevice = function (req, res) {
  */
  exports.updateDevice = (req, res) => {
    "use strict";
+
    if (!req || !req.body) return res.sendStatus(400);
 
    var uuid = req.params.uuid;
