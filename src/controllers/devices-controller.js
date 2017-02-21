@@ -6,6 +6,7 @@ var utils = require('../models/utilities'),
     DeviceManagementService = require('../services/device-management-service'),
     UserManagementService = require('../services/user-management-service'),
     Validator = require('../security/validator'),
+    DeviceParamsManagementService = require('../services/device-param-management-service'),
     DeviceReadingManagementService = require('../services/device-reading-management-service');
 
 /**
@@ -174,6 +175,52 @@ exports.getDeviceReadingsByDeviceUuid = (req, res) => {
     console.log('\ndeviceReadings: ' + JSON.stringify(deviceReadings));
     if (!deviceReadings || deviceReadings.length === 0) return res.status('200').send('No device readings found for this device...');
     return res.status('200').send(deviceReadings);
+  });
+};
+
+/**
+ * @api {get} /devices/:uuid/deviceParams Get device parameters provided for given device uuid
+ * @apiName getDeviceParamsByDeviceUuid
+ * @apiGroup Device
+ *
+ * @apiParam None
+ *
+ * @apiSuccess (200) {Device} Device params array as JSON.
+ * @apiSuccessExample {json} Success-Response:
+ * HTTP/1.1 200 OK
+ * [
+ *   {
+ *     "_id": "58ab307f41cfa343c672f3b4",
+ *     "uuid": "7e21a21f-bfb7-4218-9d3a-7ec61254688d",
+ *     "timestamp": "2017-02-20T18:07:59.242Z",
+ *     "name": "latitude",
+ *     "description": "latitude of the device position",
+ *     "category": "Location coordinates",
+ *     "deviceType": "all",
+ *     "__v": 0
+ *   },
+ *   ...
+ *   ...
+ * ]
+ */
+exports.getDeviceParamsByDeviceUuid = (req, res) => {
+  "use strict";
+
+  console.log('\ngetDeviceParamsByDeviceUuid()');
+  var uuid = req.params.uuid;
+
+  DeviceManagementService.getDevice(uuid)
+  .then(device => {
+    if (!device || device === undefined) return res.status('400').send('Error: No such device found in DB...');
+    return DeviceParamsManagementService.getDeviceParamsByDeviceUuid(uuid);
+  })
+  .then(deviceParams => {
+    if (!deviceParams || deviceParams.length === 0) return res.status('200').send('No device params found for this device...');
+    return res.status('200').send(deviceParams);
+  })
+  .catch(err => {
+    console.error('Err: %s - %s', err, err.stack);
+    return res.status(err).send(err.stack);
   });
 };
 

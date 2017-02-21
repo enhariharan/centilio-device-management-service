@@ -1,5 +1,6 @@
 var DeviceParam = require('../models/device-param-model').DeviceParam,
-    DeviceTypeManagementService = require('./device-type-management-service');
+    DeviceTypeManagementService = require('./device-type-management-service'),
+    DeviceManagementService = require('./device-management-service');
 
 exports.getAllDeviceParams = (callback) => {
   "use strict";
@@ -63,34 +64,22 @@ exports.getDeviceParam = (uuid, callback) => {
   });
 }
 
-exports.getDeviceParamsByDeviceUuid = (uuid, callback) => {
+exports.getDeviceParamsByDeviceUuid = (deviceUuid) => {
   "use strict";
 
-  DeviceParam.find({uuid: uuid}, function (err, deviceParams) {
-    if (err) {
-      console.error('error while reading device params from DB = ' + err);
-      return callback(err, null);
-    }
+  return new Promise(
+    (resolve, reject) => {
+      DeviceManagementService.getDevice(deviceUuid)
+      .then(device => {
+        console.log('\ndevice: %s', JSON.stringify(device));
 
-    if (!deviceParams.length) {
-      console.error('No device params found in DB...');
-      return callback(0, null);
-    }
+        if (!device || device === undefined) reject(400); // invalid device id
 
-    var context = {
-      deviceParams: deviceParams.map(function(deviceParam) {
-        var dev = {
-          uuid: deviceParam.uuid,
-          timestamp: deviceParam.timestamp,
-          name: deviceParam.name,
-          deviceType: deviceParam.deviceType,
-          description: deviceParam.description,
-          category: deviceParam.category,
-        };
-        return dev;
-      }),
-    };
-    return callback(0, context);
+        // match all params with given deviceType of the device or deviceType "all"
+        return DeviceParam.find({deviceType: {$in: [device.deviceType, 'all']}});
+      })
+      .then(foundDeviceParams => { resolve(foundDeviceParams); })
+      .catch(err => { reject(err); });
   });
 }
 
