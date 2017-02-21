@@ -246,10 +246,7 @@ exports.addClient = (req, res) => {
     if (!req || !req.body) throw(400);
     return _prepareToSave(req.body);
   })
-  .then(clientDTO => {
-    console.log('\nabout to save clientDTO ' + JSON.stringify(clientDTO.firstName));
-    return ClientManagementService.addClient(clientDTO);
-  })
+  .then(clientDTO => { return ClientManagementService.addClient(clientDTO); })
   .then(client => {
     if (!client || client === undefined) throw(500);
     console.log('saved client: ' + JSON.stringify(client.firstName));

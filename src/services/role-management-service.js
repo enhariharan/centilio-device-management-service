@@ -2,37 +2,22 @@ var Role = require('../models/role-model').Role,
     User = require('../models/user-model').User;
 
 exports.getAllRoles = (callback) => {
-  Role.find(function (err, roles) {
-    if (err) {
-      console.error('error while reading roles from DB = ' + err);
-      return callback(err, null);
-    }
-
-    if (!roles.length) {
-      console.info('No roles found in DB...');
-      return callback(0, null);
-    }
-
-    var context = {
-      roles: roles.map(function(role) {
-        var rol = {
-          uuid: role.uuid,
-          timestamp: role.timestamp,
-          name: role.name,
-          status: role.status,
-        };
-        return rol;
-      }),
-    };
-    return callback(0, context);
+  return new Promise(
+    (resolve, reject) => {
+      Role.find()
+       .then(roles => { resolve(roles); })
+       .catch(err => {
+         console.error('error while reading roles from DB: %s: %s ', err, err.stack);
+         reject(err);
+       });
   });
 }
 
 exports.getRole = (roleUuid) => {
   return new Promise(
     (resolve, reject) => {
-      Role.findOne({'uuid': roleUuid}).exec()
-      .then((role) => {
+      Role.findOne({'uuid': roleUuid})
+      .then(role => {
         if (role === undefined || !role) reject(err || 400);
         resolve(role);
       })
@@ -59,7 +44,7 @@ exports.getRoleByUsername = (username) => {
 exports.getRoleByClient = (clientUuid) => {
   return new Promise(
     (resolve, reject) => {
-      Client.findOne({'uuid': clientUuid}).exec()
+      Client.findOne({'uuid': clientUuid})
       .then(client => {
         if (client === undefined || !client) reject(err || 400);
         return Role.findOne({'uuid': client.role}).exec();
@@ -72,23 +57,22 @@ exports.getRoleByClient = (clientUuid) => {
   });
 }
 
-exports.addRole = (role, callback) => {
-  var roleToSave = new Role(role);
-  roleToSave.save(function(err) {
-    if (err) {
-      console.error('Error while saving role to database.');
-    }
-    return callback(err);
+exports.addRole = (role) => {
+  return new Promise(
+    (resolve, reject) => {
+      var roleToSave = new Role(role);
+      roleToSave.save()
+      .then(savedRole => { resolve(savedRole); })
+      .catch(err => { reject(err); })
   });
 }
 
-// TODO: Uncomment this method and fix to make this synchronous.
-// exports.CheckIfRolePresentByName = function(roleName) {
-//   console.info('rolename: ' + JSON.stringify(roleName));
-//   Role.count({name: roleName}, function(err, count) {
-//     if (err) {
-//       console.error('Error while querying for role %s from database.', roleName);
-//     }
-//     return count != 0;
-//   });
-// }
+exports.getRoleByName = (roleName) => {
+  return new Promise(
+    (resolve, reject) => {
+      console.info('rolename: ' + JSON.stringify(roleName));
+      Role.findOne({name: roleName})
+     .then(role => { resolve(role); })
+     .catch(err => { reject(err); })
+  })
+}

@@ -14,15 +14,16 @@ var getAllClients = () => {
   return new Promise(
     (resolve, reject) => {
       Client.find()
-      .then(clients => {resolve(clients)})
-      .catch(err => {reject(err)});
+      .then(clients => { resolve(clients); })
+      .catch(err => { reject(err); });
   });
 }
 
 var getAllClientsByCorporate = (orgName) => {
   return new Promise(
     (resolve, reject) => {
-      Client.find({'corporateName': orgName}).exec().then( clients => {
+      Client.find({'corporateName': orgName}).exec()
+      .then( clients => {
         if (!clients.length) resolve(0, null);
         resolve(clients);
       });
@@ -56,38 +57,33 @@ var getClient = (clientUuid) => {
       var findAllDevicesForClientQueryPromise = Device.find({client: clientUuid}).exec();
 
       // Now get the results of the async queries and collect all results into the result DTO
-      findClientQueryPromise.then(
-        client => {
-          if (client === null) resolve(clientDTO);
-          _fillDtoWithClientDetails(clientDTO, client);
-          return Role.find({uuid: client.role}).exec();
-        }
-      ).then(
-        role => {
-          clientDTO.role = role[0].name;
-          return findAllAddressesForClientQueryPromise;
-        }
-      ).then(
-        addresses => {
-          _fillDtoWithClientAdressDetails(clientDTO, addresses);
-          return findAllEmailsForClientQueryPromise;
-        }
-      ).then(
-        emails => {
-          _fillDtoWithClientEmailDetails(clientDTO, emails);
-          return findAllContactNumbersForClientQueryPromise;
-        }
-      ).then(
-        contactNumbers => {
-          _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
-          return findAllDevicesForClientQueryPromise;
-        }
-      ).then(
-        devices => {
-          _fillDtoWithDeviceDetails(clientDTO, devices);
-          resolve(clientDTO);
-        }
-      ).catch(err => { reject(err); });
+      findClientQueryPromise
+      .then(client => {
+        if (client === null) resolve(clientDTO);
+        _fillDtoWithClientDetails(clientDTO, client);
+        return Role.findOne({uuid: client.role}).exec();
+      })
+      .then(role => {
+        clientDTO.role = role.name;
+        return findAllAddressesForClientQueryPromise;
+      })
+      .then(addresses => {
+        _fillDtoWithClientAdressDetails(clientDTO, addresses);
+        return findAllEmailsForClientQueryPromise;
+      })
+      .then(emails => {
+        _fillDtoWithClientEmailDetails(clientDTO, emails);
+        return findAllContactNumbersForClientQueryPromise;
+      })
+      .then(contactNumbers => {
+        _fillDtoWithClientContactNumberDetails(clientDTO, contactNumbers);
+        return findAllDevicesForClientQueryPromise;
+      })
+      .then(devices => {
+        _fillDtoWithDeviceDetails(clientDTO, devices);
+        resolve(clientDTO);
+      })
+      .catch(err => { reject(err); });
     }
   );
 }
@@ -96,9 +92,9 @@ var getClientByUsername = (username) => {
   return new Promise(
     (resolve, reject) => {
       UserManagementService.getUserByCredentials({name: username})
-      .then(user => {return getClient(user.client);})
-      .then(client => {resolve(client);})
-      .catch(err => {reject(err)});
+      .then(user => { return getClient(user.client); })
+      .then(client => { resolve(client); })
+      .catch(err => { reject(err); });
   });
 }
 
@@ -107,43 +103,33 @@ var getClientByAuthCredentials = (req) => {
     (resolve, reject) => {
       var credentials = BasicAuth(req);
       getClientByUsername(credentials.name)
-      .then(client => {resolve(client);})
-      .catch(err => {reject(err)});
+      .then(client => { resolve(client); })
+      .catch(err => { reject(err); });
   });
 }
 
 var _validate = (client) => {
   return new Promise(
     (resolve, reject) => {
-      console.log('\n+_validate(%s)', client.firstName);
       if (!client.role || client.role === undefined ||
           !client.addresses || client.addresses === undefined || client.addresses.length === 0 ||
-          !client.emails || client.emails === undefined || client.emails.length === 0 ||
-          !client.contactNumbers || client.contactNumbers === undefined ||
-          client.contactNumbers.length === 0) reject(400);
+          !client.emails || client.emails === undefined || client.emails.length === 0) reject(400);
 
       // TODO: Email address validation must be done. Use Validator.isEmail().
       // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
 
-      console.log('\nabout to query role (%s)', client.role);
       RoleManagementService.getRole(client.role)
       .then(role => {
-        console.log('\nfound role (%s)', role.name);
         if (!role || role === undefined) reject(400);
-        console.log('\nclient (%s) is now considered valid', client.firstName);
         resolve(client);
       })
-      .catch(err => {
-        console.log('\nError caught while validating role (%s)', err);
-        reject(err);
-      });
+      .catch(err => { reject(err); });
   });
 };
 
 var _createPromises = (client) => {
   return new Promise(
     (resolve, reject) => {
-      console.log('\nReceived client: ' + JSON.stringify(client));
       var clientToSave = new Client({
         uuid: client.uuid,
         timestamp: client.timestamp,
@@ -196,7 +182,7 @@ var addClient = (client) => {
       .then(promises => {return Promise.all(promises);})
       .then(results => {resolve(results);})
       .catch(err => {
-        console.log('\naddClient().err ' + err);
+        console.log('\naddClient().err - %s: %s', err, err.stack);
         reject(err);
       });
   });
