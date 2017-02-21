@@ -5,7 +5,7 @@ var BasicAuth = require('basic-auth'),
 exports.initializeDB = (req, res) => {
   "use strict";
 
-  Validator.isValidCredentialsForInitialize(req)
+  Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => { return InitService.initializeDB(); })
   .then(result => {
     if (!result || result !== true || result === undefined) throw(500);
@@ -20,7 +20,7 @@ exports.initializeDB = (req, res) => {
 exports.initializeInstance = (req, res) => {
   "use strict";
 
-  Validator.isValidCredentialsForInitialize(req)
+  Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => { return InitService.initializeInstance(req.body); })
   .then(savedClient => {
     if (!savedClient || savedClient === undefined) throw(500);

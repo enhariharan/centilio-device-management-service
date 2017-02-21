@@ -70,7 +70,7 @@ var isAuthorizedForGetClientByUuid = (req) => {
   });
 };
 
-var isValidCredentialsForInitialize = (req) => {
+var isValidCredentialsForSuperAdminActivity = (req) => {
   return new Promise(
     (resolve, reject) => {
       var credentials = BasicAuth(req);
@@ -79,4 +79,4 @@ var isValidCredentialsForInitialize = (req) => {
    })
 }
 
-module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid, isValidCredentialsForInitialize};
+module.exports = {isValidCredentials, isUserAdmin, isAuthorizedForGetClientByUuid, isValidCredentialsForSuperAdminActivity};
