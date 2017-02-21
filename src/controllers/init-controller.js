@@ -16,6 +16,18 @@ exports.initializeDB = (req, res) => {
     return res.sendStatus(err);
   });
 };
+
+exports.initializeInstance = (req, res) => {
+  "use strict";
+
+  Validator.isValidCredentialsForInitialize(req)
+  .then(result => { return InitService.initializeInstance(req.body); })
+  .then(savedClient => {
+    if (!savedClient || savedClient === undefined) throw(500);
+    return res.status(200).send(savedClient);
+  })
+  .catch(err => {
+    console.error('err occurred while initializing instance: ' + JSON.stringify(err) + ' ' + err.stack );
     return res.sendStatus(err);
   });
 };

@@ -54,4 +54,5 @@ module.exports = function(app) {
   app.put('/users', user.updateUser);
 
   app.post('/init', init.initializeDB)
+  app.post('/instances', init.initializeInstance)
 };
