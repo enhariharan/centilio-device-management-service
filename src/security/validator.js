@@ -74,7 +74,7 @@ var isValidCredentialsForSuperAdminActivity = (req) => {
   return new Promise(
     (resolve, reject) => {
       var credentials = BasicAuth(req);
-      if (credentials.name.toUpperCase() !== 'CENTILIO' || credentials.pass !== '10cA1UY7n23') reject(403);
+      if (credentials.name.toUpperCase() !== 'CENTILIO' || credentials.pass !== '10cA1UY7n23') resolve(false);
       resolve(true);
    })
 }

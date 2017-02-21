@@ -54,15 +54,28 @@ var utils = require('../models/utilities'),
  exports.getAllDevices = (req, res) => {
   "use strict";
 
-  Validator.isValidCredentials(req)
+  Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
-    if (!result || result === undefined) throw (403);
-    var credentials = BasicAuth(req);
-    return UserManagementService.getUserByCredentials(credentials);
+    if (result) return DeviceManagementService.getAllDevices();
+    else return Validator.isValidCredentials(req);
   })
-  .then(user => { return DeviceManagementService.getDevicesByClient(user.client, req.query); })
+  .then(result => {
+    if (result.length > 0 && result[0].deviceType !== undefined) return result;
+    else {
+      var credentials = BasicAuth(req);
+      return UserManagementService.getUserByCredentials(credentials);
+    }
+  })
+  .then(result => {
+    console.log('\nresult: %s', JSON.stringify(result));
+    if (result.length > 0 && result[0].deviceType !== undefined) return result;
+    else return DeviceManagementService.getDevicesByClient(result.client, req.query);
+  })
   .then(devices => { return res.status(200).send(devices); })
-  .catch(err => { return res.sendStatus(err); });
+  .catch(err => {
+    console.log('\nerr: %s', JSON.stringify(err) + err.stack);
+    return res.sendStatus(err);
+  });
 };
 
 /**
@@ -247,12 +260,10 @@ exports.removeDeviceParamsByDeviceUuid = (req, res) => {
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
-    console.log('removeDeviceParamsByDeviceUuid.isValidCredentialsForSuperAdminActivity(): %s', JSON.stringify(result));
     if (!result || result === undefined) reject(403);
     return DeviceManagementService.getDevice(uuid);
   })
   .then(device => {
-    console.log('removeDeviceParamsByDeviceUuid.device: %s', JSON.stringify(device));
     if (!device || device === undefined) return res.status('400').send('Error: No such device found in DB...');
     return DeviceReadingManagementService.removeDeviceParamsByDeviceUuid(uuid);
   })
