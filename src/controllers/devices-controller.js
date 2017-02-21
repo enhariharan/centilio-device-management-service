@@ -74,9 +74,11 @@ var utils = require('../models/utilities'),
  *
  * @apiSuccess (200) {Device} Device JSON having given uuid or deviceId.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
- *   {
- *     "devices": [{
+ * HTTP/1.1 200 OK
+ * {
+ *   "devices":
+ *   [
+ *     {
  *       "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
  *       "timestamp":"2016-12-30T11:52:28.637Z",
  *       "name":"Device 01",
@@ -86,8 +88,9 @@ var utils = require('../models/utilities'),
  *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
  *       "deviceId": "01234567890123456789",
  *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *     }]
- *   }
+ *     }
+ *   ]
+ * }
  */
 exports.getDevice = (req, res) => {
   "use strict";
@@ -127,33 +130,42 @@ exports.getDevice = (req, res) => {
  *
  * @apiSuccess (200) {Device} Device readings array as JSON.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
- *   {
- *     "deviceReadings": [{
- *       "uuid": "f982cea9-d271-445d-a937-6a5dafef6d29",
- *       "timestamp": "2017-01-18T07:14:34.472Z",
- *       "device": "20e7edea-0db9-4595-844f-c42b1b6e3951",
- *       "readings": [{
- *           "type": "latitude",
- *           "value": "100.01",
- *           "_id": "587f15da8636f73e30eff809"
- *         }, {
- *           "type": "longitude",
- *           "value": "100.001",
- *           "_id": "587f15da8636f73e30eff808"
- *         }, {
- *           "type": "charging status",
- *           "value": "charging",
- *           "_id": "587f15da8636f73e30eff807"
- *         }, {
- *           "type": "current charge",
- *           "value": "80",
- *           "_id": "587f15da8636f73e30eff806"
- *         }]
- *     },
- *     ...
- *     ...
- *  ]}
+ * HTTP/1.1 200 OK
+ * {
+ *   "deviceReadings":
+ *     [
+ *       {
+ *         "uuid": "f982cea9-d271-445d-a937-6a5dafef6d29",
+ *         "timestamp": "2017-01-18T07:14:34.472Z",
+ *         "device": "20e7edea-0db9-4595-844f-c42b1b6e3951",
+ *         "readings":
+ *         [
+ *           {
+ *             "type": "latitude",
+ *             "value": "100.01",
+ *             "_id": "587f15da8636f73e30eff809"
+ *           },
+ *           {
+ *             "type": "longitude",
+ *             "value": "100.001",
+ *             "_id": "587f15da8636f73e30eff808"
+ *           },
+ *           {
+ *             "type": "charging status",
+ *             "value": "charging",
+ *             "_id": "587f15da8636f73e30eff807"
+ *           },
+ *           {
+ *             "type": "current charge",
+ *             "value": "80",
+ *             "_id": "587f15da8636f73e30eff806"
+ *           }
+ *         ]
+ *       },
+ *       ...
+ *       ...
+ *     ]
+ * }
  */
 exports.getDeviceReadingsByDeviceUuid = (req, res) => {
   "use strict";
@@ -244,18 +256,18 @@ exports.getDeviceParamsByDeviceUuid = (req, res) => {
  *
  * @apiSuccess (201) {Device} Created devices is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 201 Created
- *   {
- *     "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
- *     "timestamp": 1483155714863,
- *     "name": "device 100",
- *     "latitude": "103.001",
- *     "longitude": "103.001",
- *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
- *     "deviceId": "01234567890123456789",
- *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *     "status": "new"
- *   }
+ * HTTP/1.1 201 Created
+ * {
+ *   "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
+ *   "timestamp": 1483155714863,
+ *   "name": "device 100",
+ *   "latitude": "103.001",
+ *   "longitude": "103.001",
+ *   "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *   "deviceId": "01234567890123456789",
+ *   "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *   "status": "new"
+ * }
  *
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
@@ -305,18 +317,18 @@ exports.addDevice = function (req, res) {
  *
  * @apiSuccess (200) {Device} Updated device is returned as JSON.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
- *   {
- *     "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
- *     "timestamp": 1483155714863,
- *     "name": "device 100",
- *     "latitude": "103.001",
- *     "longitude": "103.001",
- *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
- *     "deviceId": "01234567890123456789",
- *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *     "status": "new"
- *   }
+ * HTTP/1.1 200 OK
+ * {
+ *   "uuid": "22e0805a-7002-4ae7-be1e-4877dd59fc04",
+ *   "timestamp": 1483155714863,
+ *   "name": "device 100",
+ *   "latitude": "103.001",
+ *   "longitude": "103.001",
+ *   "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *   "deviceId": "01234567890123456789",
+ *   "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *   "status": "new"
+ * }
  *
  * @apiError (400) {String} BadRequest Error code 400 is returned if the JSON format is incorrect.
  * @apiError (500) {String} InternalServerError Error code 500 is returned in case of some error in the server.
