@@ -98,6 +98,7 @@ exports.getDeviceReadingsByDeviceUuid = (deviceUuid, showLatestOnly, fromTimeSta
   });
 }
 
+
 exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly, fromTimeStamp, toTimeStamp) => {
   return new Promise(
     (resolve, reject) => {
@@ -115,5 +116,17 @@ exports.getAllDeviceReadingsByDevices = (devices, showLatestOnly, fromTimeStamp,
         }
       });
       Promise.all(deviceReadingsPromises).then(readings => {resolve(readings);});
+  });
+}
+
+exports.removeDeviceParamsByDeviceUuid = (deviceUuid) => {
+  return new Promise(
+    (resolve, reject) => {
+      DeviceReading.find({device: deviceUuid}).remove()
+      .then(result => {
+        console.log('result of removing deviceParams for device (%s): ', JSON.stringify(deviceUuid), JSON.stringify(result));
+        resolve(result);
+      })
+      .catch(err => { reject(err); });
   });
 }

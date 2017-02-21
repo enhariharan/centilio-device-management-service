@@ -236,6 +236,36 @@ exports.getDeviceParamsByDeviceUuid = (req, res) => {
   });
 };
 
+/*
+ * Undocumented method to wipe out device params, of a given device, from the DB
+ */
+exports.removeDeviceParamsByDeviceUuid = (req, res) => {
+  "use strict";
+
+  console.log('removeDeviceParamsByDeviceUuid()');
+  var uuid = req.params.uuid;
+
+  Validator.isValidCredentialsForSuperAdminActivity(req)
+  .then(result => {
+    console.log('removeDeviceParamsByDeviceUuid.isValidCredentialsForSuperAdminActivity(): %s', JSON.stringify(result));
+    if (!result || result === undefined) reject(403);
+    return DeviceManagementService.getDevice(uuid);
+  })
+  .then(device => {
+    console.log('removeDeviceParamsByDeviceUuid.device: %s', JSON.stringify(device));
+    if (!device || device === undefined) return res.status('400').send('Error: No such device found in DB...');
+    return DeviceReadingManagementService.removeDeviceParamsByDeviceUuid(uuid);
+  })
+  .then(result => {
+    if (!result || result === undefined) return res.status('500').send('Error: Could not remove device params from DB');
+    return res.status('200').send(result);
+  })
+  .catch(err => {
+    console.error('Err: %s - %s', err, err.stack);
+    return res.status(err).send(err.stack);
+  });
+};
+
 /**
  * @api {post} /devices Add a new device. Only admin or logged in user can add new device.
  * @apiName addDevice
