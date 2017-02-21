@@ -82,13 +82,12 @@ exports.addRole = (role, callback) => {
   });
 }
 
-// TODO: Uncomment this method and fix to make this synchronous.
-// exports.CheckIfRolePresentByName = function(roleName) {
-//   console.info('rolename: ' + JSON.stringify(roleName));
-//   Role.count({name: roleName}, function(err, count) {
-//     if (err) {
-//       console.error('Error while querying for role %s from database.', roleName);
-//     }
-//     return count != 0;
-//   });
-// }
+exports.getRoleByName = function(roleName) {
+  return new Promise(
+    (resolve, reject) => {
+      console.info('rolename: ' + JSON.stringify(roleName));
+      Role.findOne({name: roleName})
+     .then(role => { resolve(role); })
+     .catch(err => { reject(err); })
+  })
+}
