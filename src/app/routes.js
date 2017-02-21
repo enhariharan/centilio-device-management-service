@@ -1,15 +1,17 @@
 var bodyparser = require('body-parser'),
     jsonParser = bodyparser.json();
 
-var main = require('./controllers/main.js'),
-    devices = require('./controllers/devices-controller.js'),
-    deviceParams = require('./controllers/device-params-controller.js'),
-    clients = require('./controllers/clients-controller.js'),
-    roles = require('./controllers/roles-controller.js'),
-    deviceTypes = require('./controllers/device-types-controller.js'),
-    deviceReadings = require('./controllers/device-readings-controller.js'),
-    user = require('./controllers/user-controller.js'),
-    login = require('./controllers/login-controller.js');
+var main = require('../../src/controllers/main'),
+    devices = require('../../src/controllers/devices-controller'),
+    deviceParams = require('../../src/controllers/device-params-controller'),
+    clients = require('../../src/controllers/clients-controller'),
+    roles = require('../../src/controllers/roles-controller'),
+    deviceTypes = require('../../src/controllers/device-types-controller'),
+    deviceReadings = require('../../src/controllers/device-readings-controller'),
+    user = require('../../src/controllers/users-controller'),
+    events = require('../../src/controllers/events-controller'),
+    login = require('../../src/controllers/login-controller'),
+    init = require('../../src/controllers/init-controller');
 
 module.exports = function(app) {
   "use strict";
@@ -21,7 +23,10 @@ module.exports = function(app) {
 
   app.get('/devices', devices.getAllDevices);
   app.get('/devices/:uuid', devices.getDevice);
+  app.put('/devices/:uuid', devices.updateDevice);
   app.get('/devices/:uuid/deviceReadings', devices.getDeviceReadingsByDeviceUuid);
+  app.get('/devices/:uuid/deviceParams', devices.getDeviceParamsByDeviceUuid);
+  app.delete('/devices/:uuid/deviceReadings', devices.removeDeviceParamsByDeviceUuid);
   app.post('/devices', jsonParser, devices.addDevice);
 
   app.get('/deviceParams', deviceParams.getAllDeviceParams);
@@ -36,6 +41,8 @@ module.exports = function(app) {
   app.get('/deviceReadings/:uuid', deviceReadings.getDeviceReading);
   app.post('/deviceReadings', jsonParser, deviceReadings.addDeviceReading);
 
+  app.post('/events', jsonParser, events.sendEvent);
+
   app.get('/clients', clients.getAllClients);
   app.get('/clients/:uuid', clients.getClient);
   app.post('/clients', jsonParser, clients.addClient);
@@ -47,4 +54,7 @@ module.exports = function(app) {
 
   app.post('/users', user.addUser);
   app.put('/users', user.updateUser);
+
+  app.post('/init', init.initializeDB)
+  app.post('/instances', init.initializeInstance)
 };
