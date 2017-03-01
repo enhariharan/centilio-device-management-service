@@ -2,18 +2,19 @@ var BasicAuth = require('basic-auth'),
     User = require('../models/user-model').User,
     UserManagementService = require('../services/user-management-service'),
     ClientManagementService = require('../services/client-management-service'),
+    Errors = require('./errors').errors,
     RoleManagementService = require('../services/role-management-service');
 
 var isValidCredentials = (req) => {
   return new Promise(
     (resolve, reject) => {
       var credentials = BasicAuth(req);
-      if (credentials === undefined || !credentials) reject(403);
+      if (credentials === undefined || !credentials) throw(Errors.emptyCredentials);
       User.findOne({username: credentials.name}).exec()
       .then(u => {
         if (!u || u === undefined
            || credentials.name.toLowerCase().localeCompare(u.username.toLowerCase())
-           || credentials.pass.localeCompare(u.password)) reject(403);
+           || credentials.pass.localeCompare(u.password)) throw(Errors.invalidCredentials);
         resolve(true);
       })
       .catch(err => {reject(err);});
@@ -25,16 +26,13 @@ var isUserAdmin = (req) => {
     (resolve, reject) => {
       var credentials = BasicAuth(req);
       isValidCredentials(req)
-      .then(result => {
-        if (!result) reject(403);
-        return UserManagementService.getUserByCredentials(credentials);
-      })
+      .then(result => { return UserManagementService.getUserByCredentials(credentials); })
       .then(user => {
-        if (!user || user === undefined || !user.role || user.role === undefined) reject(403);
+        if (!user || user === undefined || !user.role || user.role === undefined) throw(Errors.invalidCredentials);
         return RoleManagementService.getRole(user.role);
       })
       .then(role => {
-        if (!role || role === undefined || role.name !== 'admin') reject(403);
+        if (!role || role === undefined || role.name !== 'admin') throw(Errors.invalidCredentials);
         resolve(true);
       })
       .catch(err => { reject(err); });
@@ -50,20 +48,16 @@ var isAuthorizedForGetClientByUuid = (req) => {
       var credentials = BasicAuth(req);
       isValidCredentials(req)
       .then(result => {
-        if (!result) reject(403);
-        console.log('\nisValidCredentials() returned true');
+        if (!result) throw(Errors.invalidCredentials);
         return ClientManagementService.getClientByAuthCredentials(req);
       })
       .then(client => {
-        if (!client || client === undefined) reject(403);
+        if (!client || client === undefined) throw(Errors.invalidCredentials);
         if (client.uuid === req.params.uuid) resolve(true);
-        console.log('\nreq.params.uuid ' + req.params.uuid);
-        console.log('\nreturned cient %s, $s' + client.firstName, client.uuid);
         return RoleManagementService.getRoleByUsername(credentials.name);
       })
       .then(role => {
-        if (!role || role === undefined || role.name !== 'admin') reject(403);
-        console.log('\nreturned role ' + role.name);
+        if (!role || role === undefined || role.name !== 'admin') throw(Errors.invalidCredentials);
         resolve(true);
       })
       .catch(err => {reject(err);});
