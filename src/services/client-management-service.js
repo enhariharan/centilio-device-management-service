@@ -8,14 +8,18 @@ var BasicAuth = require('basic-auth'),
     Role = require('../models/role-model').Role,
     Validator = require('validator'),
     RoleManagementService = require('./role-management-service'),
-    UserManagementService = require('./user-management-service');
+    UserManagementService = require('./user-management-service'),
+    Errors = require('../security/errors').errors;
 
 var getAllClients = () => {
   return new Promise(
     (resolve, reject) => {
       Client.find()
       .then(clients => { resolve(clients); })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 }
 
@@ -26,6 +30,10 @@ var getAllClientsByCorporate = (orgName) => {
       .then( clients => {
         if (!clients.length) resolve(0, null);
         resolve(clients);
+      })
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
       });
   });
 }
@@ -59,7 +67,7 @@ var getClient = (clientUuid) => {
       // Now get the results of the async queries and collect all results into the result DTO
       findClientQueryPromise
       .then(client => {
-        if (client === null) resolve(clientDTO);
+        if (!client || client === undefined) throw(Errors.invalidClientUuid);
         _fillDtoWithClientDetails(clientDTO, client);
         return Role.findOne({uuid: client.role}).exec();
       })
@@ -83,7 +91,10 @@ var getClient = (clientUuid) => {
         _fillDtoWithDeviceDetails(clientDTO, devices);
         resolve(clientDTO);
       })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
     }
   );
 }
@@ -94,7 +105,10 @@ var getClientByUsername = (username) => {
       UserManagementService.getUserByCredentials({name: username})
       .then(user => { return getClient(user.client); })
       .then(client => { resolve(client); })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 }
 
@@ -104,26 +118,32 @@ var getClientByAuthCredentials = (req) => {
       var credentials = BasicAuth(req);
       getClientByUsername(credentials.name)
       .then(client => { resolve(client); })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 }
 
 var _validate = (client) => {
   return new Promise(
     (resolve, reject) => {
-      if (!client.role || client.role === undefined ||
-          !client.addresses || client.addresses === undefined || client.addresses.length === 0 ||
-          !client.emails || client.emails === undefined || client.emails.length === 0) reject(400);
+      if (!client.role || client.role === undefined) throw(emptyClientRole);
+      if (!client.addresses || client.addresses === undefined || client.addresses.length === 0) throw(emptyClientAddresses);
+      if (!client.emails || client.emails === undefined || client.emails.length === 0) throw(emptyClientEmails);
 
       // TODO: Email address validation must be done. Use Validator.isEmail().
       // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
 
       RoleManagementService.getRole(client.role)
       .then(role => {
-        if (!role || role === undefined) reject(400);
+        if (!role || role === undefined) throw(invalidClientRole);
         resolve(client);
       })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 };
 
@@ -182,7 +202,7 @@ var addClient = (client) => {
       .then(promises => {return Promise.all(promises);})
       .then(results => {resolve(results);})
       .catch(err => {
-        console.log('\naddClient().err - %s: %s', err, err.stack);
+        if (err.code === undefined) reject({code: '500', reason: err});
         reject(err);
       });
   });

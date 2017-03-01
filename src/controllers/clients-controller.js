@@ -70,22 +70,16 @@ exports.getAllClients = (req, res) => {
 
   // Validate input and exit in case of an error right now
   Validator.isUserAdmin(req)
-  .then(result => {
-    if (!result) throw (403);
-    return ClientManagementService.getClientByAuthCredentials(req);
-  })
+  .then(result => { return ClientManagementService.getClientByAuthCredentials(req); })
   .then(client => {
-    if (!client || client === undefined) return res.sendStatus(403);
+    if (!client || client === undefined) throw(invalidCredentials);
     return ClientManagementService.getAllClientsByCorporate(client.corporateName);
   })
-  .then(context => {
-    if (!context) return res.status('200').send('No clients found in DB...');
-    return res.status('200').send(context);
-  })
+  .then(client => { return res.status('200').send(client); })
   .catch(err => {
-      console.error('Err: %s', JSON.stringify(err));
-      return res.status(err.code).send(err);
-    });
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
+  });
 };
 
 /**
@@ -98,67 +92,39 @@ exports.getAllClients = (req, res) => {
  *
  * @apiSuccess (200) {Client[]} Clients JSON array of 1 client having given uuid.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
- *   {
- *     "clients": [
- *       {
- *         "uuid": "491eeac5-f7c5-4c08-a19a-0dc376098702",
- *         "timestamp": "2016-12-30T12:32:20.819Z",
- *         "name": "Ashok Kumar",
- *         "type": "retail"
- *         "addresses" :
- *           [
- *             {
- *               "line1" : "123, ABC Road",
- *               "line2" : "DEF Blvd",
- *               "city" : "GHIJK City",
- *               "state" : "LM State",
- *               "countryCode" : "IN",
- *               "zipCode" : "NOPQRS",
- *               "latitude" : "100.01",
- *               "longitude" : "100.01",
- *               "type" : "work",
- *               "uuid" : "9eab071b-529a-4175-8033-7043a8fcc510",
- *               "timestamp" : ISODate("2016-12-31T06:34:50.615Z"),
- *               "status" : "active",
- *               "_id" : ObjectId("5867518afc5bcb32f456f9c5") *              },
- *             },
- *             {
- *               "line1" : "Address line 1",
- *               "line2" : "Address line 2",
- *               "city" : "City name",
- *               "state" : "State Code",
- *               "countryCode" : "country Code",
- *               "zipCode" : "ZiPCoDe",
- *               "latitude" : "100.01",
- *               "longitude" : "100.01",
- *               "type" : "home",
- *               "uuid" : "9eab071b-529a-4175-8033-7043a8fcc510",
- *               "timestamp" : ISODate("2016-12-31T06:34:50.615Z"),
- *               "status" : "active",
- *               "_id" : ObjectId("5867518afc5bcb32f456f9c5")
- *             },
- *           ]
- *         {
- *           "uuid": "491eeac5-f7c5-4c08-a19a-0dc376098612",
- *           "timestamp": "2016-12-28T12:32:20.819Z",
- *           "name": "Centilio",
- *           "type": "corporate"
- *         },
- *       ]
- *     }
+ * {
+ *   "corporateName": "AB Inc",
+ *   "firstName": "John",
+ *   "lastName": "Doe",
+ *   "primaryEmail": "ashok.kumar@centilio.com",
+ *   "type": "corporate",
+ *   "addresses": [{
+ *     "line1": "123, ABC Road",
+ *     "line2": "DEF Blvd",
+ *     "city": "GHIJK City",
+ *     "state": "LM State",
+ *     "countryCode": "IN",
+ *     "zipCode": "NOPQRS",
+ *     "latitude": "100.01",
+ *     "longitude": "100.01",
+ *     "type": "work"
+ *   }],
+ *   "emails": [{
+ *     "email": "ashok.kumar@centilio.com",
+ *     "type": "work"
+ *   }],
+ *   "contactNumbers": [{
+ *     "number": "+919972012345",
+ *     "type": "work"
+ *   }],
+ *   "role": "3c31410e-bfa7-4fa1-95f6-91fd39eac4f0"
+ * }
  */
 exports.getClient = (req, res) => {
   "use strict";
   Validator.isAuthorizedForGetClientByUuid(req)
-  .then(result => {
-    if (!result) throw(403);
-    return ClientManagementService.getClient(req.params.uuid);
-  })
-  .then(client => {
-    if (!client || client === undefined) return res.status('200').send('No clients found in DB...');
-    return res.status('200').send(client);
-  })
+  .then(result => { return ClientManagementService.getClient(req.params.uuid); })
+  .then(client => { return res.status('200').send(client); })
   .catch(err => {
       console.error('Err: %s', JSON.stringify(err));
       return res.status(err.code).send(err);
@@ -208,6 +174,7 @@ var _prepareToSave = (data) => {
  *          "corporateName": "AB Inc",
  *          "firstName" : "John",
  *          "lastName" : "Doe",
+ *          "primaryEmail": "ashok.kumar@centilio.com",
  *          "type": "corporate",
  *          "addresses": [{
  *            "line1": "123, ABC Road",
@@ -241,15 +208,13 @@ var _prepareToSave = (data) => {
 exports.addClient = (req, res) => {
   Validator.isUserAdmin(req)
   .then(result => {
-    console.log('\nValidator result is ' + JSON.stringify(result));
-    if (!result || result === false) throw(403);
-    if (!req || !req.body) throw(400);
+    if (!req || req === undefined || !req.body || req.body === undefined) throw(emptyReqBody);
     return _prepareToSave(req.body);
   })
   .then(clientDTO => { return ClientManagementService.addClient(clientDTO); })
   .then(client => {
-    if (!client || client === undefined) throw(500);
-    console.log('saved client: ' + JSON.stringify(client.firstName));
+    if (!client || client === undefined) throw(errAddingClient);
+    console.log('saved client: %s', JSON.stringify(client));
     return res.status('201').send(client);
   })
   .catch(err => {
