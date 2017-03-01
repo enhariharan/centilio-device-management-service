@@ -112,8 +112,7 @@ exports.login = function (req, res) {
     res.status(200).send(client);
   })
   .catch(err => {
-    if (err == 500) console.error('500 - error fetching user details');
-    if (err == 403) console.error('403 - incorrect username or password');
-    res.sendStatus(err);
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };

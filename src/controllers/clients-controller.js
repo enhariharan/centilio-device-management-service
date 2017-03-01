@@ -83,9 +83,9 @@ exports.getAllClients = (req, res) => {
     return res.status('200').send(context);
   })
   .catch(err => {
-    if (err === 403 || err === 400) return res.sendStatus(err);
-    return res.sendStatus('500');
-  });
+      console.error('Err: %s', JSON.stringify(err));
+      return res.status(err.code).send(err);
+    });
 };
 
 /**
@@ -160,8 +160,8 @@ exports.getClient = (req, res) => {
     return res.status('200').send(client);
   })
   .catch(err => {
-    if (err === false || err === 403) return res.sendStatus(403);
-    if (err) return res.status('500').send('error encountered while reading client from DB' + err.stack);
+      console.error('Err: %s', JSON.stringify(err));
+      return res.status(err.code).send(err);
   });
 };
 
@@ -253,9 +253,7 @@ exports.addClient = (req, res) => {
     return res.status('201').send(client);
   })
   .catch(err => {
-    console.log('saving client threw err: ' + err.stack);
-    if (err === false || err === 403) return res.sendStatus('403');
-    if (err === 400) return res.sendStatus('400');
-    return res.sendStatus('500');
+      console.error('Err: %s', JSON.stringify(err));
+      return res.status(err.code).send(err);
   });
 };
