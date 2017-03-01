@@ -123,25 +123,25 @@ exports.addDevice = (device) => {
     (resolve, reject) => {
       if (device.deviceType === undefined || !device.deviceType) {
         console.log('device does not have a valid device type.');
-        reject(400);
+        throw(400);
       }
       if (device.uuid === undefined || !device.uuid || device.deviceId === undefined || !device.deviceId) {
         console.log('device does not have a valid uuid and valid deviceId.');
-        reject(400);
+        throw(400);
       }
 
       this.getDevice(device.uuid)
       .then(foundDevice => {
         if (foundDevice && foundDevice !== undefined) {
           console.log('device with given uuid (%s) is already present.', foundDevice.uuid);
-          reject(400);
+          throw(400);
         }
         return this.getDevice(device.deviceId);
       })
       .then(foundDevice => {
         if (foundDevice && foundDevice !== undefined) {
           console.log('device with given deviceId (%s) is already present.', foundDevice.deviceId);
-          reject(400);
+          throw(400);
         }
         return DeviceTypeManagementService.getDeviceType(device.deviceType)
       })
@@ -172,7 +172,7 @@ exports.addDevice = (device) => {
         resolve(savedDevice);
       })
       .catch(err => {
-        console.error('Error while saving device to database.' + err.stack);
+        console.error('Error while saving device to database. ' + err + err.stack);
         reject(err);
       });
   });
