@@ -7,5 +7,6 @@ exports.errors = {
   emptyClientEmails: {code: '400', reason: 'client email cannot be empty.'},
   emptyReqBody: {code: '400', reason: 'request body is empty or not present'},
   invalidClientUuid: {code: '400', reason: 'client with given UUID was not found.'},
-  errAddingClient: {code: '500', reason: 'error adding client to DB.'}
+  errAddingClient: {code: '500', reason: 'error adding client to DB.'},
+  userNotFound: {code: '400', reason: 'user with given username not found.'},
 };

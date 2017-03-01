@@ -10,58 +10,55 @@ var BasicAuth = require('basic-auth'),
  * @apiGroup Device
  *
  * @apiParam {json} Request-header must contain the credentials of logged in user.
- * @apiParam {json} all /devices?all=true will return all devices in the corporate, provided the logged in user
- * has role admin.
- * @apiParam {json} unassignedOnly /devices?unassignedOnly=true will return all devices in the corporate that are
- * not yet assigned to any user, provided the logged in user has role admin. If false, only assigned devices will
- * be returned.  This option must be preceded by the param all=true else it will be ignored.
- * @apiParam {json} showRetiredDevices /devices?showRetiredDevices=true will return all devices including retired
- * devices also. This option is set to false by default.
+ * @apiParam {json} all /devices?all=true will return all devices in the corporate, provided the logged
+ * in user has role admin.
+ * @apiParam {json} unassignedOnly /devices?unassignedOnly=true will return all devices in the corporate
+ * that are not yet assigned to any user, provided the logged in user has role admin. If false, only
+ * assigned devices will be returned. This option must be preceded by the param all=true else it will be
+ * ignored.
+ * @apiParam {json} showRetiredDevices /devices?showRetiredDevices=true will return all devices
+ * including retired devices also. This option is set to false by default.
  *
  * @apiSuccess (200) {Device[]} devices Array of devices.
  * @apiSuccessExample {json} Success-Response:
- *   HTTP/1.1 200 OK
+ * HTTP/1.1 200 OK
+ * {
+ *   "devices": [{
+ *     "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
+ *     "timestamp":"2016-12-30T11:52:28.637Z",
+ *     "name":"Device 01",
+ *     "latitude":"100.001",
+ *     "longitude":"100.001",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId":"01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status":"new"
+ *   },
  *   {
- *     "devices": [{
- *       "uuid":"0123456789012345678901234567890123456789012345678901234567890123",
- *       "timestamp":"2016-12-30T11:52:28.637Z",
- *       "name":"Device 01",
- *       "latitude":"100.001",
- *       "longitude":"100.001",
- *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
- *       "deviceId":"01234567890123456789",
- *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *       "status":"new"
- *     },
- *     {
- *       "uuid":"0123456789012345678901234567890123456789012345678901234567890124",
- *       "timestamp":"2016-12-28T11:52:28.637Z",
- *       "name":"Device 02",
- *       "latitude":"100.001",
- *       "longitude":"100.001",
- *       "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
- *       "deviceId":"01234567890123456789",
- *       "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
- *       "status":"new"
- *     }]
- *   }
+ *     "uuid":"0123456789012345678901234567890123456789012345678901234567890124",
+ *     "timestamp":"2016-12-28T11:52:28.637Z",
+ *     "name":"Device 02",
+ *     "latitude":"100.001",
+ *     "longitude":"100.001",
+ *     "deviceType":"5612d680-e008-4482-97e2-0391ce5d3994",
+ *     "deviceId":"01234567890123456789",
+ *     "client": "b42f0bad-5a1d-485d-a0f2-308b8f53aed0"
+ *     "status":"new"
+ *   }]
+ * }
  */
  exports.getAllUsers = (req, res) => {
   "use strict";
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
-    console.log('\nresult 1: ' + JSON.stringify(result));
     if (result) return UserManagementService.getAllUsers();
     else return {};
   })
-  .then(users => {
-    console.log('\nusers: ' + JSON.stringify(users));
-    return res.status(200).send(users);
-  })
+  .then(users => { return res.status(200).send(users); })
   .catch(err => {
-    console.log('\nerr: %s', JSON.stringify(err) + err.stack);
-    return res.sendStatus(err);
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };
 
@@ -93,18 +90,18 @@ var BasicAuth = require('basic-auth'),
  */
 exports.addUser = function (req, res) {
   "use strict";
-  var UserAlreadyPresentException = {};
 
   // Get the credentials
   var credentials = BasicAuth(req);  // TODO: Change this to JWT based stateless token based authentication
 
   UserManagementService.addUser(credentials, req.body)
   .then(user => {
-    console.info('in controller - added new user: ' + JSON.stringify(user));
+    console.info('in controller - added new user: ' + JSON.stringify(user.email));
     return res.sendStatus(201);
-  }).catch(err => {
-    console.error('in controller - err occured while adding new user: ' + JSON.stringify(err));
-    return res.sendStatus(err);
+  })
+  .catch(err => {
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };
 
@@ -156,7 +153,7 @@ exports.updateUser = function (req, res) {
     return;
   })
   .catch(err => {
-    res.status(500).send('Internal service error while modifying user.');
-    return;
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };

@@ -1,6 +1,7 @@
 var User = require('../models/user-model').User,
     Client = require('../models/client-model').Client,
     Email = require('../models/client-model').Email,
+    Errors = require('../security/errors').errors,
     Utilities = require('../models/utilities');
 
 exports.getUserByCredentials = (credentials) => {
@@ -8,7 +9,7 @@ exports.getUserByCredentials = (credentials) => {
     function(resolve, reject) {
       User.findOne({username: credentials.name}).exec()
       .then(user => {
-          if (user !== null && user.length === 0) reject(400);
+          if (!user || user == undefined) throw(Errors.invalidCredentials);
           var userDTO = {
             username: user.username,
             gender: user.gender,
@@ -18,7 +19,10 @@ exports.getUserByCredentials = (credentials) => {
           };
           resolve(userDTO);
       })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 };
 
@@ -27,7 +31,10 @@ exports.getAllUsers = () => {
     function(resolve, reject) {
       User.find().exec()
       .then(users => { resolve(users); })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 };
 
@@ -38,20 +45,19 @@ exports.addUser = (credentials, newUserDetails) => {
       var userToSave = null;
       var emailToSave = null;
 
-      User.find({username: credentials.name}).exec()
-      .then(users => {
-        console.log('\nfound credentials for user: ' + credentials.name);
-        if (!users || users === undefined || users.length === 0) reject('400 - ' + credentials.name +' not found.');
-        return Client.find({uuid: users[0].client}).exec();
+      User.findOne({username: credentials.name}).exec()
+      .then(user => {
+        if (!user || user === undefined) throw(Errors.userNotFound);
+        return Client.findOne({uuid: user.client}).exec();
       })
-      .then(adminClients => {
+      .then(adminClient => {
         var clientToSave = new Client({
           uuid: Utilities.getUuid(),
           timestamp: Utilities.getTimestamp(),
           firstName: newUserDetails.firstName,
           lastName: newUserDetails.lastName,
           middleName: '',
-          corporateName: adminClients[0].corporateName,
+          corporateName: adminClient.corporateName,
           type: 'corporate',
           role: newUserDetails.role,
           primaryEmail: newUserDetails.email,
@@ -83,7 +89,7 @@ exports.addUser = (credentials, newUserDetails) => {
         resolve(newUserDetails);
       })
       .catch(err => {
-        console.log('\naddNewuser() resulted in error : ' + JSON.stringify(err) + ' ' + err);
+        if (err.code === undefined) reject({code: '500', reason: err});
         reject(err);
       });
   });
