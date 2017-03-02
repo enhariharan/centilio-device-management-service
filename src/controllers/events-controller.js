@@ -38,7 +38,7 @@ exports.sendEvent = (req, res) => {
 
   Validator.isUserAdmin(req)
   .then(result => {
-    if (!event || event === undefined) throw(Errors.emptyEvent);
+    if (!event || event === undefined) throw(Errors.emptyOrUnknownEvent);
     return eventsManagementService.sendEventNotification(event);
   })
   .then(event => {
