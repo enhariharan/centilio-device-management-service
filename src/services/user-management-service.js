@@ -47,7 +47,7 @@ exports.addUser = (credentials, newUserDetails) => {
 
       User.findOne({username: credentials.name}).exec()
       .then(user => {
-        if (!user || user === undefined) throw(Errors.userNotFound);
+        if (!user || user === undefined) throw(Errors.userWithGivenUsernameNotFound);
         return Client.findOne({uuid: user.client}).exec();
       })
       .then(adminClient => {

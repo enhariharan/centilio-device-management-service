@@ -137,7 +137,7 @@ var _validate = (client) => {
 
       RoleManagementService.getRole(client.role)
       .then(role => {
-        if (!role || role === undefined) throw(invalidClientRole);
+        if (!role || role === undefined) throw(roleWithGivenUuidNotFound);
         resolve(client);
       })
       .catch(err => {
