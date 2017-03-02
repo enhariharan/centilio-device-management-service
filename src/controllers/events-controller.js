@@ -1,4 +1,5 @@
 var Validator = require('../security/validator');
+var Errors = require('../security/errors').errors;
 
 /**
  * @api {post} /events Send an event notification to the device. Only admin can access this URI.
@@ -35,16 +36,17 @@ exports.sendEvent = (req, res) => {
   var event = req.body;
   console.log('\nevent received: ' + JSON.stringify(event));
 
-  if (!event || event === undefined) throw(400);
-
-  Validator.isUserAdmin()
+  Validator.isUserAdmin(req)
   .then(result => {
-    if (!result || result !== true) throw(403);
+    if (!event || event === undefined) throw(Errors.emptyEvent);
     return eventsManagementService.sendEventNotification(event);
   })
   .then(event => {
     console.log('\nevent posted: ' + JSON.stringify(event));
     res.sendStatus(200);
   })
-  .catch(err => {res.sendStatus(err);})
+  .catch(err => {
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
+  });
 };

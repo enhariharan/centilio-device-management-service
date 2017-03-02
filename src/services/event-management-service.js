@@ -1,4 +1,5 @@
 var PushNotifications = require('../app/push-notifications');
+var Errors = require('../security/errors').errors;
 
 exports.sendEventNotification = (event) => {
   "use strict";
@@ -8,20 +9,20 @@ exports.sendEventNotification = (event) => {
         console.log('\nevent.name: ' + JSON.stringify(event.name));
         switch (event.name) {
         case 'displayBrightness':
-          console.log('\ndisplayBrightness'); 
+          console.log('\ndisplayBrightness');
           PushNotifications.sendDisplayBrightnessNotification(event);
           resolve(event);
           break;
 
         case 'playAudio':
-          console.log('\nplayAudio'); 
+          console.log('\nplayAudio');
           PushNotifications.sendPlayAudioNotification(event);
           resolve(event);
           break;
 
         default:
-          console.log('\nerror'); 
-          reject(400); // sending 400 - bad request error for an unknown event
+          console.log('\nerror');
+          reject(Errors.emptyOrUnknownEvent); // sending 400 - bad request error for an unknown event
           break;
       }
   }}

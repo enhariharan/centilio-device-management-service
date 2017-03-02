@@ -12,4 +12,5 @@ exports.errors = {
   rolewithGivenNameNotFound: {code: '400', reason: 'role with given name not found.'},
   rolewithGivenNameAlreadyExists: {code: '400', reason: 'role with given name already exists.'},
   clientNotFound: {code: '400', reason: 'client with given uuid not found.'},
+  emptyEvent: {code: '400', reason: 'empty event was received.'},
 };
