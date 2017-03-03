@@ -1,24 +1,24 @@
 var BasicAuth = require('basic-auth'),
-    Validator = require('../security/validator.js'),
-    InitService = require('../services/initializer-service.js');
+    Validator = require('../security/validator'),
+    Errros = require('../security/errors').errors,
+    InitService = require('../services/initializer-service');
 
 exports.initializeDB = (req, res) => {
   "use strict";
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
-    if (!result || result === undefined) reject(403);
-    console.info('isValidCreds: %s', JSON.stringify(result));
+    if (!result || result === undefined) throw(Errors.invalidCredentials);
     return InitService.initializeDB();
   })
   .then(result => {
     console.info('initializeDB result: %s', JSON.stringify(result));
-    if (!result || result !== true || result === undefined) throw(500);
+    if (!result || result !== true || result === undefined) throw(Errors.couldNotInitializeDb);
     return res.sendStatus(200);
   })
   .catch(err => {
-    console.error('err occurred while initializing DB: ' + JSON.stringify(err) + ' ' + err.stack );
-    return res.sendStatus(err);
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };
 
@@ -27,15 +27,16 @@ exports.initializeInstance = (req, res) => {
 
   Validator.isValidCredentialsForSuperAdminActivity(req)
   .then(result => {
-    if (!result || result === undefined) reject(403);
+    if (!result || result === undefined) throw(Errors.invalidCredentials);
     return InitService.initializeInstance(req.body);
   })
   .then(savedClient => {
-    if (!savedClient || savedClient === undefined) throw(500);
+    console.info('savedClient: %s', JSON.stringify(savedClient));
+    if (!savedClient || savedClient === undefined) throw(Errors.couldNotInitializeInstance);
     return res.status(200).send(savedClient);
   })
   .catch(err => {
-    console.error('err occurred while initializing instance: ' + JSON.stringify(err) + ' ' + err.stack );
-    return res.sendStatus(err);
+    console.error('Err: %s', JSON.stringify(err));
+    return res.status(err.code).send(err);
   });
 };

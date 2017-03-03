@@ -49,8 +49,8 @@ var getClient = (clientUuid) => {
         lastName: '',
         middleName: '',
         type: '',
-        role: '',
         primaryEmail: '',
+        role: '',
         addresses: [],
         emails: [],
         contactNumbers: [],
@@ -128,16 +128,16 @@ var getClientByAuthCredentials = (req) => {
 var _validate = (client) => {
   return new Promise(
     (resolve, reject) => {
-      if (!client.role || client.role === undefined) throw(emptyClientRole);
-      if (!client.addresses || client.addresses === undefined || client.addresses.length === 0) throw(emptyClientAddresses);
-      if (!client.emails || client.emails === undefined || client.emails.length === 0) throw(emptyClientEmails);
+      if (!client.role || client.role === undefined) throw(Errors.emptyClientRole);
+      if (!client.addresses || client.addresses === undefined || client.addresses.length === 0) throw(Errors.emptyClientAddresses);
+      if (!client.emails || client.emails === undefined || client.emails.length === 0) throw(Errors.emptyClientEmails);
 
       // TODO: Email address validation must be done. Use Validator.isEmail().
       // TODO: contact number validation must be done Use Validator.isMobilePhone().  Locale must be provided sing the npm module os-local.
 
       RoleManagementService.getRole(client.role)
       .then(role => {
-        if (!role || role === undefined) throw(roleWithGivenUuidNotFound);
+        if (!role || role === undefined) throw(Errors.roleWithGivenUuidNotFound);
         resolve(client);
       })
       .catch(err => {
@@ -198,7 +198,10 @@ var addClient = (client) => {
   return new Promise(
     (resolve, reject) => {
       _validate(client)
-      .then(validClient => {return _createPromises(validClient);})
+      .then(validClient => {
+        console.info('validClient:' + JSON.stringify(validClient));
+        return _createPromises(validClient);
+      })
       .then(promises => {return Promise.all(promises);})
       .then(results => {resolve(results);})
       .catch(err => {

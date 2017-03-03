@@ -1,7 +1,8 @@
-var Setup = require('../../public/qa/setup-db.js');
-var utils = require('../models/utilities.js');
-var ClientManagementService = require('../services/client-management-service.js');
-var RoleManagementService = require('../services/role-management-service.js');
+var Setup = require('../../public/qa/setup-db');
+var utils = require('../models/utilities');
+var ClientManagementService = require('../services/client-management-service');
+var RoleManagementService = require('../services/role-management-service');
+var Errors = require('../security/errors').errors;
 
 exports.initializeDB = () => {
   return new Promise(
@@ -10,7 +11,10 @@ exports.initializeDB = () => {
       .then(result => {
         if (result !== false) resolve(result);
       })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   })
 }
 
@@ -19,12 +23,10 @@ var _prepareToSave = (instanceDTO) => {
     (resolve, reject) => {
       RoleManagementService.getRoleByName('admin')
       .then(adminRole => {
-        console.log('_prepareToSave.adminRole: ' + JSON.stringify(adminRole.name));
-        if (!instanceDTO || instanceDTO === undefined) reject(400);
-        if (!instanceDTO.firstname || instanceDTO.firstname === undefined) reject(400);
-        if (!instanceDTO.lastname || instanceDTO.lastname === undefined) reject(400);
-        if (!instanceDTO.email || instanceDTO.email === undefined) reject(400);
-        if (!instanceDTO.organisation || instanceDTO.organisation === undefined) reject(400);
+        if (!instanceDTO.firstname || instanceDTO.firstname === undefined) throw(Errors.emptyFirstNameInInstance);
+        if (!instanceDTO.lastname || instanceDTO.lastname === undefined) throw(Errors.emptyLastNameInInstance);
+        if (!instanceDTO.email || instanceDTO.email === undefined) throw(Errors.emptyEmailInInstance);
+        if (!instanceDTO.organisation || instanceDTO.organisation === undefined) throw(Errors.emptyOrganizationInInstance);
 
         // copy everything from request body into a DTO object
         var clientDTO = {
@@ -58,7 +60,10 @@ var _prepareToSave = (instanceDTO) => {
 
         resolve(clientDTO);
       })
-      .catch(err => { reject(err); })
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   });
 };
 
@@ -68,9 +73,13 @@ exports.initializeInstance = (instanceDTO) => {
       _prepareToSave(instanceDTO)
       .then(clientDTO => { return ClientManagementService.addClient(clientDTO); })
       .then(savedClient => {
-        if (!savedClient || savedClient === undefined) throw(500);
+        if (!savedClient || savedClient === undefined) throw(Errors.couldNotCreateClientToInitializeInstance);
+        console.info('savedClient:' + JSON.stringify(savedClient));
         resolve(savedClient);
       })
-      .catch(err => { reject(err); });
+      .catch(err => {
+        if (err.code === undefined) reject({code: '500', reason: err});
+        reject(err);
+      });
   })
 }
