@@ -64,5 +64,4 @@ _(Coming soon)_
 _(Nothing yet)_
 
 ## License
-Copyright (c) 2016 Centilio
-Licensed under the UNLICENSED license.
+See LICENSE.md for license.
