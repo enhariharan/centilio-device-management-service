@@ -64,4 +64,4 @@ _(Coming soon)_
 _(Nothing yet)_
 
 ## License
-See LICENSE.md for license.
+See the file LICENSE for details.
